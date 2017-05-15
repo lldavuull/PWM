@@ -1,0 +1,162 @@
+[p PRO_MODE GLOBOPT AUTOSTATIC PIC14 PIC14E SPACEOPT ]
+[d version 1.1 ]
+[d edition pro ]
+[d chip 16F1574 ]
+[d frameptr 6 ]
+"299 D:\DMX512A\PWM\main.c
+[e E4852 . `uc
+RX_WAIT_FOR_BREAK 0
+RX_WAIT_FOR_START 1
+RX_READ_DATA 2
+]
+"62 C:\Program Files (x86)\Microchip\xc8\v1.41\sources\common\float.c
+[v ___ftpack __ftpack `(f  1 e 3 0 ]
+"86 C:\Program Files (x86)\Microchip\xc8\v1.41\sources\common\ftadd.c
+[v ___ftadd __ftadd `(f  1 e 3 0 ]
+"164 D:\DMX512A\PWM\main.c
+[v _main main `(v  1 e 1 0 ]
+"255
+[v _isr isr `II(v  1 e 1 0 ]
+"335 C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16f1574.h
+[v _INTCON INTCON `VEuc  1 e 1 @11 ]
+"853
+[v _PR2 PR2 `VEuc  1 e 1 @27 ]
+"872
+[v _T2CON T2CON `VEuc  1 e 1 @28 ]
+"1154
+[v _OPTION_REG OPTION_REG `VEuc  1 e 1 @149 ]
+"1350
+[v _OSCTUNE OSCTUNE `VEuc  1 e 1 @152 ]
+"1407
+[v _OSCCON OSCCON `VEuc  1 e 1 @153 ]
+"4147
+[v _PWM1PHL PWM1PHL `VEuc  1 e 1 @3473 ]
+"4224
+[v _PWM1PHH PWM1PHH `VEuc  1 e 1 @3474 ]
+"4307
+[v _PWM1DCL PWM1DCL `VEuc  1 e 1 @3475 ]
+"4384
+[v _PWM1DCH PWM1DCH `VEuc  1 e 1 @3476 ]
+"4467
+[v _PWM1PRL PWM1PRL `VEuc  1 e 1 @3477 ]
+"4544
+[v _PWM1PRH PWM1PRH `VEuc  1 e 1 @3478 ]
+"4941
+[v _PWM1CON PWM1CON `VEuc  1 e 1 @3483 ]
+"5298
+[v _PWM1CLKCON PWM1CLKCON `VEuc  1 e 1 @3486 ]
+"5599
+[v _PWM2PHL PWM2PHL `VEuc  1 e 1 @3489 ]
+"5676
+[v _PWM2PHH PWM2PHH `VEuc  1 e 1 @3490 ]
+"5759
+[v _PWM2DCL PWM2DCL `VEuc  1 e 1 @3491 ]
+"5836
+[v _PWM2DCH PWM2DCH `VEuc  1 e 1 @3492 ]
+"5919
+[v _PWM2PRL PWM2PRL `VEuc  1 e 1 @3493 ]
+"5996
+[v _PWM2PRH PWM2PRH `VEuc  1 e 1 @3494 ]
+"6393
+[v _PWM2CON PWM2CON `VEuc  1 e 1 @3499 ]
+"6750
+[v _PWM2CLKCON PWM2CLKCON `VEuc  1 e 1 @3502 ]
+"7051
+[v _PWM3PHL PWM3PHL `VEuc  1 e 1 @3505 ]
+"7128
+[v _PWM3PHH PWM3PHH `VEuc  1 e 1 @3506 ]
+"7211
+[v _PWM3DCL PWM3DCL `VEuc  1 e 1 @3507 ]
+"7288
+[v _PWM3DCH PWM3DCH `VEuc  1 e 1 @3508 ]
+"7371
+[v _PWM3PRL PWM3PRL `VEuc  1 e 1 @3509 ]
+"7448
+[v _PWM3PRH PWM3PRH `VEuc  1 e 1 @3510 ]
+"7845
+[v _PWM3CON PWM3CON `VEuc  1 e 1 @3515 ]
+"8202
+[v _PWM3CLKCON PWM3CLKCON `VEuc  1 e 1 @3518 ]
+"8503
+[v _PWM4PHL PWM4PHL `VEuc  1 e 1 @3521 ]
+"8580
+[v _PWM4PHH PWM4PHH `VEuc  1 e 1 @3522 ]
+"8663
+[v _PWM4DCL PWM4DCL `VEuc  1 e 1 @3523 ]
+"8740
+[v _PWM4DCH PWM4DCH `VEuc  1 e 1 @3524 ]
+"8823
+[v _PWM4PRL PWM4PRL `VEuc  1 e 1 @3525 ]
+"8900
+[v _PWM4PRH PWM4PRH `VEuc  1 e 1 @3526 ]
+"9297
+[v _PWM4CON PWM4CON `VEuc  1 e 1 @3531 ]
+"9654
+[v _PWM4CLKCON PWM4CLKCON `VEuc  1 e 1 @3534 ]
+"10466
+[v _RA2PPS RA2PPS `VEuc  1 e 1 @3730 ]
+"10601
+[v _RC0PPS RC0PPS `VEuc  1 e 1 @3744 ]
+"10646
+[v _RC1PPS RC1PPS `VEuc  1 e 1 @3745 ]
+"10691
+[v _RC2PPS RC2PPS `VEuc  1 e 1 @3746 ]
+"11160
+[v _ANSA2 ANSA2 `VEb  1 e 0 @3170 ]
+"11164
+[v _ANSC0 ANSC0 `VEb  1 e 0 @3184 ]
+"11166
+[v _ANSC1 ANSC1 `VEb  1 e 0 @3185 ]
+"11168
+[v _ANSC2 ANSC2 `VEb  1 e 0 @3186 ]
+"12808
+[v _TRISA2 TRISA2 `VEb  1 e 0 @1122 ]
+"12816
+[v _TRISC0 TRISC0 `VEb  1 e 0 @1136 ]
+"12818
+[v _TRISC1 TRISC1 `VEb  1 e 0 @1137 ]
+"12820
+[v _TRISC2 TRISC2 `VEb  1 e 0 @1138 ]
+"23 D:\DMX512A\PWM\main.c
+[v _RxData RxData `VE[4]uc  1 e 4 0 ]
+"29
+[v _RxAddrCount RxAddrCount `VEi  1 e 2 0 ]
+"33
+[v _RxState RxState `VEuc  1 e 1 0 ]
+"35
+[v _RxTimer RxTimer `VEi  1 e 2 0 ]
+[s S19 . 1 `uc 1 RxNew 1 0 :1:0 
+`uc 1 RxBreak 1 0 :1:1 
+`uc 1 RxStart 1 0 :1:2 
+`uc 1 RxTimeout 1 0 :1:3 
+`uc 1 TxRunning 1 0 :1:4 
+`uc 1 TxBREAK 1 0 :1:5 
+`uc 1 TxMAB 1 0 :1:6 
+`uc 1 TxDone 1 0 :1:7 
+]
+"75
+[v _Flags Flags `VES19  1 e 1 0 ]
+"88
+[v _TimerState TimerState `VEuc  1 e 1 0 ]
+[s S28 . 1 `uc 1 MS 1 0 :1:0 
+`uc 1 SEC 1 0 :1:1 
+`uc 1 MIN 1 0 :1:2 
+`uc 1 HR 1 0 :1:3 
+`uc 1 BREAK 1 0 :1:4 
+`uc 1 MAB 1 0 :1:5 
+`uc 1 spare 1 0 :2:6 
+]
+"116
+[u S36 . 1 `S28 1 . 1 0 `uc 1 flags 1 0 ]
+[s S39 . 6 `S36 1 . 1 0 `i 1 MS_Count 2 1 `uc 1 SEC_Count 1 3 `uc 1 MIN_Count 1 4 `uc 1 HR_Count 1 5 ]
+[v _Timer Timer `VES39  1 e 6 0 ]
+"164
+[v _main main `(v  1 e 1 0 ]
+{
+"253
+} 0
+"255
+[v _isr isr `II(v  1 e 1 0 ]
+{
+"261
+} 0

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <executable name="dist/default/production\PWM.production.hex">
+    <memory name="program">
+      <units>words</units>
+      <length>4096</length>
+      <used>105</used>
+      <free>3991</free>
+    </memory>
+    <memory name="data">
+      <units>bytes</units>
+      <length>512</length>
+      <used>20</used>
+      <free>492</free>
+    </memory>
+  </executable>
+</project>
