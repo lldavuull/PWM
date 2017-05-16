@@ -1,6 +1,3 @@
-
-
-
 /*
  * File:   main.c
  * Author: METEOR
@@ -11,23 +8,130 @@
 
 #include <xc.h>
 
+/** Select the size of the receive buffer.
+    This is the number of DMX512 Channels you will recieve
+    For example a RGBW fixture may use 4 channels where a scanner may need 10 */
+#define RX_BUFFER_SIZE 4
+
+/** Selects the ms between breaks that sets the timeout flag.
+    This is usually just over 1 second and is common for DMX Fixtures
+    to go into a blackout or default mode if this occurs (i.e. signal lost) */
+#define DMX_RX_TIMEOUT_MS 1200
+
+char RGBW[4];
+/** RxData Receive Data Buffer  */
+volatile char RxData[RX_BUFFER_SIZE];
+/** RxChannel Base Address / Channel to start reading from */
+int         DMX_Address=1;
+/** RxStart The Start Code for a valid data stream */
+char          DMX_StartCode=0;
+/** AddrCount Address counter used in the interrupt routine */
+volatile int RxAddrCount=0;
+/** *RxDataPtr Pointer to the receive data buffer. Used in interrupt */
+volatile char *RxDataPtr;
+/** RxState Current state in the receive state machine */
+volatile char RxState=0;
+/** RxTimer Counts ms since last overflow - used for 1 second timeout */
+volatile int RxTimer=0;
+
+
+ enum
+ {
+    RX_WAIT_FOR_BREAK,
+    RX_WAIT_FOR_START,
+    RX_READ_DATA
+ };
+ 
+ 
+
+/** DMX_FLAGS <BR> */
+typedef struct
+{
+    // Recieve Flags
+    /**  Indicates new data was recieved */
+    unsigned int RxNew    :1;
+    /**  Indicate valid break detected */
+    unsigned int RxBreak  :1;
+    /**  Indicates valid start is detected so store data */
+    unsigned int RxStart  :1;
+    /** Indicates 1 second timout occured */
+    unsigned int RxTimeout :1;
+
+    // Transmit Flags
+    /** Indicated transmission is in progress */
+    unsigned int TxRunning :1;
+    /** Break active */
+    unsigned int TxBREAK   :1;
+    /**  Mark after Break Active */
+    unsigned int TxMAB     :1; 
+
+    /** Indicates a transmission is complete (Last Byte loaded into buffer) */
+    unsigned int TxDone   :1;
+
+    /** DMX_FLAGS Used to pass information from the ISR */
+}DMX_FLAGS;
+
+/** DMX_Flags Set in the ISR to indicate to helper functions etc */
+volatile DMX_FLAGS Flags;
+
+
+
+
+enum
+{
+    TIMER_1MS,
+    TIMER_BREAK,
+    TIMER_MAB,
+    TIMER_FILL
+};
+
+volatile char TimerState=0;
+
+typedef struct 
+{
+    union
+    {
+        struct
+        {
+            unsigned int MS    :1;
+            unsigned int SEC   :1;
+            unsigned int MIN   :1;
+            unsigned int HR    :1;
+
+            unsigned int BREAK :1;  // Start BREAK Timer
+            unsigned int MAB   :1;  // Start MAB Timer
+            unsigned int spare :2;
+        };
+        char flags;
+    };
+
+    int MS_Count;
+    char  SEC_Count;
+    char  MIN_Count;
+    char  HR_Count;
+
+
+}DMX_TIMER_DATA;
+
+volatile DMX_TIMER_DATA Timer;
+
+
 __CONFIG(FOSC_INTOSC & WDTE_OFF & PWRTE_OFF & MCLRE_ON & CP_OFF & BOREN_OFF & CLKOUTEN_OFF );
 __CONFIG(WRT_OFF & PPS1WAY_OFF & PLLEN_ON & STVREN_ON & LPBOREN_OFF &  LVP_OFF );
 
 #define PWMxCON_SET  0b10000000        // Enhanced features off
 #define PRx_SET      0xFF              // Max resolution
 #define TxCON_SET    0b00000101        // Post=1:1, ON, PRE=1:4
-
 void ADC_interrupt(void);
 void DMX_interrput(void);
+void timer_interrupt(void);
 void Sweep_PWM(void);
 
-char led=255;//pwm number
+char led=253;//pwm number
 char bright=1; //1=brighter  0=darker
 const int delay=1;  // delay*1.024ms
 int count=0;
 const int PWM[256]={
-    
 0x0000, 0x0046, 0x0046, 0x0046, 0x0046, 0x0046, 0x0046, 0x0048, 0x0048, 0x0048, 							
 0x0048, 0x0049, 0x0049, 0x0049, 0x004A, 0x004A, 0x004C, 0x004D, 0x004D, 0x004E, 							
 0x0050, 0x0052, 0x0053, 0x0054, 0x0056, 0x0058, 0x005A, 0x005C, 0x005E, 0x0060, 							
@@ -53,10 +157,11 @@ const int PWM[256]={
 0x169C, 0x16E0, 0x1728, 0x1768, 0x17A8, 0x17F0, 0x1838, 0x1878, 0x18C0, 0x1904, 							
 0x1948, 0x1998, 0x19E0, 0x1A28, 0x1A70, 0x1AB8, 0x1B00, 0x1B48, 0x1B90, 0x1BE0, 							
 0x1C30, 0x1C80, 0x1CC8, 0x1D18, 0x1D68, 0x1D80, 0x1DB8, 0x1E08, 0x1E50, 0x1EA0, 							
-0x1EE8, 0x1F30, 0x1F78, 0x1FC0, 0x1FE8, 0x1FFF							
-        
+0x1EE8, 0x1F30, 0x1F78, 0x1FC0, 0x1FE8, 0x1FFF
 };
-
+volatile char RxAr[450];
+volatile char *RxArPtr;
+volatile int i=0;
 void main(void) {
 
 
@@ -64,23 +169,25 @@ void main(void) {
     PR2=PRx_SET;
     T2CON=TxCON_SET;
     
-    OSCCON= 0b11111000;     // 4xPLL,8MHz(32MHz), Config bits determine source  //   PLL=Phase-locked
+    OSCCON= 0b11111000;     // 4xPLL,16MHz, Config bits determine source  //   PLL=Phase-locked
     OSCTUNE=0b000000;
     
     TRISA2=TRISC0=TRISC1=TRISC2=0; //RA2, RC0, RC1, RC2 set to output
     ANSA2=ANSC0=ANSC1=ANSC2=0; //RA2, RC0, RC1, RC2 set to I/O
+    TRISC3=0;ANSC3=0;   //RC3  is for interrupt test
+    
     RA2PPS=0b0011; //PWM1_out
     RC0PPS=0b0100; //PWM2_out
     RC1PPS=0b0101; //PWM3_out
     RC2PPS=0b0110; //PWM4_out
     
-    PWM1DCH=0x2F;
-    PWM2DCH=0x07;
+    PWM1DCH=0x0F;
+    PWM2DCH=0x0C;
     PWM3DCH=0x09;
     PWM4DCH=0x06;
     
     PWM1DCL=0xFF;
-    PWM2DCL=0xC8;
+    PWM2DCL=0x7E;
     PWM3DCL=0x0D;
     PWM4DCL=0x9C;
     
@@ -92,21 +199,27 @@ void main(void) {
     
     
 
-    OPTION_REG=0b00000101;//Timer0 set Timer,  1:64  Period=1.024ms
-    INTCON=0b10100000;//GIE=1; TMR0 interrupt=1
+//    OPTION_REG=0b00000101;//Timer0 set Timer,  1:64  Period=1.024ms
+    INTCON=0b11000000;//GIE=1; TMR0 interrupt=0; PEIE interrupt=1;
     
     
-//    RXPPS=0b10101;  //RX=RC5
-//    TRISC5=1;       //set RC5 as input
-//    RCSTA=0b10010000; //enable RX
-//    BAUDCON=0b00000000;
-////    RC4PPS=0b1001; //RC4=TX
-////    TXSTA=0b01000101;//disable TX, 
-//    SPBRGH=0x00;
-//    SPBRGL=0x01; //  32M/(64*(SPBRG+1)) = 250k
-////    RCIE=1;     //Enable RC interrupt
-//    
-//    
+    // DMX UART START
+    RXPPS=0b10101;  //RX=RC5
+    TRISC5=1;       //set RC5 as input
+    
+    RCSTA=0b10010000; //enable RX  ; 8bit
+    SYNC=0;// UART Enable
+    BAUDCON=0b00000000; //BRG16 =0
+    BRGH=1;             //High Buad Speed
+    SPBRGH=0x00;
+    SPBRGL=0x3;        //  16M/(16*(SPBRG+1)) = 250k
+    RCIE=1;     //Enable RC interrupt
+    RxArPtr = &RxAr[0];
+    // DMX UART END
+
+//    RC4PPS=0b1001; //RC4=TX
+//    TXSTA=0b01000101;//disable TX,
+    
 //    ADIE=1;
 ////    PWM1IE=1;
 //    
@@ -117,12 +230,39 @@ void main(void) {
 ////    ADCON2=0b0001;// set PWM1_interrupt
 //    ADGO=1; //Start to convert Analog to Digit
 //    ADIF=0; // interrupt_flag clear
-    
-
-
-    
+    RC3=0;
      while(1)
      {
+
+        if(Flags.RxNew==1)
+        {
+            Flags.RxNew=0;
+//            dmx_read(0,RGBW,4); // Read the data
+//            led_set_rgbw(RGBW[0],RGBW[1],RGBW[2],RGBW[3]);
+            PWM1DCH=((char)(PWM[RxData[0]]>>8));
+            PWM1DCL=((char)PWM[RxData[0]]);
+            PWM2DCH=((char)(PWM[RxData[1]]>>8));
+            PWM2DCL=((char)PWM[RxData[1]]);
+            PWM3DCH=((char)(PWM[RxData[2]]>>8));
+            PWM3DCL=((char)PWM[RxData[2]]);
+            PWM4DCH=((char)(PWM[RxData[3]]>>8));
+            PWM4DCL=((char)PWM[RxData[3]]);
+            PWM1LDCON=PWM2LDCON=PWM3LDCON=PWM4LDCON=0b10000000;
+        }
+//        if(i>449){
+//            GIE=0;
+//        }
+        
+//        if(Timer.MS)
+//        {
+//            Timer.MS=0;
+//            // If no data received for 1200ms turn the lights off
+//            if(Flags.RxTimeout==1)
+//            {
+////                 led_set_rgbw(0,0,0,0);
+//
+//            }
+//        }
      }
     
 }
@@ -130,15 +270,105 @@ void main(void) {
 void interrupt isr(void)
 {
 //    ADC_interrupt();
-    Sweep_PWM();
-//    DMX_interrput();
+//    Sweep_PWM();
+    DMX_interrput();
+//    timer_interrupt();
+
 }
 
+//volatile int j=0;
+
+
+void DMX_interrput(void){
+    if(RCIE & RCIF){
+//        char d9;
+//        d9=RX9D;
+        volatile char RxDat;
+        
+        if(FERR) // if get error bit, clear the bit ;  occur at space for "break"
+        {
+           RxDat=RCREG;  // Clear the Framing Error - do not read before the bit test
+           Flags.RxBreak=1;                 // Indicate a break
+           RxState=RX_WAIT_FOR_START;
+           RxTimer=0;
+//           j++;
+        }
+        
+        
+
+        
+        switch(RxState)
+        {
+            case RX_WAIT_FOR_BREAK:
+                RxDat=RCREG;   // Just keep clearing the buffer until overflow.
+                break;
+                
+            case RX_WAIT_FOR_START:
+                
+                 if(RCIF)   // make sure there is data avaliable (ie not a break)
+                {
+                    
+                    RxDat=RCREG;
+                    
+                    if(RxDat==DMX_StartCode)
+                    {
+                        // Valid Start Received
+                        RxState = RX_READ_DATA;
+                        RxDataPtr = &RxData[0]; // Point to Buffer
+                        RxAddrCount = 1;            // Reset current addr - Start at address 1! (zero is OFF)
+                        Flags.RxStart = 1;          // Indicate a Start
+                    }
+                    else
+                    {
+                        RxState=RX_WAIT_FOR_BREAK;
+                    }
+                }
+                break;
+
+            case RX_READ_DATA:
+                RxDat=RCREG;
+//                RC3=~RC3;
+//                *RxArPtr=RxAddrCount;
+//                RxArPtr++;
+//                *RxArPtr=DMX_Address;
+//                RxArPtr++;
+//                *RxArPtr=DMX_Address + RX_BUFFER_SIZE;
+//                RxArPtr++;
+//                i++;
+                if(RxAddrCount >= DMX_Address && (DMX_Address !=0) )  // A selection of channel zero is "OFF"
+                {
+                    *RxDataPtr=RxDat;
+                    RxDataPtr++;
+                }
+                
+                RxAddrCount++;
+
+                // Check for end of data packet we can read
+                if(RxAddrCount >= (DMX_Address + RX_BUFFER_SIZE) && DMX_Address !=0 )
+                {
+                    Flags.RxNew=1;
+                    RxState=RX_WAIT_FOR_BREAK;
+                    RxTimer = 0;
+                    Flags.RxTimeout=0;
+                }
+                break;
+        }
+
+        if(RxTimer > DMX_RX_TIMEOUT_MS)
+        {
+            Flags.RxTimeout=1;
+            RxTimer=0;
+        }
+    }
+}
+
+
 void Sweep_PWM(void){
-    if(TMR0IF==1){
+    if(TMR0IF){
+        
         if((count<delay) && ((led>0) && (led<255)) ){
             count+=1;
-        }else if((count<200*delay ) && ((led== 0) || (led==255)) ){
+        }else if((count<1000*delay )&& ((led== 0) || (led==255)) ){
             count+=1;
         }else{
             count=0;
@@ -148,26 +378,69 @@ void Sweep_PWM(void){
             else{
                 led-=1;
             }
-            PWM1DCH=((char)(PWM[led]>>8));
-            PWM1DCL=((char)PWM[led]);
-            PWM1LDCON=0b10000000;
-            
             if(led==255){
                 bright=0;
             }else if(led==0){
                 bright=1;
             }
-
-
-            
+            PWM1DCH=((char)(PWM[led]>>8));
+            PWM1DCL=((char)PWM[led]);
+            PWM1LDCON=0b10000000;
         }
-                    TMR0IF=0;
+        TMR0IF=0;
     }
 }
 
-void DMX_interrput(void){
-//    RCREG=;
-}
+//void timer_interrupt(void)
+//{
+//    if(TMRIE && TMRIF)
+//    {
+//        TMRIF=0;
+//
+//        switch(TimerState)
+//        {
+//            default:
+//                TimerState=TIMER_1MS;
+//
+//            case TIMER_1MS:
+//
+//                TMR = TMR_LOAD_1MS;
+//
+//
+//                RxTimer++;          // Inc timeout counter for receiver
+//                if(RxTimer == DMX_RX_TIMEOUT_MS)
+//                {
+//                    RxTimer = DMX_RX_TIMEOUT_MS + 1;
+//                    Flags.RxTimeout=1;
+//                }
+//
+//
+//                Timer.MS_Count++;            // Inc the MS Counter
+//                Timer.MS=1;                  // Set the ms flag
+//                if(Timer.MS_Count==1000)     // Check for 1 second
+//                {
+//                    Timer.MS_Count=0;
+//                    Timer.SEC_Count++;
+//                    Timer.SEC=1;
+//                    if(Timer.SEC_Count==60)  // Check for Minute
+//                    {
+//                        Timer.SEC_Count=0;
+//                        Timer.MIN_Count++;
+//                        Timer.MIN=1;
+//
+//                        if(Timer.MIN_Count==60) // Check for Hour
+//                        {
+//                            Timer.MIN_Count=0;
+//                            Timer.HR_Count++;
+//                            Timer.HR=1;
+//                        }
+//                    }
+//                }
+//                break;
+//        }
+//    }
+//}
+
 
 void ADC_interrupt(void){
     if(ADIF==1){
@@ -180,9 +453,6 @@ void ADC_interrupt(void){
         IOCCF3=0;
         GIE=1;
     }
-    
-    
 }
-
 
 
