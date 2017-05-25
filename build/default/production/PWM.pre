@@ -1,5 +1,5 @@
 
-# 1 "main.c"
+# 1 "PWM.c"
 
 # 26 "C:\Program Files (x86)\Microchip\xc8\v1.41\include\htc.h"
 extern const char __xc8_OPTIM_SPEED;
@@ -6159,15 +6159,6 @@ extern unsigned char __resetbits;
 extern __bit __powerdown;
 extern __bit __timeout;
 
-# 14 "DMX.h"
-extern void DMX_init(void);
-
-# 20
-extern void DMX_loop(void);
-
-# 26
-extern void DMX_interrupt(void);
-
 # 8 "PWM.h"
 extern void Sweep_PWM(void);
 extern void Sweep_PWM_init(void);
@@ -6212,68 +6203,42 @@ const PWM_16 PWM={
 0x1EE8, 0x1F30, 0x1F78, 0x1FC0, 0x1FE8, 0x1FFF
 };
 
-# 16 "main.c"
-__config("__CONFIG", "pic", "FOSC_INTOSC & WDTE_OFF & PWRTE_OFF & MCLRE_ON & CP_OFF & BOREN_OFF & CLKOUTEN_OFF");
-__config("__CONFIG", "pic", "WRT_OFF & PPS1WAY_OFF & PLLEN_ON & STVREN_ON & LPBOREN_OFF & LVP_OFF");
+# 23 "PWM.c"
+char led = 253;
+char bright = 1;
+const int delay = 2;
+int count = 0;
 
-# 23
-void timer_interrupt(void);
-
-void main(void) {
-PWM1CON = PWM2CON = PWM3CON = PWM4CON = 0b10000000;
-PR2 = 0xFF;
-T2CON = 0b00000101;
-
-OSCCON = 0b11111000;
-OSCTUNE = 0b000000;
-
-TRISA2 = TRISC0 = TRISC1 = TRISC2 = 0;
-ANSA2 = ANSC0 = ANSC1 = ANSC2 = 0;
-
-RA2PPS = 0b0011;
-RC0PPS = 0b0100;
-RC1PPS = 0b0101;
-RC2PPS = 0b0110;
-
-PWM1DCH = 0x0F;
-PWM2DCH = 0x0C;
-PWM3DCH = 0x09;
-PWM4DCH = 0x06;
-
-PWM1DCL = 0xFF;
-PWM2DCL = 0x7E;
-PWM3DCL = 0x0D;
-PWM4DCL = 0x9C;
-
-PWM1PHH = PWM2PHH = PWM3PHH = PWM4PHH = 0x00;
-PWM1PHL = PWM2PHL = PWM3PHL = PWM4PHL = 0x00;
-PWM1PRH = PWM2PRH = PWM3PRH = PWM4PRH = 0x1F;
-PWM1PRL = PWM2PRL = PWM3PRL = PWM4PRL = 0xFF;
-PWM1CLKCON = PWM2CLKCON = PWM3CLKCON = PWM4CLKCON = 0b00000000;
-
-
-TRISC3 = 0;
-ANSC3 = 0;
-INTCON = 0b11000000;
-
-
-
-
-DMX_init();
-
-# 71
-while (1) {
-DMX_loop();
-
-
-}
+void Sweep_PWM_init(void){
+OPTION_REG=0b00000101;
+TMR0IE=1;
+PEIE=0;
 }
 
-void interrupt isr(void) {
+void Sweep_PWM(void){
+if(TMR0IF){
 
-
-
-DMX_interrput();
-
+if((count<delay) && ((led>0) && (led<255)) ){
+count+=1;
+}else if((count<100*delay )&& ((led== 0) || (led==255)) ){
+count+=1;
+}else{
+count=0;
+if(bright==1){
+led+=1;
 }
-
+else{
+led-=1;
+}
+if(led==255){
+bright=0;
+}else if(led==0){
+bright=1;
+}
+PWM1DCH=PWM.PWM[led].DCH;
+PWM1DCL=PWM.PWM[led].DCL;
+PWM1LDCON=0b10000000;
+}
+TMR0IF=0;
+}
+}

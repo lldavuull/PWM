@@ -5,115 +5,18 @@ Version 3.2 HI-TECH Software Intermediate Code
 "14
 [u S593 `ui -> 256 `i `S594 -> 256 `i ]
 [n S593 . D PWM ]
-[p mainexit ]
-"4941 C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16f1574.h
-[v _PWM1CON `Vuc ~T0 @X0 0 e@3483 ]
-"6393
-[v _PWM2CON `Vuc ~T0 @X0 0 e@3499 ]
-"7845
-[v _PWM3CON `Vuc ~T0 @X0 0 e@3515 ]
-"9297
-[v _PWM4CON `Vuc ~T0 @X0 0 e@3531 ]
-"853
-[v _PR2 `Vuc ~T0 @X0 0 e@27 ]
-"872
-[v _T2CON `Vuc ~T0 @X0 0 e@28 ]
-"1407
-[v _OSCCON `Vuc ~T0 @X0 0 e@153 ]
-"1350
-[v _OSCTUNE `Vuc ~T0 @X0 0 e@152 ]
-"12808
-[v _TRISA2 `Vb ~T0 @X0 0 e@1122 ]
-"12816
-[v _TRISC0 `Vb ~T0 @X0 0 e@1136 ]
-"12818
-[v _TRISC1 `Vb ~T0 @X0 0 e@1137 ]
-"12820
-[v _TRISC2 `Vb ~T0 @X0 0 e@1138 ]
-"11160
-[v _ANSA2 `Vb ~T0 @X0 0 e@3170 ]
-"11164
-[v _ANSC0 `Vb ~T0 @X0 0 e@3184 ]
-"11166
-[v _ANSC1 `Vb ~T0 @X0 0 e@3185 ]
-"11168
-[v _ANSC2 `Vb ~T0 @X0 0 e@3186 ]
-"10466
-[v _RA2PPS `Vuc ~T0 @X0 0 e@3730 ]
-"10601
-[v _RC0PPS `Vuc ~T0 @X0 0 e@3744 ]
-"10646
-[v _RC1PPS `Vuc ~T0 @X0 0 e@3745 ]
-"10691
-[v _RC2PPS `Vuc ~T0 @X0 0 e@3746 ]
+"1154 C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16f1574.h
+[v _OPTION_REG `Vuc ~T0 @X0 0 e@149 ]
+"12768
+[v _TMR0IE `Vb ~T0 @X0 0 e@93 ]
+"12770
+[v _TMR0IF `Vb ~T0 @X0 0 e@90 ]
 "4384
 [v _PWM1DCH `Vuc ~T0 @X0 0 e@3476 ]
-"5836
-[v _PWM2DCH `Vuc ~T0 @X0 0 e@3492 ]
-"7288
-[v _PWM3DCH `Vuc ~T0 @X0 0 e@3508 ]
-"8740
-[v _PWM4DCH `Vuc ~T0 @X0 0 e@3524 ]
 "4307
 [v _PWM1DCL `Vuc ~T0 @X0 0 e@3475 ]
-"5759
-[v _PWM2DCL `Vuc ~T0 @X0 0 e@3491 ]
-"7211
-[v _PWM3DCL `Vuc ~T0 @X0 0 e@3507 ]
-"8663
-[v _PWM4DCL `Vuc ~T0 @X0 0 e@3523 ]
-"4224
-[v _PWM1PHH `Vuc ~T0 @X0 0 e@3474 ]
-"5676
-[v _PWM2PHH `Vuc ~T0 @X0 0 e@3490 ]
-"7128
-[v _PWM3PHH `Vuc ~T0 @X0 0 e@3506 ]
-"8580
-[v _PWM4PHH `Vuc ~T0 @X0 0 e@3522 ]
-"4147
-[v _PWM1PHL `Vuc ~T0 @X0 0 e@3473 ]
-"5599
-[v _PWM2PHL `Vuc ~T0 @X0 0 e@3489 ]
-"7051
-[v _PWM3PHL `Vuc ~T0 @X0 0 e@3505 ]
-"8503
-[v _PWM4PHL `Vuc ~T0 @X0 0 e@3521 ]
-"4544
-[v _PWM1PRH `Vuc ~T0 @X0 0 e@3478 ]
-"5996
-[v _PWM2PRH `Vuc ~T0 @X0 0 e@3494 ]
-"7448
-[v _PWM3PRH `Vuc ~T0 @X0 0 e@3510 ]
-"8900
-[v _PWM4PRH `Vuc ~T0 @X0 0 e@3526 ]
-"4467
-[v _PWM1PRL `Vuc ~T0 @X0 0 e@3477 ]
-"5919
-[v _PWM2PRL `Vuc ~T0 @X0 0 e@3493 ]
-"7371
-[v _PWM3PRL `Vuc ~T0 @X0 0 e@3509 ]
-"8823
-[v _PWM4PRL `Vuc ~T0 @X0 0 e@3525 ]
-"5298
-[v _PWM1CLKCON `Vuc ~T0 @X0 0 e@3486 ]
-"6750
-[v _PWM2CLKCON `Vuc ~T0 @X0 0 e@3502 ]
-"8202
-[v _PWM3CLKCON `Vuc ~T0 @X0 0 e@3518 ]
-"9654
-[v _PWM4CLKCON `Vuc ~T0 @X0 0 e@3534 ]
-"12822
-[v _TRISC3 `Vb ~T0 @X0 0 e@1139 ]
-"11170
-[v _ANSC3 `Vb ~T0 @X0 0 e@3187 ]
-"335
-[v _INTCON `Vuc ~T0 @X0 0 e@11 ]
-"14 DMX.h
-[v _DMX_init `(v ~T0 @X0 0 ef ]
-"20
-[v _DMX_loop `(v ~T0 @X0 0 ef ]
-"82 main.c
-[v _DMX_interrput `(i ~T0 @X0 0 ef ]
+"5405
+[v _PWM1LDCON `Vuc ~T0 @X0 0 e@3487 ]
 [; ;htc.h: 26: extern const char __xc8_OPTIM_SPEED;
 [; ;htc.h: 28: extern double __fpnormalize(double);
 [; ;xc8debug.h: 14: extern void __builtin_software_breakpoint(void);
@@ -4706,9 +4609,6 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;pic.h: 192: extern unsigned char __resetbits;
 [; ;pic.h: 193: extern __bit __powerdown;
 [; ;pic.h: 194: extern __bit __timeout;
-[; ;DMX.h: 14: extern void DMX_init(void);
-[; ;DMX.h: 20: extern void DMX_loop(void);
-[; ;DMX.h: 26: extern void DMX_interrupt(void);
 [; ;PWM.h: 8: extern void Sweep_PWM(void);
 [; ;PWM.h: 9: extern void Sweep_PWM_init(void);
 "11 PWM.h
@@ -5048,143 +4948,148 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;PWM.h: 47: 0x1C30, 0x1C80, 0x1CC8, 0x1D18, 0x1D68, 0x1D80, 0x1DB8, 0x1E08, 0x1E50, 0x1EA0,
 [; ;PWM.h: 48: 0x1EE8, 0x1F30, 0x1F78, 0x1FC0, 0x1FE8, 0x1FFF
 [; ;PWM.h: 49: };
-"16 main.c
-[p x FOSC=INTOSC ]
-[p x WDTE=OFF ]
-[p x PWRTE=OFF ]
-[p x MCLRE=ON ]
-[p x CP=OFF ]
-[p x BOREN=OFF ]
-[p x CLKOUTEN=OFF ]
-"17
-[p x WRT=OFF ]
-[p x PPS1WAY=OFF ]
-[p x PLLEN=ON ]
-[p x STVREN=ON ]
-[p x LPBOREN=OFF ]
-[p x LVP=OFF ]
-[; ;main.c: 16: __config("__CONFIG", "pic", "FOSC_INTOSC & WDTE_OFF & PWRTE_OFF & MCLRE_ON & CP_OFF & BOREN_OFF & CLKOUTEN_OFF");
-[; ;main.c: 17: __config("__CONFIG", "pic", "WRT_OFF & PPS1WAY_OFF & PLLEN_ON & STVREN_ON & LPBOREN_OFF & LVP_OFF");
-[; ;main.c: 23: void timer_interrupt(void);
+"23 PWM.c
+[v _led `uc ~T0 @X0 1 e ]
+[i _led
+-> -> 253 `i `uc
+]
+[; ;PWM.c: 23: char led = 253;
+"24
+[v _bright `uc ~T0 @X0 1 e ]
+[i _bright
+-> -> 1 `i `uc
+]
+[; ;PWM.c: 24: char bright = 1;
 "25
-[v _main `(v ~T0 @X0 1 ef ]
-{
-[; ;main.c: 25: void main(void) {
-[e :U _main ]
-[f ]
-[; ;main.c: 26: PWM1CON = PWM2CON = PWM3CON = PWM4CON = 0b10000000;
+[v _delay `Ci ~T0 @X0 1 e ]
+[i _delay
+-> 1 `i
+]
+[; ;PWM.c: 25: const int delay = 1;
 "26
-[e = _PWM1CON = _PWM2CON = _PWM3CON = _PWM4CON -> -> 128 `i `uc ]
-[; ;main.c: 27: PR2 = 0xFF;
-"27
-[e = _PR2 -> -> 255 `i `uc ]
-[; ;main.c: 28: T2CON = 0b00000101;
+[v _count `i ~T0 @X0 1 e ]
+[i _count
+-> 0 `i
+]
+[; ;PWM.c: 26: int count = 0;
 "28
-[e = _T2CON -> -> 5 `i `uc ]
-[; ;main.c: 30: OSCCON = 0b11111000;
-"30
-[e = _OSCCON -> -> 248 `i `uc ]
-[; ;main.c: 31: OSCTUNE = 0b000000;
-"31
-[e = _OSCTUNE -> -> 0 `i `uc ]
-[; ;main.c: 33: TRISA2 = TRISC0 = TRISC1 = TRISC2 = 0;
-"33
-[e = _TRISA2 = _TRISC0 = _TRISC1 = _TRISC2 -> -> 0 `i `b ]
-[; ;main.c: 34: ANSA2 = ANSC0 = ANSC1 = ANSC2 = 0;
-"34
-[e = _ANSA2 = _ANSC0 = _ANSC1 = _ANSC2 -> -> 0 `i `b ]
-[; ;main.c: 36: RA2PPS = 0b0011;
-"36
-[e = _RA2PPS -> -> 3 `i `uc ]
-[; ;main.c: 37: RC0PPS = 0b0100;
-"37
-[e = _RC0PPS -> -> 4 `i `uc ]
-[; ;main.c: 38: RC1PPS = 0b0101;
-"38
-[e = _RC1PPS -> -> 5 `i `uc ]
-[; ;main.c: 39: RC2PPS = 0b0110;
-"39
-[e = _RC2PPS -> -> 6 `i `uc ]
-[; ;main.c: 41: PWM1DCH = 0x0F;
-"41
-[e = _PWM1DCH -> -> 15 `i `uc ]
-[; ;main.c: 42: PWM2DCH = 0x0C;
-"42
-[e = _PWM2DCH -> -> 12 `i `uc ]
-[; ;main.c: 43: PWM3DCH = 0x09;
-"43
-[e = _PWM3DCH -> -> 9 `i `uc ]
-[; ;main.c: 44: PWM4DCH = 0x06;
-"44
-[e = _PWM4DCH -> -> 6 `i `uc ]
-[; ;main.c: 46: PWM1DCL = 0xFF;
-"46
-[e = _PWM1DCL -> -> 255 `i `uc ]
-[; ;main.c: 47: PWM2DCL = 0x7E;
-"47
-[e = _PWM2DCL -> -> 126 `i `uc ]
-[; ;main.c: 48: PWM3DCL = 0x0D;
-"48
-[e = _PWM3DCL -> -> 13 `i `uc ]
-[; ;main.c: 49: PWM4DCL = 0x9C;
-"49
-[e = _PWM4DCL -> -> 156 `i `uc ]
-[; ;main.c: 51: PWM1PHH = PWM2PHH = PWM3PHH = PWM4PHH = 0x00;
-"51
-[e = _PWM1PHH = _PWM2PHH = _PWM3PHH = _PWM4PHH -> -> 0 `i `uc ]
-[; ;main.c: 52: PWM1PHL = PWM2PHL = PWM3PHL = PWM4PHL = 0x00;
-"52
-[e = _PWM1PHL = _PWM2PHL = _PWM3PHL = _PWM4PHL -> -> 0 `i `uc ]
-[; ;main.c: 53: PWM1PRH = PWM2PRH = PWM3PRH = PWM4PRH = 0x1F;
-"53
-[e = _PWM1PRH = _PWM2PRH = _PWM3PRH = _PWM4PRH -> -> 31 `i `uc ]
-[; ;main.c: 54: PWM1PRL = PWM2PRL = PWM3PRL = PWM4PRL = 0xFF;
-"54
-[e = _PWM1PRL = _PWM2PRL = _PWM3PRL = _PWM4PRL -> -> 255 `i `uc ]
-[; ;main.c: 55: PWM1CLKCON = PWM2CLKCON = PWM3CLKCON = PWM4CLKCON = 0b00000000;
-"55
-[e = _PWM1CLKCON = _PWM2CLKCON = _PWM3CLKCON = _PWM4CLKCON -> -> 0 `i `uc ]
-[; ;main.c: 58: TRISC3 = 0;
-"58
-[e = _TRISC3 -> -> 0 `i `b ]
-[; ;main.c: 59: ANSC3 = 0;
-"59
-[e = _ANSC3 -> -> 0 `i `b ]
-[; ;main.c: 60: INTCON = 0b11000000;
-"60
-[e = _INTCON -> -> 192 `i `uc ]
-[; ;main.c: 65: DMX_init();
-"65
-[e ( _DMX_init ..  ]
-[; ;main.c: 71: while (1) {
-"71
-[e :U 597 ]
+[v _Sweep_PWM_init `(v ~T0 @X0 1 ef ]
 {
-[; ;main.c: 72: DMX_loop();
-"72
-[e ( _DMX_loop ..  ]
-"75
-}
-[e :U 596 ]
-"71
-[e $U 597  ]
-[e :U 598 ]
-[; ;main.c: 75: }
-[; ;main.c: 76: }
-"76
+[; ;PWM.c: 28: void Sweep_PWM_init(void){
+[e :U _Sweep_PWM_init ]
+[f ]
+[; ;PWM.c: 29: OPTION_REG=0b00000101;
+"29
+[e = _OPTION_REG -> -> 5 `i `uc ]
+[; ;PWM.c: 30: TMR0IE=1;
+"30
+[e = _TMR0IE -> -> 1 `i `b ]
+[; ;PWM.c: 31: }
+"31
 [e :UE 595 ]
 }
-[v F4870 `(v ~T0 @X0 1 tf ]
-"78
-[v _isr `IF4870 ~T0 @X0 1 e ]
+"33
+[v _Sweep_PWM `(v ~T0 @X0 1 ef ]
 {
-[; ;main.c: 78: void interrupt isr(void) {
-[e :U _isr ]
+[; ;PWM.c: 33: void Sweep_PWM(void){
+[e :U _Sweep_PWM ]
 [f ]
-[; ;main.c: 82: DMX_interrput();
-"82
-[e ( _DMX_interrput ..  ]
-[; ;main.c: 84: }
-"84
-[e :UE 599 ]
+[; ;PWM.c: 34: if(TMR0IF){
+"34
+[e $ ! _TMR0IF 597  ]
+{
+[; ;PWM.c: 36: if((count<delay) && ((led>0) && (led<255)) ){
+"36
+[e $ ! && < _count _delay && > -> _led `i -> 0 `i < -> _led `i -> 255 `i 598  ]
+{
+[; ;PWM.c: 37: count+=1;
+"37
+[e =+ _count -> 1 `i ]
+"38
+}
+[; ;PWM.c: 38: }else if((count<1000*delay )&& ((led== 0) || (led==255)) ){
+[e $U 599  ]
+[e :U 598 ]
+[e $ ! && < _count * -> 1000 `i _delay || == -> _led `i -> 0 `i == -> _led `i -> 255 `i 600  ]
+{
+[; ;PWM.c: 39: count+=1;
+"39
+[e =+ _count -> 1 `i ]
+"40
+}
+[; ;PWM.c: 40: }else{
+[e $U 601  ]
+[e :U 600 ]
+{
+[; ;PWM.c: 41: count=0;
+"41
+[e = _count -> 0 `i ]
+[; ;PWM.c: 42: if(bright==1){
+"42
+[e $ ! == -> _bright `i -> 1 `i 602  ]
+{
+[; ;PWM.c: 43: led+=1;
+"43
+[e =+ _led -> -> 1 `i `uc ]
+"44
+}
+[; ;PWM.c: 44: }
+[e $U 603  ]
+"45
+[e :U 602 ]
+[; ;PWM.c: 45: else{
+{
+[; ;PWM.c: 46: led-=1;
+"46
+[e =- _led -> -> 1 `i `uc ]
+"47
+}
+[e :U 603 ]
+[; ;PWM.c: 47: }
+[; ;PWM.c: 48: if(led==255){
+"48
+[e $ ! == -> _led `i -> 255 `i 604  ]
+{
+[; ;PWM.c: 49: bright=0;
+"49
+[e = _bright -> -> 0 `i `uc ]
+"50
+}
+[; ;PWM.c: 50: }else if(led==0){
+[e $U 605  ]
+[e :U 604 ]
+[e $ ! == -> _led `i -> 0 `i 606  ]
+{
+[; ;PWM.c: 51: bright=1;
+"51
+[e = _bright -> -> 1 `i `uc ]
+"52
+}
+[e :U 606 ]
+"53
+[e :U 605 ]
+[; ;PWM.c: 52: }
+[; ;PWM.c: 53: PWM1DCH=PWM.PWM[led].DCH;
+[e = _PWM1DCH . *U + &U . _PWM 1 * -> _led `ux -> -> # *U &U . _PWM 1 `ui `ux 1 ]
+[; ;PWM.c: 54: PWM1DCL=PWM.PWM[led].DCL;
+"54
+[e = _PWM1DCL . *U + &U . _PWM 1 * -> _led `ux -> -> # *U &U . _PWM 1 `ui `ux 0 ]
+[; ;PWM.c: 55: PWM1LDCON=0b10000000;
+"55
+[e = _PWM1LDCON -> -> 128 `i `uc ]
+"56
+}
+[e :U 601 ]
+[e :U 599 ]
+[; ;PWM.c: 56: }
+[; ;PWM.c: 57: TMR0IF=0;
+"57
+[e = _TMR0IF -> -> 0 `i `b ]
+"58
+}
+[e :U 597 ]
+[; ;PWM.c: 58: }
+[; ;PWM.c: 59: }
+"59
+[e :UE 596 ]
 }

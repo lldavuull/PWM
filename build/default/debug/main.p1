@@ -1,16 +1,13 @@
 Version 3.2 HI-TECH Software Intermediate Code
-"49 main.c
-[s S593 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S593 . RxNew RxBreak RxStart RxTimeout TxRunning TxBREAK TxMAB TxDone ]
-"95
-[s S596 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :2 `uc 1 ]
-[n S596 . MS SEC MIN HR BREAK MAB spare ]
-"93
-[u S595 `S596 1 `uc 1 ]
-[n S595 . . flags ]
-"91
-[s S594 `S595 1 `i 1 `uc 1 `uc 1 `uc 1 ]
-[n S594 . . MS_Count SEC_Count MIN_Count HR_Count ]
+"16 PWM.h
+[s S594 :8 `uc 1 :8 `uc 1 ]
+[n S594 . DCL DCH ]
+"14
+[u S593 `ui -> 256 `i `S594 -> 256 `i ]
+[n S593 . D PWM ]
+"26 main.c
+[s S595 :1 `uc 1 ]
+[n S595 . New ]
 [p mainexit ]
 "4941 C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16f1574.h
 [v _PWM1CON `Vuc ~T0 @X0 0 e@3483 ]
@@ -44,10 +41,6 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _ANSC1 `Vb ~T0 @X0 0 e@3185 ]
 "11168
 [v _ANSC2 `Vb ~T0 @X0 0 e@3186 ]
-"12822
-[v _TRISC3 `Vb ~T0 @X0 0 e@1139 ]
-"11170
-[v _ANSC3 `Vb ~T0 @X0 0 e@3187 ]
 "10466
 [v _RA2PPS `Vuc ~T0 @X0 0 e@3730 ]
 "10601
@@ -112,61 +105,44 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _PWM3CLKCON `Vuc ~T0 @X0 0 e@3518 ]
 "9654
 [v _PWM4CLKCON `Vuc ~T0 @X0 0 e@3534 ]
+"12822
+[v _TRISC3 `Vb ~T0 @X0 0 e@1139 ]
+"11170
+[v _ANSC3 `Vb ~T0 @X0 0 e@3187 ]
 "335
 [v _INTCON `Vuc ~T0 @X0 0 e@11 ]
-"10223
-[v _RXPPS `Vuc ~T0 @X0 0 e@3605 ]
-"12826
-[v _TRISC5 `Vb ~T0 @X0 0 e@1141 ]
-"2716
-[v _RCSTA `Vuc ~T0 @X0 0 e@413 ]
-"12692
-[v _SYNC `Vb ~T0 @X0 0 e@3316 ]
-"2838
-[v _BAUDCON `Vuc ~T0 @X0 0 e@415 ]
-"11178
-[v _BRGH `Vb ~T0 @X0 0 e@3314 ]
-"2697
-[v _SPBRGH `Vuc ~T0 @X0 0 e@412 ]
-"2678
-[v _SPBRGL `Vuc ~T0 @X0 0 e@411 ]
-"12628
-[v _RCIE `Vb ~T0 @X0 0 e@1165 ]
-"12596
-[v _RC3 `Vb ~T0 @X0 0 e@115 ]
-"5405
-[v _PWM1LDCON `Vuc ~T0 @X0 0 e@3487 ]
-"6857
-[v _PWM2LDCON `Vuc ~T0 @X0 0 e@3503 ]
-"8309
-[v _PWM3LDCON `Vuc ~T0 @X0 0 e@3519 ]
-"9761
-[v _PWM4LDCON `Vuc ~T0 @X0 0 e@3535 ]
-"126 main.c
-[v _DMX_interrput `(v ~T0 @X0 0 ef ]
-"12630 C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16f1574.h
-[v _RCIF `Vb ~T0 @X0 0 e@141 ]
-"11346
-[v _FERR `Vb ~T0 @X0 0 e@3306 ]
-"2634
-[v _RCREG `Vuc ~T0 @X0 0 e@409 ]
-"292 main.c
-[c E4852 0 1 2 .. ]
-[n E4852 . RX_WAIT_FOR_BREAK RX_WAIT_FOR_START RX_READ_DATA  ]
-"12770 C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16f1574.h
-[v _TMR0IF `Vb ~T0 @X0 0 e@90 ]
-"11148
-[v _ADIF `Vb ~T0 @X0 0 e@142 ]
-"1558
-[v _ADRESH `Vuc ~T0 @X0 0 e@156 ]
-"1539
-[v _ADRESL `Vuc ~T0 @X0 0 e@155 ]
+"11146
+[v _ADIE `Vb ~T0 @X0 0 e@1166 ]
+"12812
+[v _TRISA4 `Vb ~T0 @X0 0 e@1124 ]
+"11162
+[v _ANSA4 `Vb ~T0 @X0 0 e@3172 ]
+"1577
+[v _ADCON0 `Vuc ~T0 @X0 0 e@157 ]
+"1665
+[v _ADCON1 `Vuc ~T0 @X0 0 e@158 ]
 "11144
 [v _ADGO `Vb ~T0 @X0 0 e@1257 ]
-"11484
-[v _IOCCF3 `Vb ~T0 @X0 0 e@7371 ]
-"11390
-[v _GIE `Vb ~T0 @X0 0 e@95 ]
+"11148
+[v _ADIF `Vb ~T0 @X0 0 e@142 ]
+"11514
+[v _IOCIE `Vb ~T0 @X0 0 e@91 ]
+"11460
+[v _IOCAN3 `Vb ~T0 @X0 0 e@7315 ]
+"11472
+[v _IOCAP3 `Vb ~T0 @X0 0 e@7307 ]
+"5405
+[v _PWM1LDCON `Vuc ~T0 @X0 0 e@3487 ]
+"9761
+[v _PWM4LDCON `Vuc ~T0 @X0 0 e@3535 ]
+"19 main.c
+[v _ADC_interrupt `(v ~T0 @X0 0 ef ]
+"12596 C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16f1574.h
+[v _RC3 `Vb ~T0 @X0 0 e@115 ]
+"11448
+[v _IOCAF3 `Vb ~T0 @X0 0 e@7323 ]
+"1558
+[v _ADRESH `Vuc ~T0 @X0 0 e@156 ]
 [; ;htc.h: 26: extern const char __xc8_OPTIM_SPEED;
 [; ;htc.h: 28: extern double __fpnormalize(double);
 [; ;xc8debug.h: 14: extern void __builtin_software_breakpoint(void);
@@ -4759,103 +4735,349 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;pic.h: 192: extern unsigned char __resetbits;
 [; ;pic.h: 193: extern __bit __powerdown;
 [; ;pic.h: 194: extern __bit __timeout;
-"21 main.c
-[v _RGBW `uc ~T0 @X0 -> 4 `i e ]
-[; ;main.c: 21: char RGBW[4];
+[; ;DMX.h: 14: extern void DMX_init(void);
+[; ;DMX.h: 20: extern void DMX_loop(void);
+[; ;DMX.h: 26: extern void DMX_interrupt(void);
+[; ;PWM.h: 8: extern void Sweep_PWM(void);
+[; ;PWM.h: 9: extern void Sweep_PWM_init(void);
+"11 PWM.h
+[v _RxArPtr `*Vuc ~T0 @X0 1 e ]
+[; ;PWM.h: 11: volatile char *RxArPtr;
+"12
+[v _i `Vi ~T0 @X0 1 e ]
+[i _i
+-> 0 `i
+]
+[; ;PWM.h: 12: volatile int i = 0;
+[; ;PWM.h: 14: typedef union {
+[; ;PWM.h: 15: unsigned int D[256];
+[; ;PWM.h: 16: struct{
+[; ;PWM.h: 17: unsigned DCL :8;
+[; ;PWM.h: 18: unsigned DCH :8;
+[; ;PWM.h: 19: }PWM[256];
+[; ;PWM.h: 20: }PWM_16;
+"22
+[v _PWM `CS593 ~T0 @X0 1 e ]
+[i _PWM
+:U ..
+:U ..
+:U ..
 "23
-[v _RxData `Vuc ~T0 @X0 -> 4 `i e ]
-[; ;main.c: 23: volatile char RxData[4];
+-> -> 0 `i `ui
+-> -> 70 `i `ui
+-> -> 70 `i `ui
+-> -> 70 `i `ui
+-> -> 70 `i `ui
+-> -> 70 `i `ui
+-> -> 70 `i `ui
+-> -> 72 `i `ui
+-> -> 72 `i `ui
+-> -> 72 `i `ui
+"24
+-> -> 72 `i `ui
+-> -> 73 `i `ui
+-> -> 73 `i `ui
+-> -> 73 `i `ui
+-> -> 74 `i `ui
+-> -> 74 `i `ui
+-> -> 76 `i `ui
+-> -> 77 `i `ui
+-> -> 77 `i `ui
+-> -> 78 `i `ui
 "25
-[v _DMX_Address `i ~T0 @X0 1 e ]
-[i _DMX_Address
--> 1 `i
-]
-[; ;main.c: 25: int DMX_Address=1;
+-> -> 80 `i `ui
+-> -> 82 `i `ui
+-> -> 83 `i `ui
+-> -> 84 `i `ui
+-> -> 86 `i `ui
+-> -> 88 `i `ui
+-> -> 90 `i `ui
+-> -> 92 `i `ui
+-> -> 94 `i `ui
+-> -> 96 `i `ui
+"26
+-> -> 98 `i `ui
+-> -> 100 `i `ui
+-> -> 103 `i `ui
+-> -> 106 `i `ui
+-> -> 108 `i `ui
+-> -> 111 `i `ui
+-> -> 114 `i `ui
+-> -> 118 `i `ui
+-> -> 122 `i `ui
+-> -> 124 `i `ui
 "27
-[v _DMX_StartCode `uc ~T0 @X0 1 e ]
-[i _DMX_StartCode
--> -> 0 `i `uc
-]
-[; ;main.c: 27: char DMX_StartCode=0;
+-> -> 128 `i `ui
+-> -> 131 `i `ui
+-> -> 136 `i `ui
+-> -> 138 `i `ui
+-> -> 142 `i `ui
+-> -> 146 `i `ui
+-> -> 152 `i `ui
+-> -> 158 `i `ui
+-> -> 164 `i `ui
+-> -> 172 `i `ui
+"28
+-> -> 180 `i `ui
+-> -> 188 `i `ui
+-> -> 192 `i `ui
+-> -> 200 `i `ui
+-> -> 208 `i `ui
+-> -> 222 `i `ui
+-> -> 228 `i `ui
+-> -> 236 `i `ui
+-> -> 246 `i `ui
+-> -> 262 `i `ui
 "29
-[v _RxAddrCount `Vi ~T0 @X0 1 e ]
-[i _RxAddrCount
--> 0 `i
-]
-[; ;main.c: 29: volatile int RxAddrCount=0;
+-> -> 270 `i `ui
+-> -> 278 `i `ui
+-> -> 286 `i `ui
+-> -> 300 `i `ui
+-> -> 308 `i `ui
+-> -> 316 `i `ui
+-> -> 326 `i `ui
+-> -> 342 `i `ui
+-> -> 352 `i `ui
+-> -> 360 `i `ui
+"30
+-> -> 374 `i `ui
+-> -> 386 `i `ui
+-> -> 394 `i `ui
+-> -> 406 `i `ui
+-> -> 422 `i `ui
+-> -> 434 `i `ui
+-> -> 446 `i `ui
+-> -> 460 `i `ui
+-> -> 472 `i `ui
+-> -> 484 `i `ui
 "31
-[v _RxDataPtr `*Vuc ~T0 @X0 1 e ]
-[; ;main.c: 31: volatile char *RxDataPtr;
+-> -> 502 `i `ui
+-> -> 514 `i `ui
+-> -> 526 `i `ui
+-> -> 544 `i `ui
+-> -> 560 `i `ui
+-> -> 576 `i `ui
+-> -> 588 `i `ui
+-> -> 610 `i `ui
+-> -> 624 `i `ui
+-> -> 640 `i `ui
+"32
+-> -> 658 `i `ui
+-> -> 674 `i `ui
+-> -> 694 `i `ui
+-> -> 710 `i `ui
+-> -> 726 `i `ui
+-> -> 746 `i `ui
+-> -> 768 `i `ui
+-> -> 796 `i `ui
+-> -> 806 `i `ui
+-> -> 822 `i `ui
 "33
-[v _RxState `Vuc ~T0 @X0 1 e ]
-[i _RxState
--> -> 0 `i `uc
-]
-[; ;main.c: 33: volatile char RxState=0;
+-> -> 840 `i `ui
+-> -> 864 `i `ui
+-> -> 886 `i `ui
+-> -> 902 `i `ui
+-> -> 926 `i `ui
+-> -> 944 `i `ui
+-> -> 968 `i `ui
+-> -> 988 `i `ui
+-> -> 1012 `i `ui
+-> -> 1030 `i `ui
+"34
+-> -> 1052 `i `ui
+-> -> 1082 `i `ui
+-> -> 1100 `i `ui
+-> -> 1128 `i `ui
+-> -> 1150 `i `ui
+-> -> 1174 `i `ui
+-> -> 1202 `i `ui
+-> -> 1224 `i `ui
+-> -> 1248 `i `ui
+-> -> 1272 `i `ui
 "35
-[v _RxTimer `Vi ~T0 @X0 1 e ]
-[i _RxTimer
--> 0 `i
+-> -> 1300 `i `ui
+-> -> 1328 `i `ui
+-> -> 1356 `i `ui
+-> -> 1382 `i `ui
+-> -> 1408 `i `ui
+-> -> 1436 `i `ui
+-> -> 1464 `i `ui
+-> -> 1496 `i `ui
+-> -> 1524 `i `ui
+-> -> 1550 `i `ui
+"36
+-> -> 1576 `i `ui
+-> -> 1608 `i `ui
+-> -> 1640 `i `ui
+-> -> 1672 `i `ui
+-> -> 1700 `i `ui
+-> -> 1732 `i `ui
+-> -> 1756 `i `ui
+-> -> 1796 `i `ui
+-> -> 1828 `i `ui
+-> -> 1856 `i `ui
+"37
+-> -> 1892 `i `ui
+-> -> 1924 `i `ui
+-> -> 1956 `i `ui
+-> -> 1992 `i `ui
+-> -> 2028 `i `ui
+-> -> 2064 `i `ui
+-> -> 2096 `i `ui
+-> -> 2128 `i `ui
+-> -> 2160 `i `ui
+-> -> 2200 `i `ui
+"38
+-> -> 2240 `i `ui
+-> -> 2280 `i `ui
+-> -> 2312 `i `ui
+-> -> 2352 `i `ui
+-> -> 2392 `i `ui
+-> -> 2432 `i `ui
+-> -> 2464 `i `ui
+-> -> 2504 `i `ui
+-> -> 2544 `i `ui
+-> -> 2584 `i `ui
+"39
+-> -> 2624 `i `ui
+-> -> 2664 `i `ui
+-> -> 2708 `i `ui
+-> -> 2748 `i `ui
+-> -> 2788 `i `ui
+-> -> 2832 `i `ui
+-> -> 2872 `i `ui
+-> -> 2912 `i `ui
+-> -> 2956 `i `ui
+-> -> 2996 `i `ui
+"40
+-> -> 3048 `i `ui
+-> -> 3094 `i `ui
+-> -> 3136 `i `ui
+-> -> 3180 `i `ui
+-> -> 3224 `i `ui
+-> -> 3276 `i `ui
+-> -> 3324 `i `ui
+-> -> 3368 `i `ui
+-> -> 3416 `i `ui
+-> -> 3464 `i `ui
+"41
+-> -> 3512 `i `ui
+-> -> 3560 `i `ui
+-> -> 3608 `i `ui
+-> -> 3656 `i `ui
+-> -> 3704 `i `ui
+-> -> 3752 `i `ui
+-> -> 3808 `i `ui
+-> -> 3856 `i `ui
+-> -> 3912 `i `ui
+-> -> 3964 `i `ui
+"42
+-> -> 4016 `i `ui
+-> -> 4068 `i `ui
+-> -> 4120 `i `ui
+-> -> 4176 `i `ui
+-> -> 4232 `i `ui
+-> -> 4284 `i `ui
+-> -> 4340 `i `ui
+-> -> 4396 `i `ui
+-> -> 4452 `i `ui
+-> -> 4504 `i `ui
+"43
+-> -> 4560 `i `ui
+-> -> 4620 `i `ui
+-> -> 4676 `i `ui
+-> -> 4732 `i `ui
+-> -> 4788 `i `ui
+-> -> 4848 `i `ui
+-> -> 4904 `i `ui
+-> -> 4972 `i `ui
+-> -> 5032 `i `ui
+-> -> 5092 `i `ui
+"44
+-> -> 5152 `i `ui
+-> -> 5212 `i `ui
+-> -> 5276 `i `ui
+-> -> 5340 `i `ui
+-> -> 5400 `i `ui
+-> -> 5464 `i `ui
+-> -> 5532 `i `ui
+-> -> 5596 `i `ui
+-> -> 5660 `i `ui
+-> -> 5724 `i `ui
+"45
+-> -> 5788 `i `ui
+-> -> 5856 `i `ui
+-> -> 5928 `i `ui
+-> -> 5992 `i `ui
+-> -> 6056 `i `ui
+-> -> 6128 `i `ui
+-> -> 6200 `i `ui
+-> -> 6264 `i `ui
+-> -> 6336 `i `ui
+-> -> 6404 `i `ui
+"46
+-> -> 6472 `i `ui
+-> -> 6552 `i `ui
+-> -> 6624 `i `ui
+-> -> 6696 `i `ui
+-> -> 6768 `i `ui
+-> -> 6840 `i `ui
+-> -> 6912 `i `ui
+-> -> 6984 `i `ui
+-> -> 7056 `i `ui
+-> -> 7136 `i `ui
+"47
+-> -> 7216 `i `ui
+-> -> 7296 `i `ui
+-> -> 7368 `i `ui
+-> -> 7448 `i `ui
+-> -> 7528 `i `ui
+-> -> 7552 `i `ui
+-> -> 7608 `i `ui
+-> -> 7688 `i `ui
+-> -> 7760 `i `ui
+-> -> 7840 `i `ui
+"48
+-> -> 7912 `i `ui
+-> -> 7984 `i `ui
+-> -> 8056 `i `ui
+-> -> 8128 `i `ui
+-> -> 8168 `i `ui
+"49
+-> -> 8191 `i `ui
+..
+..
+..
 ]
-[; ;main.c: 35: volatile int RxTimer=0;
-[; ;main.c: 38: enum
-[; ;main.c: 39: {
-[; ;main.c: 40: RX_WAIT_FOR_BREAK,
-[; ;main.c: 41: RX_WAIT_FOR_START,
-[; ;main.c: 42: RX_READ_DATA
-[; ;main.c: 43: };
-[; ;main.c: 48: typedef struct
-[; ;main.c: 49: {
-[; ;main.c: 52: unsigned int RxNew :1;
-[; ;main.c: 54: unsigned int RxBreak :1;
-[; ;main.c: 56: unsigned int RxStart :1;
-[; ;main.c: 58: unsigned int RxTimeout :1;
-[; ;main.c: 62: unsigned int TxRunning :1;
-[; ;main.c: 64: unsigned int TxBREAK :1;
-[; ;main.c: 66: unsigned int TxMAB :1;
-[; ;main.c: 69: unsigned int TxDone :1;
-[; ;main.c: 72: }DMX_FLAGS;
-"75
-[v _Flags `VS593 ~T0 @X0 1 e ]
-[; ;main.c: 75: volatile DMX_FLAGS Flags;
-[; ;main.c: 80: enum
-[; ;main.c: 81: {
-[; ;main.c: 82: TIMER_1MS,
-[; ;main.c: 83: TIMER_BREAK,
-[; ;main.c: 84: TIMER_MAB,
-[; ;main.c: 85: TIMER_FILL
-[; ;main.c: 86: };
-"88
-[v _TimerState `Vuc ~T0 @X0 1 e ]
-[i _TimerState
--> -> 0 `i `uc
-]
-[; ;main.c: 88: volatile char TimerState=0;
-[; ;main.c: 90: typedef struct
-[; ;main.c: 91: {
-[; ;main.c: 92: union
-[; ;main.c: 93: {
-[; ;main.c: 94: struct
-[; ;main.c: 95: {
-[; ;main.c: 96: unsigned int MS :1;
-[; ;main.c: 97: unsigned int SEC :1;
-[; ;main.c: 98: unsigned int MIN :1;
-[; ;main.c: 99: unsigned int HR :1;
-[; ;main.c: 101: unsigned int BREAK :1;
-[; ;main.c: 102: unsigned int MAB :1;
-[; ;main.c: 103: unsigned int spare :2;
-[; ;main.c: 104: };
-[; ;main.c: 105: char flags;
-[; ;main.c: 106: };
-[; ;main.c: 108: int MS_Count;
-[; ;main.c: 109: char SEC_Count;
-[; ;main.c: 110: char MIN_Count;
-[; ;main.c: 111: char HR_Count;
-[; ;main.c: 114: }DMX_TIMER_DATA;
-"116
-[v _Timer `VS594 ~T0 @X0 1 e ]
-[; ;main.c: 116: volatile DMX_TIMER_DATA Timer;
-"119
+[; ;PWM.h: 22: const PWM_16 PWM={
+[; ;PWM.h: 23: 0x0000, 0x0046, 0x0046, 0x0046, 0x0046, 0x0046, 0x0046, 0x0048, 0x0048, 0x0048,
+[; ;PWM.h: 24: 0x0048, 0x0049, 0x0049, 0x0049, 0x004A, 0x004A, 0x004C, 0x004D, 0x004D, 0x004E,
+[; ;PWM.h: 25: 0x0050, 0x0052, 0x0053, 0x0054, 0x0056, 0x0058, 0x005A, 0x005C, 0x005E, 0x0060,
+[; ;PWM.h: 26: 0x0062, 0x0064, 0x0067, 0x006A, 0x006C, 0x006F, 0x0072, 0x0076, 0x007A, 0x007C,
+[; ;PWM.h: 27: 0x0080, 0x0083, 0x0088, 0x008A, 0x008E, 0x0092, 0x0098, 0x009E, 0x00A4, 0x00AC,
+[; ;PWM.h: 28: 0x00B4, 0x00BC, 0x00C0, 0x00C8, 0x00D0, 0x00DE, 0x00E4, 0x00EC, 0x00F6, 0x0106,
+[; ;PWM.h: 29: 0x010E, 0x0116, 0x011E, 0x012C, 0x0134, 0x013C, 0x0146, 0x0156, 0x0160, 0x0168,
+[; ;PWM.h: 30: 0x0176, 0x0182, 0x018A, 0x0196, 0x01A6, 0x01B2, 0x01BE, 0x01CC, 0x01D8, 0x01E4,
+[; ;PWM.h: 31: 0x01F6, 0x0202, 0x020E, 0x0220, 0x0230, 0x0240, 0x024C, 0x0262, 0x0270, 0x0280,
+[; ;PWM.h: 32: 0x0292, 0x02A2, 0x02B6, 0x02C6, 0x02D6, 0x02EA, 0x0300, 0x031C, 0x0326, 0x0336,
+[; ;PWM.h: 33: 0x0348, 0x0360, 0x0376, 0x0386, 0x039E, 0x03B0, 0x03C8, 0x03DC, 0x03F4, 0x0406,
+[; ;PWM.h: 34: 0x041C, 0x043A, 0x044C, 0x0468, 0x047E, 0x0496, 0x04B2, 0x04C8, 0x04E0, 0x04F8,
+[; ;PWM.h: 35: 0x0514, 0x0530, 0x054C, 0x0566, 0x0580, 0x059C, 0x05B8, 0x05D8, 0x05F4, 0x060E,
+[; ;PWM.h: 36: 0x0628, 0x0648, 0x0668, 0x0688, 0x06A4, 0x06C4, 0x06DC, 0x0704, 0x0724, 0x0740,
+[; ;PWM.h: 37: 0x0764, 0x0784, 0x07A4, 0x07C8, 0x07EC, 0x0810, 0x0830, 0x0850, 0x0870, 0x0898,
+[; ;PWM.h: 38: 0x08C0, 0x08E8, 0x0908, 0x0930, 0x0958, 0x0980, 0x09A0, 0x09C8, 0x09F0, 0x0A18,
+[; ;PWM.h: 39: 0x0A40, 0x0A68, 0x0A94, 0x0ABC, 0x0AE4, 0x0B10, 0x0B38, 0x0B60, 0x0B8C, 0x0BB4,
+[; ;PWM.h: 40: 0x0BE8, 0x0C16, 0x0C40, 0x0C6C, 0x0C98, 0x0CCC, 0x0CFC, 0x0D28, 0x0D58, 0x0D88,
+[; ;PWM.h: 41: 0x0DB8, 0x0DE8, 0x0E18, 0x0E48, 0x0E78, 0x0EA8, 0x0EE0, 0x0F10, 0x0F48, 0x0F7C,
+[; ;PWM.h: 42: 0x0FB0, 0x0FE4, 0x1018, 0x1050, 0x1088, 0x10BC, 0x10F4, 0x112C, 0x1164, 0x1198,
+[; ;PWM.h: 43: 0x11D0, 0x120C, 0x1244, 0x127C, 0x12B4, 0x12F0, 0x1328, 0x136C, 0x13A8, 0x13E4,
+[; ;PWM.h: 44: 0x1420, 0x145C, 0x149C, 0x14DC, 0x1518, 0x1558, 0x159C, 0x15DC, 0x161C, 0x165C,
+[; ;PWM.h: 45: 0x169C, 0x16E0, 0x1728, 0x1768, 0x17A8, 0x17F0, 0x1838, 0x1878, 0x18C0, 0x1904,
+[; ;PWM.h: 46: 0x1948, 0x1998, 0x19E0, 0x1A28, 0x1A70, 0x1AB8, 0x1B00, 0x1B48, 0x1B90, 0x1BE0,
+[; ;PWM.h: 47: 0x1C30, 0x1C80, 0x1CC8, 0x1D18, 0x1D68, 0x1D80, 0x1DB8, 0x1E08, 0x1E50, 0x1EA0,
+[; ;PWM.h: 48: 0x1EE8, 0x1F30, 0x1F78, 0x1FC0, 0x1FE8, 0x1FFF
+[; ;PWM.h: 49: };
+"13 main.c
 [p x FOSC=INTOSC ]
 [p x WDTE=OFF ]
 [p x PWRTE=OFF ]
@@ -4863,894 +5085,230 @@ Version 3.2 HI-TECH Software Intermediate Code
 [p x CP=OFF ]
 [p x BOREN=OFF ]
 [p x CLKOUTEN=OFF ]
-"120
+"14
 [p x WRT=OFF ]
 [p x PPS1WAY=OFF ]
 [p x PLLEN=ON ]
 [p x STVREN=ON ]
 [p x LPBOREN=OFF ]
 [p x LVP=OFF ]
-[; ;main.c: 119: __config("__CONFIG", "pic", "FOSC_INTOSC & WDTE_OFF & PWRTE_OFF & MCLRE_ON & CP_OFF & BOREN_OFF & CLKOUTEN_OFF");
-[; ;main.c: 120: __config("__CONFIG", "pic", "WRT_OFF & PPS1WAY_OFF & PLLEN_ON & STVREN_ON & LPBOREN_OFF & LVP_OFF");
-[; ;main.c: 125: void ADC_interrupt(void);
-[; ;main.c: 126: void DMX_interrput(void);
-[; ;main.c: 127: void timer_interrupt(void);
-[; ;main.c: 128: void Sweep_PWM(void);
-"130
-[v _led `uc ~T0 @X0 1 e ]
-[i _led
--> -> 253 `i `uc
-]
-[; ;main.c: 130: char led=253;
-"131
-[v _bright `uc ~T0 @X0 1 e ]
-[i _bright
--> -> 1 `i `uc
-]
-[; ;main.c: 131: char bright=1;
-"132
-[v _delay `Ci ~T0 @X0 1 e ]
-[i _delay
--> 1 `i
-]
-[; ;main.c: 132: const int delay=1;
-"133
-[v _count `i ~T0 @X0 1 e ]
-[i _count
--> 0 `i
-]
-[; ;main.c: 133: int count=0;
-"134
-[v _PWM `Ci ~T0 @X0 -> 256 `i e ]
-[i _PWM
-:U ..
-"135
--> 0 `i
--> 70 `i
--> 70 `i
--> 70 `i
--> 70 `i
--> 70 `i
--> 70 `i
--> 72 `i
--> 72 `i
--> 72 `i
-"136
--> 72 `i
--> 73 `i
--> 73 `i
--> 73 `i
--> 74 `i
--> 74 `i
--> 76 `i
--> 77 `i
--> 77 `i
--> 78 `i
-"137
--> 80 `i
--> 82 `i
--> 83 `i
--> 84 `i
--> 86 `i
--> 88 `i
--> 90 `i
--> 92 `i
--> 94 `i
--> 96 `i
-"138
--> 98 `i
--> 100 `i
--> 103 `i
--> 106 `i
--> 108 `i
--> 111 `i
--> 114 `i
--> 118 `i
--> 122 `i
--> 124 `i
-"139
--> 128 `i
--> 131 `i
--> 136 `i
--> 138 `i
--> 142 `i
--> 146 `i
--> 152 `i
--> 158 `i
--> 164 `i
--> 172 `i
-"140
--> 180 `i
--> 188 `i
--> 192 `i
--> 200 `i
--> 208 `i
--> 222 `i
--> 228 `i
--> 236 `i
--> 246 `i
--> 262 `i
-"141
--> 270 `i
--> 278 `i
--> 286 `i
--> 300 `i
--> 308 `i
--> 316 `i
--> 326 `i
--> 342 `i
--> 352 `i
--> 360 `i
-"142
--> 374 `i
--> 386 `i
--> 394 `i
--> 406 `i
--> 422 `i
--> 434 `i
--> 446 `i
--> 460 `i
--> 472 `i
--> 484 `i
-"143
--> 502 `i
--> 514 `i
--> 526 `i
--> 544 `i
--> 560 `i
--> 576 `i
--> 588 `i
--> 610 `i
--> 624 `i
--> 640 `i
-"144
--> 658 `i
--> 674 `i
--> 694 `i
--> 710 `i
--> 726 `i
--> 746 `i
--> 768 `i
--> 796 `i
--> 806 `i
--> 822 `i
-"145
--> 840 `i
--> 864 `i
--> 886 `i
--> 902 `i
--> 926 `i
--> 944 `i
--> 968 `i
--> 988 `i
--> 1012 `i
--> 1030 `i
-"146
--> 1052 `i
--> 1082 `i
--> 1100 `i
--> 1128 `i
--> 1150 `i
--> 1174 `i
--> 1202 `i
--> 1224 `i
--> 1248 `i
--> 1272 `i
-"147
--> 1300 `i
--> 1328 `i
--> 1356 `i
--> 1382 `i
--> 1408 `i
--> 1436 `i
--> 1464 `i
--> 1496 `i
--> 1524 `i
--> 1550 `i
-"148
--> 1576 `i
--> 1608 `i
--> 1640 `i
--> 1672 `i
--> 1700 `i
--> 1732 `i
--> 1756 `i
--> 1796 `i
--> 1828 `i
--> 1856 `i
-"149
--> 1892 `i
--> 1924 `i
--> 1956 `i
--> 1992 `i
--> 2028 `i
--> 2064 `i
--> 2096 `i
--> 2128 `i
--> 2160 `i
--> 2200 `i
-"150
--> 2240 `i
--> 2280 `i
--> 2312 `i
--> 2352 `i
--> 2392 `i
--> 2432 `i
--> 2464 `i
--> 2504 `i
--> 2544 `i
--> 2584 `i
-"151
--> 2624 `i
--> 2664 `i
--> 2708 `i
--> 2748 `i
--> 2788 `i
--> 2832 `i
--> 2872 `i
--> 2912 `i
--> 2956 `i
--> 2996 `i
-"152
--> 3048 `i
--> 3094 `i
--> 3136 `i
--> 3180 `i
--> 3224 `i
--> 3276 `i
--> 3324 `i
--> 3368 `i
--> 3416 `i
--> 3464 `i
-"153
--> 3512 `i
--> 3560 `i
--> 3608 `i
--> 3656 `i
--> 3704 `i
--> 3752 `i
--> 3808 `i
--> 3856 `i
--> 3912 `i
--> 3964 `i
-"154
--> 4016 `i
--> 4068 `i
--> 4120 `i
--> 4176 `i
--> 4232 `i
--> 4284 `i
--> 4340 `i
--> 4396 `i
--> 4452 `i
--> 4504 `i
-"155
--> 4560 `i
--> 4620 `i
--> 4676 `i
--> 4732 `i
--> 4788 `i
--> 4848 `i
--> 4904 `i
--> 4972 `i
--> 5032 `i
--> 5092 `i
-"156
--> 5152 `i
--> 5212 `i
--> 5276 `i
--> 5340 `i
--> 5400 `i
--> 5464 `i
--> 5532 `i
--> 5596 `i
--> 5660 `i
--> 5724 `i
-"157
--> 5788 `i
--> 5856 `i
--> 5928 `i
--> 5992 `i
--> 6056 `i
--> 6128 `i
--> 6200 `i
--> 6264 `i
--> 6336 `i
--> 6404 `i
-"158
--> 6472 `i
--> 6552 `i
--> 6624 `i
--> 6696 `i
--> 6768 `i
--> 6840 `i
--> 6912 `i
--> 6984 `i
--> 7056 `i
--> 7136 `i
-"159
--> 7216 `i
--> 7296 `i
--> 7368 `i
--> 7448 `i
--> 7528 `i
--> 7552 `i
--> 7608 `i
--> 7688 `i
--> 7760 `i
--> 7840 `i
-"160
--> 7912 `i
--> 7984 `i
--> 8056 `i
--> 8128 `i
--> 8168 `i
-"161
--> 8191 `i
-..
-]
-[; ;main.c: 134: const int PWM[256]={
-[; ;main.c: 135: 0x0000, 0x0046, 0x0046, 0x0046, 0x0046, 0x0046, 0x0046, 0x0048, 0x0048, 0x0048,
-[; ;main.c: 136: 0x0048, 0x0049, 0x0049, 0x0049, 0x004A, 0x004A, 0x004C, 0x004D, 0x004D, 0x004E,
-[; ;main.c: 137: 0x0050, 0x0052, 0x0053, 0x0054, 0x0056, 0x0058, 0x005A, 0x005C, 0x005E, 0x0060,
-[; ;main.c: 138: 0x0062, 0x0064, 0x0067, 0x006A, 0x006C, 0x006F, 0x0072, 0x0076, 0x007A, 0x007C,
-[; ;main.c: 139: 0x0080, 0x0083, 0x0088, 0x008A, 0x008E, 0x0092, 0x0098, 0x009E, 0x00A4, 0x00AC,
-[; ;main.c: 140: 0x00B4, 0x00BC, 0x00C0, 0x00C8, 0x00D0, 0x00DE, 0x00E4, 0x00EC, 0x00F6, 0x0106,
-[; ;main.c: 141: 0x010E, 0x0116, 0x011E, 0x012C, 0x0134, 0x013C, 0x0146, 0x0156, 0x0160, 0x0168,
-[; ;main.c: 142: 0x0176, 0x0182, 0x018A, 0x0196, 0x01A6, 0x01B2, 0x01BE, 0x01CC, 0x01D8, 0x01E4,
-[; ;main.c: 143: 0x01F6, 0x0202, 0x020E, 0x0220, 0x0230, 0x0240, 0x024C, 0x0262, 0x0270, 0x0280,
-[; ;main.c: 144: 0x0292, 0x02A2, 0x02B6, 0x02C6, 0x02D6, 0x02EA, 0x0300, 0x031C, 0x0326, 0x0336,
-[; ;main.c: 145: 0x0348, 0x0360, 0x0376, 0x0386, 0x039E, 0x03B0, 0x03C8, 0x03DC, 0x03F4, 0x0406,
-[; ;main.c: 146: 0x041C, 0x043A, 0x044C, 0x0468, 0x047E, 0x0496, 0x04B2, 0x04C8, 0x04E0, 0x04F8,
-[; ;main.c: 147: 0x0514, 0x0530, 0x054C, 0x0566, 0x0580, 0x059C, 0x05B8, 0x05D8, 0x05F4, 0x060E,
-[; ;main.c: 148: 0x0628, 0x0648, 0x0668, 0x0688, 0x06A4, 0x06C4, 0x06DC, 0x0704, 0x0724, 0x0740,
-[; ;main.c: 149: 0x0764, 0x0784, 0x07A4, 0x07C8, 0x07EC, 0x0810, 0x0830, 0x0850, 0x0870, 0x0898,
-[; ;main.c: 150: 0x08C0, 0x08E8, 0x0908, 0x0930, 0x0958, 0x0980, 0x09A0, 0x09C8, 0x09F0, 0x0A18,
-[; ;main.c: 151: 0x0A40, 0x0A68, 0x0A94, 0x0ABC, 0x0AE4, 0x0B10, 0x0B38, 0x0B60, 0x0B8C, 0x0BB4,
-[; ;main.c: 152: 0x0BE8, 0x0C16, 0x0C40, 0x0C6C, 0x0C98, 0x0CCC, 0x0CFC, 0x0D28, 0x0D58, 0x0D88,
-[; ;main.c: 153: 0x0DB8, 0x0DE8, 0x0E18, 0x0E48, 0x0E78, 0x0EA8, 0x0EE0, 0x0F10, 0x0F48, 0x0F7C,
-[; ;main.c: 154: 0x0FB0, 0x0FE4, 0x1018, 0x1050, 0x1088, 0x10BC, 0x10F4, 0x112C, 0x1164, 0x1198,
-[; ;main.c: 155: 0x11D0, 0x120C, 0x1244, 0x127C, 0x12B4, 0x12F0, 0x1328, 0x136C, 0x13A8, 0x13E4,
-[; ;main.c: 156: 0x1420, 0x145C, 0x149C, 0x14DC, 0x1518, 0x1558, 0x159C, 0x15DC, 0x161C, 0x165C,
-[; ;main.c: 157: 0x169C, 0x16E0, 0x1728, 0x1768, 0x17A8, 0x17F0, 0x1838, 0x1878, 0x18C0, 0x1904,
-[; ;main.c: 158: 0x1948, 0x1998, 0x19E0, 0x1A28, 0x1A70, 0x1AB8, 0x1B00, 0x1B48, 0x1B90, 0x1BE0,
-[; ;main.c: 159: 0x1C30, 0x1C80, 0x1CC8, 0x1D18, 0x1D68, 0x1D80, 0x1DB8, 0x1E08, 0x1E50, 0x1EA0,
-[; ;main.c: 160: 0x1EE8, 0x1F30, 0x1F78, 0x1FC0, 0x1FE8, 0x1FFF
-[; ;main.c: 161: };
-"162
-[v _RxAr `Vuc ~T0 @X0 -> 450 `i e ]
-[; ;main.c: 162: volatile char RxAr[450];
-"163
-[v _RxArPtr `*Vuc ~T0 @X0 1 e ]
-[; ;main.c: 163: volatile char *RxArPtr;
-"164
-[v _i `Vi ~T0 @X0 1 e ]
-[i _i
--> 0 `i
-]
-[; ;main.c: 164: volatile int i=0;
-"165
+[; ;main.c: 13: __config("__CONFIG", "pic", "FOSC_INTOSC & WDTE_OFF & PWRTE_OFF & MCLRE_ON & CP_OFF & BOREN_OFF & CLKOUTEN_OFF");
+[; ;main.c: 14: __config("__CONFIG", "pic", "WRT_OFF & PPS1WAY_OFF & PLLEN_ON & STVREN_ON & LPBOREN_OFF & LVP_OFF");
+[; ;main.c: 19: void ADC_interrupt(void);
+[; ;main.c: 20: void timer_interrupt(void);
+"24
+[v _ADC_Data `Vuc ~T0 @X0 1 e ]
+[; ;main.c: 24: volatile char ADC_Data;
+[; ;main.c: 26: typedef struct {
+[; ;main.c: 29: unsigned int New : 1;
+[; ;main.c: 31: } ADC_FLAGS;
+"33
+[v _ADC_Flags `VS595 ~T0 @X0 1 e ]
+[; ;main.c: 33: volatile ADC_FLAGS ADC_Flags;
+"37
 [v _main `(v ~T0 @X0 1 ef ]
 {
-[; ;main.c: 165: void main(void) {
+[; ;main.c: 37: void main(void) {
 [e :U _main ]
 [f ]
-[; ;main.c: 168: PWM1CON=PWM2CON=PWM3CON=PWM4CON=0b10000000;
-"168
+[; ;main.c: 38: PWM1CON = PWM2CON = PWM3CON = PWM4CON = 0b10000000;
+"38
 [e = _PWM1CON = _PWM2CON = _PWM3CON = _PWM4CON -> -> 128 `i `uc ]
-[; ;main.c: 169: PR2=0xFF;
-"169
+[; ;main.c: 39: PR2 = 0xFF;
+"39
 [e = _PR2 -> -> 255 `i `uc ]
-[; ;main.c: 170: T2CON=0b00000101;
-"170
+[; ;main.c: 40: T2CON = 0b00000101;
+"40
 [e = _T2CON -> -> 5 `i `uc ]
-[; ;main.c: 172: OSCCON= 0b11111000;
-"172
+[; ;main.c: 42: OSCCON = 0b11111000;
+"42
 [e = _OSCCON -> -> 248 `i `uc ]
-[; ;main.c: 173: OSCTUNE=0b000000;
-"173
+[; ;main.c: 43: OSCTUNE = 0b000000;
+"43
 [e = _OSCTUNE -> -> 0 `i `uc ]
-[; ;main.c: 175: TRISA2=TRISC0=TRISC1=TRISC2=0;
-"175
+[; ;main.c: 45: TRISA2 = TRISC0 = TRISC1 = TRISC2 = 0;
+"45
 [e = _TRISA2 = _TRISC0 = _TRISC1 = _TRISC2 -> -> 0 `i `b ]
-[; ;main.c: 176: ANSA2=ANSC0=ANSC1=ANSC2=0;
-"176
+[; ;main.c: 46: ANSA2 = ANSC0 = ANSC1 = ANSC2 = 0;
+"46
 [e = _ANSA2 = _ANSC0 = _ANSC1 = _ANSC2 -> -> 0 `i `b ]
-[; ;main.c: 177: TRISC3=0;ANSC3=0;
-"177
-[e = _TRISC3 -> -> 0 `i `b ]
-[e = _ANSC3 -> -> 0 `i `b ]
-[; ;main.c: 179: RA2PPS=0b0011;
-"179
+[; ;main.c: 48: RA2PPS = 0b0011;
+"48
 [e = _RA2PPS -> -> 3 `i `uc ]
-[; ;main.c: 180: RC0PPS=0b0100;
-"180
+[; ;main.c: 49: RC0PPS = 0b0100;
+"49
 [e = _RC0PPS -> -> 4 `i `uc ]
-[; ;main.c: 181: RC1PPS=0b0101;
-"181
+[; ;main.c: 50: RC1PPS = 0b0101;
+"50
 [e = _RC1PPS -> -> 5 `i `uc ]
-[; ;main.c: 182: RC2PPS=0b0110;
-"182
+[; ;main.c: 51: RC2PPS = 0b0110;
+"51
 [e = _RC2PPS -> -> 6 `i `uc ]
-[; ;main.c: 184: PWM1DCH=0x0F;
-"184
+[; ;main.c: 53: PWM1DCH = 0x0F;
+"53
 [e = _PWM1DCH -> -> 15 `i `uc ]
-[; ;main.c: 185: PWM2DCH=0x0C;
-"185
+[; ;main.c: 54: PWM2DCH = 0x0C;
+"54
 [e = _PWM2DCH -> -> 12 `i `uc ]
-[; ;main.c: 186: PWM3DCH=0x09;
-"186
+[; ;main.c: 55: PWM3DCH = 0x09;
+"55
 [e = _PWM3DCH -> -> 9 `i `uc ]
-[; ;main.c: 187: PWM4DCH=0x06;
-"187
+[; ;main.c: 56: PWM4DCH = 0x06;
+"56
 [e = _PWM4DCH -> -> 6 `i `uc ]
-[; ;main.c: 189: PWM1DCL=0xFF;
-"189
+[; ;main.c: 58: PWM1DCL = 0xFF;
+"58
 [e = _PWM1DCL -> -> 255 `i `uc ]
-[; ;main.c: 190: PWM2DCL=0x7E;
-"190
+[; ;main.c: 59: PWM2DCL = 0x7E;
+"59
 [e = _PWM2DCL -> -> 126 `i `uc ]
-[; ;main.c: 191: PWM3DCL=0x0D;
-"191
+[; ;main.c: 60: PWM3DCL = 0x0D;
+"60
 [e = _PWM3DCL -> -> 13 `i `uc ]
-[; ;main.c: 192: PWM4DCL=0x9C;
-"192
+[; ;main.c: 61: PWM4DCL = 0x9C;
+"61
 [e = _PWM4DCL -> -> 156 `i `uc ]
-[; ;main.c: 194: PWM1PHH=PWM2PHH=PWM3PHH=PWM4PHH=0x00;
-"194
+[; ;main.c: 63: PWM1PHH = PWM2PHH = PWM3PHH = PWM4PHH = 0x00;
+"63
 [e = _PWM1PHH = _PWM2PHH = _PWM3PHH = _PWM4PHH -> -> 0 `i `uc ]
-[; ;main.c: 195: PWM1PHL=PWM2PHL=PWM3PHL=PWM4PHL=0x00;
-"195
+[; ;main.c: 64: PWM1PHL = PWM2PHL = PWM3PHL = PWM4PHL = 0x00;
+"64
 [e = _PWM1PHL = _PWM2PHL = _PWM3PHL = _PWM4PHL -> -> 0 `i `uc ]
-[; ;main.c: 196: PWM1PRH=PWM2PRH=PWM3PRH=PWM4PRH=0x1F;
-"196
+[; ;main.c: 65: PWM1PRH = PWM2PRH = PWM3PRH = PWM4PRH = 0x1F;
+"65
 [e = _PWM1PRH = _PWM2PRH = _PWM3PRH = _PWM4PRH -> -> 31 `i `uc ]
-[; ;main.c: 197: PWM1PRL=PWM2PRL=PWM3PRL=PWM4PRL=0xFF;
-"197
+[; ;main.c: 66: PWM1PRL = PWM2PRL = PWM3PRL = PWM4PRL = 0xFF;
+"66
 [e = _PWM1PRL = _PWM2PRL = _PWM3PRL = _PWM4PRL -> -> 255 `i `uc ]
-[; ;main.c: 198: PWM1CLKCON=PWM2CLKCON=PWM3CLKCON=PWM4CLKCON=0b00000000;
-"198
+[; ;main.c: 67: PWM1CLKCON = PWM2CLKCON = PWM3CLKCON = PWM4CLKCON = 0b00000000;
+"67
 [e = _PWM1CLKCON = _PWM2CLKCON = _PWM3CLKCON = _PWM4CLKCON -> -> 0 `i `uc ]
-[; ;main.c: 203: INTCON=0b11000000;
-"203
+[; ;main.c: 70: TRISC3 = 0;
+"70
+[e = _TRISC3 -> -> 0 `i `b ]
+[; ;main.c: 71: ANSC3 = 0;
+"71
+[e = _ANSC3 -> -> 0 `i `b ]
+[; ;main.c: 75: INTCON = 0b11000000;
+"75
 [e = _INTCON -> -> 192 `i `uc ]
-[; ;main.c: 207: RXPPS=0b10101;
-"207
-[e = _RXPPS -> -> 21 `i `uc ]
-[; ;main.c: 208: TRISC5=1;
-"208
-[e = _TRISC5 -> -> 1 `i `b ]
-[; ;main.c: 210: RCSTA=0b10010000;
-"210
-[e = _RCSTA -> -> 144 `i `uc ]
-[; ;main.c: 211: SYNC=0;
-"211
-[e = _SYNC -> -> 0 `i `b ]
-[; ;main.c: 212: BAUDCON=0b00000000;
-"212
-[e = _BAUDCON -> -> 0 `i `uc ]
-[; ;main.c: 213: BRGH=1;
-"213
-[e = _BRGH -> -> 1 `i `b ]
-[; ;main.c: 214: SPBRGH=0x00;
-"214
-[e = _SPBRGH -> -> 0 `i `uc ]
-[; ;main.c: 215: SPBRGL=0x3;
-"215
-[e = _SPBRGL -> -> 3 `i `uc ]
-[; ;main.c: 216: RCIE=1;
-"216
-[e = _RCIE -> -> 1 `i `b ]
-[; ;main.c: 217: RxArPtr = &RxAr[0];
-"217
-[e = _RxArPtr &U *U + &U _RxAr * -> -> -> 0 `i `ui `ux -> -> # *U &U _RxAr `ui `ux ]
-[; ;main.c: 233: RC3=0;
-"233
-[e = _RC3 -> -> 0 `i `b ]
-[; ;main.c: 234: while(1)
-"234
-[e :U 599 ]
-[; ;main.c: 235: {
-"235
-{
-[; ;main.c: 237: if(Flags.RxNew==1)
-"237
-[e $ ! == -> . _Flags 0 `i -> 1 `i 601  ]
-[; ;main.c: 238: {
-"238
-{
-[; ;main.c: 239: Flags.RxNew=0;
-"239
-[e = . _Flags 0 -> -> 0 `i `uc ]
-[; ;main.c: 242: PWM1DCH=((char)(PWM[RxData[0]]>>8));
-"242
-[e = _PWM1DCH -> >> *U + &U _PWM * -> *U + &U _RxData * -> -> -> 0 `i `ui `ux -> -> # *U &U _RxData `ui `ux `ux -> -> # *U &U _PWM `ui `ux -> 8 `i `uc ]
-[; ;main.c: 243: PWM1DCL=((char)PWM[RxData[0]]);
-"243
-[e = _PWM1DCL -> *U + &U _PWM * -> *U + &U _RxData * -> -> -> 0 `i `ui `ux -> -> # *U &U _RxData `ui `ux `ux -> -> # *U &U _PWM `ui `ux `uc ]
-[; ;main.c: 244: PWM2DCH=((char)(PWM[RxData[1]]>>8));
-"244
-[e = _PWM2DCH -> >> *U + &U _PWM * -> *U + &U _RxData * -> -> -> 1 `i `ui `ux -> -> # *U &U _RxData `ui `ux `ux -> -> # *U &U _PWM `ui `ux -> 8 `i `uc ]
-[; ;main.c: 245: PWM2DCL=((char)PWM[RxData[1]]);
-"245
-[e = _PWM2DCL -> *U + &U _PWM * -> *U + &U _RxData * -> -> -> 1 `i `ui `ux -> -> # *U &U _RxData `ui `ux `ux -> -> # *U &U _PWM `ui `ux `uc ]
-[; ;main.c: 246: PWM3DCH=((char)(PWM[RxData[2]]>>8));
-"246
-[e = _PWM3DCH -> >> *U + &U _PWM * -> *U + &U _RxData * -> -> -> 2 `i `ui `ux -> -> # *U &U _RxData `ui `ux `ux -> -> # *U &U _PWM `ui `ux -> 8 `i `uc ]
-[; ;main.c: 247: PWM3DCL=((char)PWM[RxData[2]]);
-"247
-[e = _PWM3DCL -> *U + &U _PWM * -> *U + &U _RxData * -> -> -> 2 `i `ui `ux -> -> # *U &U _RxData `ui `ux `ux -> -> # *U &U _PWM `ui `ux `uc ]
-[; ;main.c: 248: PWM4DCH=((char)(PWM[RxData[3]]>>8));
-"248
-[e = _PWM4DCH -> >> *U + &U _PWM * -> *U + &U _RxData * -> -> -> 3 `i `ui `ux -> -> # *U &U _RxData `ui `ux `ux -> -> # *U &U _PWM `ui `ux -> 8 `i `uc ]
-[; ;main.c: 249: PWM4DCL=((char)PWM[RxData[3]]);
-"249
-[e = _PWM4DCL -> *U + &U _PWM * -> *U + &U _RxData * -> -> -> 3 `i `ui `ux -> -> # *U &U _RxData `ui `ux `ux -> -> # *U &U _PWM `ui `ux `uc ]
-[; ;main.c: 250: PWM1LDCON=PWM2LDCON=PWM3LDCON=PWM4LDCON=0b10000000;
-"250
-[e = _PWM1LDCON = _PWM2LDCON = _PWM3LDCON = _PWM4LDCON -> -> 128 `i `uc ]
-"251
-}
-[e :U 601 ]
-"266
-}
+[; ;main.c: 78: ADIE = 1;
+"78
+[e = _ADIE -> -> 1 `i `b ]
+[; ;main.c: 80: TRISA4 = 1;
+"80
+[e = _TRISA4 -> -> 1 `i `b ]
+[; ;main.c: 81: ANSA4 = 1;
+"81
+[e = _ANSA4 -> -> 1 `i `b ]
+[; ;main.c: 82: ADCON0 = 0b00001101;
+"82
+[e = _ADCON0 -> -> 13 `i `uc ]
+[; ;main.c: 83: ADCON1 = 0b01110000;
+"83
+[e = _ADCON1 -> -> 112 `i `uc ]
+[; ;main.c: 85: ADGO = 1;
+"85
+[e = _ADGO -> -> 1 `i `b ]
+[; ;main.c: 86: ADIF = 0;
+"86
+[e = _ADIF -> -> 0 `i `b ]
+[; ;main.c: 87: IOCIE = 1;
+"87
+[e = _IOCIE -> -> 1 `i `b ]
+[; ;main.c: 88: IOCAN3 = IOCAP3 = 1;
+"88
+[e = _IOCAN3 = _IOCAP3 -> -> 1 `i `b ]
+[; ;main.c: 91: while (1) {
+"91
 [e :U 598 ]
-"234
-[e $U 599  ]
-[e :U 600 ]
-[; ;main.c: 251: }
-[; ;main.c: 266: }
-[; ;main.c: 268: }
-"268
-[e :UE 597 ]
-}
-[v F4920 `(v ~T0 @X0 1 tf ]
-"270
-[v _isr `IF4920 ~T0 @X0 1 e ]
-"271
 {
-[; ;main.c: 270: void interrupt isr(void)
-[; ;main.c: 271: {
+[; ;main.c: 93: if(ADC_Flags.New==1){
+"93
+[e $ ! == -> . _ADC_Flags 0 `i -> 1 `i 600  ]
+{
+[; ;main.c: 94: ADC_Flags.New = 0;
+"94
+[e = . _ADC_Flags 0 -> -> 0 `i `uc ]
+[; ;main.c: 95: PWM1DCH=PWM4DCH = PWM.PWM[ADC_Data].DCH;
+"95
+[e = _PWM1DCH = _PWM4DCH . *U + &U . _PWM 1 * -> _ADC_Data `ux -> -> # *U &U . _PWM 1 `ui `ux 1 ]
+[; ;main.c: 96: PWM1DCL=PWM4DCL = PWM.PWM[ADC_Data].DCL;
+"96
+[e = _PWM1DCL = _PWM4DCL . *U + &U . _PWM 1 * -> _ADC_Data `ux -> -> # *U &U . _PWM 1 `ui `ux 0 ]
+[; ;main.c: 97: PWM1LDCON=PWM4LDCON = 0b10000000;
+"97
+[e = _PWM1LDCON = _PWM4LDCON -> -> 128 `i `uc ]
+"98
+}
+[e :U 600 ]
+"102
+}
+[e :U 597 ]
+"91
+[e $U 598  ]
+[e :U 599 ]
+[; ;main.c: 98: }
+[; ;main.c: 102: }
+[; ;main.c: 103: }
+"103
+[e :UE 596 ]
+}
+[v F4879 `(v ~T0 @X0 1 tf ]
+"105
+[v _isr `IF4879 ~T0 @X0 1 e ]
+{
+[; ;main.c: 105: void interrupt isr(void) {
 [e :U _isr ]
 [f ]
-[; ;main.c: 274: DMX_interrput();
-"274
-[e ( _DMX_interrput ..  ]
-[; ;main.c: 277: }
-"277
-[e :UE 602 ]
+[; ;main.c: 106: ADC_interrupt();
+"106
+[e ( _ADC_interrupt ..  ]
+[; ;main.c: 110: }
+"110
+[e :UE 601 ]
 }
-"282
-[v _DMX_interrput `(v ~T0 @X0 1 ef ]
-{
-[; ;main.c: 282: void DMX_interrput(void){
-[e :U _DMX_interrput ]
-[f ]
-[; ;main.c: 283: if(RCIE & RCIF){
-"283
-[e $ ! & _RCIE _RCIF 604  ]
-{
-"286
-[v _RxDat `Vuc ~T0 @X0 1 a ]
-[; ;main.c: 286: volatile char RxDat;
-[; ;main.c: 288: if(FERR)
-"288
-[e $ ! _FERR 605  ]
-[; ;main.c: 289: {
-"289
-{
-[; ;main.c: 290: RxDat=RCREG;
-"290
-[e = _RxDat _RCREG ]
-[; ;main.c: 291: Flags.RxBreak=1;
-"291
-[e = . _Flags 1 -> -> 1 `i `uc ]
-[; ;main.c: 292: RxState=RX_WAIT_FOR_START;
-"292
-[e = _RxState -> . `E4852 1 `uc ]
-[; ;main.c: 293: RxTimer=0;
-"293
-[e = _RxTimer -> 0 `i ]
-"295
-}
-[e :U 605 ]
-[; ;main.c: 295: }
-[; ;main.c: 300: switch(RxState)
-"300
-[e $U 607  ]
-[; ;main.c: 301: {
-"301
-{
-[; ;main.c: 302: case RX_WAIT_FOR_BREAK:
-"302
-[e :U 608 ]
-[; ;main.c: 303: RxDat=RCREG;
-"303
-[e = _RxDat _RCREG ]
-[; ;main.c: 304: break;
-"304
-[e $U 606  ]
-[; ;main.c: 306: case RX_WAIT_FOR_START:
-"306
-[e :U 609 ]
-[; ;main.c: 308: if(RCIF)
-"308
-[e $ ! _RCIF 610  ]
-[; ;main.c: 309: {
-"309
-{
-[; ;main.c: 311: RxDat=RCREG;
-"311
-[e = _RxDat _RCREG ]
-[; ;main.c: 313: if(RxDat==DMX_StartCode)
-"313
-[e $ ! == -> _RxDat `i -> _DMX_StartCode `i 611  ]
-[; ;main.c: 314: {
-"314
-{
-[; ;main.c: 316: RxState = RX_READ_DATA;
-"316
-[e = _RxState -> . `E4852 2 `uc ]
-[; ;main.c: 317: RxDataPtr = &RxData[0];
-"317
-[e = _RxDataPtr &U *U + &U _RxData * -> -> -> 0 `i `ui `ux -> -> # *U &U _RxData `ui `ux ]
-[; ;main.c: 318: RxAddrCount = 1;
-"318
-[e = _RxAddrCount -> 1 `i ]
-[; ;main.c: 319: Flags.RxStart = 1;
-"319
-[e = . _Flags 2 -> -> 1 `i `uc ]
-"320
-}
-[; ;main.c: 320: }
-[e $U 612  ]
-"321
-[e :U 611 ]
-[; ;main.c: 321: else
-[; ;main.c: 322: {
-"322
-{
-[; ;main.c: 323: RxState=RX_WAIT_FOR_BREAK;
-"323
-[e = _RxState -> . `E4852 0 `uc ]
-"324
-}
-[e :U 612 ]
-"325
-}
-[e :U 610 ]
-[; ;main.c: 324: }
-[; ;main.c: 325: }
-[; ;main.c: 326: break;
-"326
-[e $U 606  ]
-[; ;main.c: 328: case RX_READ_DATA:
-"328
-[e :U 613 ]
-[; ;main.c: 329: RxDat=RCREG;
-"329
-[e = _RxDat _RCREG ]
-[; ;main.c: 338: if(RxAddrCount >= DMX_Address && (DMX_Address !=0) )
-"338
-[e $ ! && >= _RxAddrCount _DMX_Address != _DMX_Address -> 0 `i 614  ]
-[; ;main.c: 339: {
-"339
-{
-[; ;main.c: 340: *RxDataPtr=RxDat;
-"340
-[e = *U _RxDataPtr _RxDat ]
-[; ;main.c: 341: RxDataPtr++;
-"341
-[e ++ _RxDataPtr * -> -> 1 `i `x -> -> # *U _RxDataPtr `i `x ]
-"342
-}
-[e :U 614 ]
-[; ;main.c: 342: }
-[; ;main.c: 344: RxAddrCount++;
-"344
-[e ++ _RxAddrCount -> 1 `i ]
-[; ;main.c: 347: if(RxAddrCount >= (DMX_Address + 4) && DMX_Address !=0 )
-"347
-[e $ ! && >= _RxAddrCount + _DMX_Address -> 4 `i != _DMX_Address -> 0 `i 615  ]
-[; ;main.c: 348: {
-"348
-{
-[; ;main.c: 349: Flags.RxNew=1;
-"349
-[e = . _Flags 0 -> -> 1 `i `uc ]
-[; ;main.c: 350: RxState=RX_WAIT_FOR_BREAK;
-"350
-[e = _RxState -> . `E4852 0 `uc ]
-[; ;main.c: 351: RxTimer = 0;
-"351
-[e = _RxTimer -> 0 `i ]
-[; ;main.c: 352: Flags.RxTimeout=0;
-"352
-[e = . _Flags 3 -> -> 0 `i `uc ]
-"353
-}
-[e :U 615 ]
-[; ;main.c: 353: }
-[; ;main.c: 354: break;
-"354
-[e $U 606  ]
-"355
-}
-[; ;main.c: 355: }
-[e $U 606  ]
-"300
-[e :U 607 ]
-[e [\ _RxState , $ -> . `E4852 0 `uc 608
- , $ -> . `E4852 1 `uc 609
- , $ -> . `E4852 2 `uc 613
- 606 ]
-"355
-[e :U 606 ]
-[; ;main.c: 357: if(RxTimer > 1200)
-"357
-[e $ ! > _RxTimer -> 1200 `i 616  ]
-[; ;main.c: 358: {
-"358
-{
-[; ;main.c: 359: Flags.RxTimeout=1;
-"359
-[e = . _Flags 3 -> -> 1 `i `uc ]
-[; ;main.c: 360: RxTimer=0;
-"360
-[e = _RxTimer -> 0 `i ]
-"361
-}
-[e :U 616 ]
-"362
-}
-[e :U 604 ]
-[; ;main.c: 361: }
-[; ;main.c: 362: }
-[; ;main.c: 363: }
-"363
-[e :UE 603 ]
-}
-"366
-[v _Sweep_PWM `(v ~T0 @X0 1 ef ]
-{
-[; ;main.c: 366: void Sweep_PWM(void){
-[e :U _Sweep_PWM ]
-[f ]
-[; ;main.c: 367: if(TMR0IF){
-"367
-[e $ ! _TMR0IF 618  ]
-{
-[; ;main.c: 369: if((count<delay) && ((led>0) && (led<255)) ){
-"369
-[e $ ! && < _count _delay && > -> _led `i -> 0 `i < -> _led `i -> 255 `i 619  ]
-{
-[; ;main.c: 370: count+=1;
-"370
-[e =+ _count -> 1 `i ]
-"371
-}
-[; ;main.c: 371: }else if((count<1000*delay )&& ((led== 0) || (led==255)) ){
-[e $U 620  ]
-[e :U 619 ]
-[e $ ! && < _count * -> 1000 `i _delay || == -> _led `i -> 0 `i == -> _led `i -> 255 `i 621  ]
-{
-[; ;main.c: 372: count+=1;
-"372
-[e =+ _count -> 1 `i ]
-"373
-}
-[; ;main.c: 373: }else{
-[e $U 622  ]
-[e :U 621 ]
-{
-[; ;main.c: 374: count=0;
-"374
-[e = _count -> 0 `i ]
-[; ;main.c: 375: if(bright==1){
-"375
-[e $ ! == -> _bright `i -> 1 `i 623  ]
-{
-[; ;main.c: 376: led+=1;
-"376
-[e =+ _led -> -> 1 `i `uc ]
-"377
-}
-[; ;main.c: 377: }
-[e $U 624  ]
-"378
-[e :U 623 ]
-[; ;main.c: 378: else{
-{
-[; ;main.c: 379: led-=1;
-"379
-[e =- _led -> -> 1 `i `uc ]
-"380
-}
-[e :U 624 ]
-[; ;main.c: 380: }
-[; ;main.c: 381: if(led==255){
-"381
-[e $ ! == -> _led `i -> 255 `i 625  ]
-{
-[; ;main.c: 382: bright=0;
-"382
-[e = _bright -> -> 0 `i `uc ]
-"383
-}
-[; ;main.c: 383: }else if(led==0){
-[e $U 626  ]
-[e :U 625 ]
-[e $ ! == -> _led `i -> 0 `i 627  ]
-{
-[; ;main.c: 384: bright=1;
-"384
-[e = _bright -> -> 1 `i `uc ]
-"385
-}
-[e :U 627 ]
-"386
-[e :U 626 ]
-[; ;main.c: 385: }
-[; ;main.c: 386: PWM1DCH=((char)(PWM[led]>>8));
-[e = _PWM1DCH -> >> *U + &U _PWM * -> _led `ux -> -> # *U &U _PWM `ui `ux -> 8 `i `uc ]
-[; ;main.c: 387: PWM1DCL=((char)PWM[led]);
-"387
-[e = _PWM1DCL -> *U + &U _PWM * -> _led `ux -> -> # *U &U _PWM `ui `ux `uc ]
-[; ;main.c: 388: PWM1LDCON=0b10000000;
-"388
-[e = _PWM1LDCON -> -> 128 `i `uc ]
-"389
-}
-[e :U 622 ]
-[e :U 620 ]
-[; ;main.c: 389: }
-[; ;main.c: 390: TMR0IF=0;
-"390
-[e = _TMR0IF -> -> 0 `i `b ]
-"391
-}
-[e :U 618 ]
-[; ;main.c: 391: }
-[; ;main.c: 392: }
-"392
-[e :UE 617 ]
-}
-"445
+"159
 [v _ADC_interrupt `(v ~T0 @X0 1 ef ]
 {
-[; ;main.c: 445: void ADC_interrupt(void){
+[; ;main.c: 159: void ADC_interrupt(void) {
 [e :U _ADC_interrupt ]
 [f ]
-[; ;main.c: 446: if(ADIF==1){
-"446
-[e $ ! == -> _ADIF `i -> 1 `i 629  ]
+[; ;main.c: 160: RC3=~RC3;
+"160
+[e = _RC3 -> ~ -> _RC3 `ui `b ]
+[; ;main.c: 161: if (IOCAF3==1) {
+"161
+[e $ ! == -> _IOCAF3 `i -> 1 `i 603  ]
 {
-[; ;main.c: 447: PWM1DCH=(ADRESH<<4);
-"447
-[e = _PWM1DCH -> << -> _ADRESH `i -> 4 `i `uc ]
-[; ;main.c: 448: PWM1DCH|=(ADRESL>>4);
-"448
-[e =| _PWM1DCH -> >> -> _ADRESL `i -> 4 `i `uc ]
-[; ;main.c: 449: PWM1DCL=(ADRESL<<4);
-"449
-[e = _PWM1DCL -> << -> _ADRESL `i -> 4 `i `uc ]
-[; ;main.c: 450: ADIF=0;
-"450
-[e = _ADIF -> -> 0 `i `b ]
-[; ;main.c: 451: ADGO=1;
-"451
+[; ;main.c: 162: ADGO = 1;
+"162
 [e = _ADGO -> -> 1 `i `b ]
-[; ;main.c: 453: IOCCF3=0;
-"453
-[e = _IOCCF3 -> -> 0 `i `b ]
-[; ;main.c: 454: GIE=1;
-"454
-[e = _GIE -> -> 1 `i `b ]
-"455
+[; ;main.c: 163: IOCAF3=0;
+"163
+[e = _IOCAF3 -> -> 0 `i `b ]
+"165
 }
-[e :U 629 ]
-[; ;main.c: 455: }
-[; ;main.c: 456: }
-"456
-[e :UE 628 ]
+[e :U 603 ]
+[; ;main.c: 165: }
+[; ;main.c: 166: if (ADIF == 1) {
+"166
+[e $ ! == -> _ADIF `i -> 1 `i 604  ]
+{
+[; ;main.c: 167: ADC_Data=ADRESH;
+"167
+[e = _ADC_Data _ADRESH ]
+[; ;main.c: 168: ADC_Flags.New=1;
+"168
+[e = . _ADC_Flags 0 -> -> 1 `i `uc ]
+[; ;main.c: 169: ADIF = 0;
+"169
+[e = _ADIF -> -> 0 `i `b ]
+"170
+}
+[e :U 604 ]
+[; ;main.c: 170: }
+[; ;main.c: 171: }
+"171
+[e :UE 602 ]
 }
