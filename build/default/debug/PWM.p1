@@ -9,6 +9,8 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _OPTION_REG `Vuc ~T0 @X0 0 e@149 ]
 "12768
 [v _TMR0IE `Vb ~T0 @X0 0 e@93 ]
+"11602
+[v _PEIE `Vb ~T0 @X0 0 e@94 ]
 "12770
 [v _TMR0IF `Vb ~T0 @X0 0 e@90 ]
 "4384
@@ -4963,9 +4965,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 "25
 [v _delay `Ci ~T0 @X0 1 e ]
 [i _delay
--> 1 `i
+-> 2 `i
 ]
-[; ;PWM.c: 25: const int delay = 1;
+[; ;PWM.c: 25: const int delay = 2;
 "26
 [v _count `i ~T0 @X0 1 e ]
 [i _count
@@ -4984,112 +4986,115 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;PWM.c: 30: TMR0IE=1;
 "30
 [e = _TMR0IE -> -> 1 `i `b ]
-[; ;PWM.c: 31: }
+[; ;PWM.c: 31: PEIE=0;
 "31
+[e = _PEIE -> -> 0 `i `b ]
+[; ;PWM.c: 32: }
+"32
 [e :UE 595 ]
 }
-"33
+"34
 [v _Sweep_PWM `(v ~T0 @X0 1 ef ]
 {
-[; ;PWM.c: 33: void Sweep_PWM(void){
+[; ;PWM.c: 34: void Sweep_PWM(void){
 [e :U _Sweep_PWM ]
 [f ]
-[; ;PWM.c: 34: if(TMR0IF){
-"34
+[; ;PWM.c: 35: if(TMR0IF){
+"35
 [e $ ! _TMR0IF 597  ]
 {
-[; ;PWM.c: 36: if((count<delay) && ((led>0) && (led<255)) ){
-"36
+[; ;PWM.c: 37: if((count<delay) && ((led>0) && (led<255)) ){
+"37
 [e $ ! && < _count _delay && > -> _led `i -> 0 `i < -> _led `i -> 255 `i 598  ]
 {
-[; ;PWM.c: 37: count+=1;
-"37
-[e =+ _count -> 1 `i ]
+[; ;PWM.c: 38: count+=1;
 "38
+[e =+ _count -> 1 `i ]
+"39
 }
-[; ;PWM.c: 38: }else if((count<1000*delay )&& ((led== 0) || (led==255)) ){
+[; ;PWM.c: 39: }else if((count<100*delay )&& ((led== 0) || (led==255)) ){
 [e $U 599  ]
 [e :U 598 ]
-[e $ ! && < _count * -> 1000 `i _delay || == -> _led `i -> 0 `i == -> _led `i -> 255 `i 600  ]
+[e $ ! && < _count * -> 100 `i _delay || == -> _led `i -> 0 `i == -> _led `i -> 255 `i 600  ]
 {
-[; ;PWM.c: 39: count+=1;
-"39
-[e =+ _count -> 1 `i ]
+[; ;PWM.c: 40: count+=1;
 "40
+[e =+ _count -> 1 `i ]
+"41
 }
-[; ;PWM.c: 40: }else{
+[; ;PWM.c: 41: }else{
 [e $U 601  ]
 [e :U 600 ]
 {
-[; ;PWM.c: 41: count=0;
-"41
-[e = _count -> 0 `i ]
-[; ;PWM.c: 42: if(bright==1){
+[; ;PWM.c: 42: count=0;
 "42
+[e = _count -> 0 `i ]
+[; ;PWM.c: 43: if(bright==1){
+"43
 [e $ ! == -> _bright `i -> 1 `i 602  ]
 {
-[; ;PWM.c: 43: led+=1;
-"43
-[e =+ _led -> -> 1 `i `uc ]
+[; ;PWM.c: 44: led+=1;
 "44
-}
-[; ;PWM.c: 44: }
-[e $U 603  ]
+[e =+ _led -> -> 1 `i `uc ]
 "45
-[e :U 602 ]
-[; ;PWM.c: 45: else{
-{
-[; ;PWM.c: 46: led-=1;
+}
+[; ;PWM.c: 45: }
+[e $U 603  ]
 "46
-[e =- _led -> -> 1 `i `uc ]
+[e :U 602 ]
+[; ;PWM.c: 46: else{
+{
+[; ;PWM.c: 47: led-=1;
 "47
+[e =- _led -> -> 1 `i `uc ]
+"48
 }
 [e :U 603 ]
-[; ;PWM.c: 47: }
-[; ;PWM.c: 48: if(led==255){
-"48
+[; ;PWM.c: 48: }
+[; ;PWM.c: 49: if(led==255){
+"49
 [e $ ! == -> _led `i -> 255 `i 604  ]
 {
-[; ;PWM.c: 49: bright=0;
-"49
-[e = _bright -> -> 0 `i `uc ]
+[; ;PWM.c: 50: bright=0;
 "50
+[e = _bright -> -> 0 `i `uc ]
+"51
 }
-[; ;PWM.c: 50: }else if(led==0){
+[; ;PWM.c: 51: }else if(led==0){
 [e $U 605  ]
 [e :U 604 ]
 [e $ ! == -> _led `i -> 0 `i 606  ]
 {
-[; ;PWM.c: 51: bright=1;
-"51
-[e = _bright -> -> 1 `i `uc ]
+[; ;PWM.c: 52: bright=1;
 "52
+[e = _bright -> -> 1 `i `uc ]
+"53
 }
 [e :U 606 ]
-"53
-[e :U 605 ]
-[; ;PWM.c: 52: }
-[; ;PWM.c: 53: PWM1DCH=PWM.PWM[led].DCH;
-[e = _PWM1DCH . *U + &U . _PWM 1 * -> _led `ux -> -> # *U &U . _PWM 1 `ui `ux 1 ]
-[; ;PWM.c: 54: PWM1DCL=PWM.PWM[led].DCL;
 "54
-[e = _PWM1DCL . *U + &U . _PWM 1 * -> _led `ux -> -> # *U &U . _PWM 1 `ui `ux 0 ]
-[; ;PWM.c: 55: PWM1LDCON=0b10000000;
+[e :U 605 ]
+[; ;PWM.c: 53: }
+[; ;PWM.c: 54: PWM1DCH=PWM.PWM[led].DCH;
+[e = _PWM1DCH . *U + &U . _PWM 1 * -> _led `ux -> -> # *U &U . _PWM 1 `ui `ux 1 ]
+[; ;PWM.c: 55: PWM1DCL=PWM.PWM[led].DCL;
 "55
-[e = _PWM1LDCON -> -> 128 `i `uc ]
+[e = _PWM1DCL . *U + &U . _PWM 1 * -> _led `ux -> -> # *U &U . _PWM 1 `ui `ux 0 ]
+[; ;PWM.c: 56: PWM1LDCON=0b10000000;
 "56
+[e = _PWM1LDCON -> -> 128 `i `uc ]
+"57
 }
 [e :U 601 ]
 [e :U 599 ]
-[; ;PWM.c: 56: }
-[; ;PWM.c: 57: TMR0IF=0;
-"57
-[e = _TMR0IF -> -> 0 `i `b ]
+[; ;PWM.c: 57: }
+[; ;PWM.c: 58: TMR0IF=0;
 "58
+[e = _TMR0IF -> -> 0 `i `b ]
+"59
 }
 [e :U 597 ]
-[; ;PWM.c: 58: }
 [; ;PWM.c: 59: }
-"59
+[; ;PWM.c: 60: }
+"60
 [e :UE 596 ]
 }

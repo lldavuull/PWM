@@ -1,10 +1,13 @@
 Version 3.2 HI-TECH Software Intermediate Code
+"65 DMX.h
+[s S593 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S593 . RxNew RxBreak RxStart RxTimeout TxRunning TxBREAK TxMAB TxDone RDMNew ]
 "16 PWM.h
-[s S594 :8 `uc 1 :8 `uc 1 ]
-[n S594 . DCL DCH ]
+[s S595 :8 `uc 1 :8 `uc 1 ]
+[n S595 . DCL DCH ]
 "14
-[u S593 `ui -> 256 `i `S594 -> 256 `i ]
-[n S593 . D PWM ]
+[u S594 `ui -> 256 `i `S595 -> 256 `i ]
+[n S594 . D PWM ]
 [p mainexit ]
 "4941 C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16f1574.h
 [v _PWM1CON `Vuc ~T0 @X0 0 e@3483 ]
@@ -108,12 +111,16 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _ANSC3 `Vb ~T0 @X0 0 e@3187 ]
 "335
 [v _INTCON `Vuc ~T0 @X0 0 e@11 ]
-"14 DMX.h
+"13 DMX.h
 [v _DMX_init `(v ~T0 @X0 0 ef ]
-"20
+"68 main.c
+[v _timer1_init `(i ~T0 @X0 0 ef ]
+"19 DMX.h
 [v _DMX_loop `(v ~T0 @X0 0 ef ]
-"82 main.c
+"81 main.c
 [v _DMX_interrput `(i ~T0 @X0 0 ef ]
+"82
+[v _timer1_interrupt `(i ~T0 @X0 0 ef ]
 [; ;htc.h: 26: extern const char __xc8_OPTIM_SPEED;
 [; ;htc.h: 28: extern double __fpnormalize(double);
 [; ;xc8debug.h: 14: extern void __builtin_software_breakpoint(void);
@@ -4706,9 +4713,92 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;pic.h: 192: extern unsigned char __resetbits;
 [; ;pic.h: 193: extern __bit __powerdown;
 [; ;pic.h: 194: extern __bit __timeout;
-[; ;DMX.h: 14: extern void DMX_init(void);
-[; ;DMX.h: 20: extern void DMX_loop(void);
-[; ;DMX.h: 26: extern void DMX_interrupt(void);
+[; ;stdint.h: 13: typedef signed char int8_t;
+[; ;stdint.h: 20: typedef signed int int16_t;
+[; ;stdint.h: 28: typedef signed short long int int24_t;
+[; ;stdint.h: 36: typedef signed long int int32_t;
+[; ;stdint.h: 43: typedef unsigned char uint8_t;
+[; ;stdint.h: 49: typedef unsigned int uint16_t;
+[; ;stdint.h: 56: typedef unsigned short long int uint24_t;
+[; ;stdint.h: 63: typedef unsigned long int uint32_t;
+[; ;stdint.h: 71: typedef signed char int_least8_t;
+[; ;stdint.h: 78: typedef signed int int_least16_t;
+[; ;stdint.h: 90: typedef signed short long int int_least24_t;
+[; ;stdint.h: 98: typedef signed long int int_least32_t;
+[; ;stdint.h: 105: typedef unsigned char uint_least8_t;
+[; ;stdint.h: 111: typedef unsigned int uint_least16_t;
+[; ;stdint.h: 121: typedef unsigned short long int uint_least24_t;
+[; ;stdint.h: 128: typedef unsigned long int uint_least32_t;
+[; ;stdint.h: 137: typedef signed char int_fast8_t;
+[; ;stdint.h: 144: typedef signed int int_fast16_t;
+[; ;stdint.h: 156: typedef signed short long int int_fast24_t;
+[; ;stdint.h: 164: typedef signed long int int_fast32_t;
+[; ;stdint.h: 171: typedef unsigned char uint_fast8_t;
+[; ;stdint.h: 177: typedef unsigned int uint_fast16_t;
+[; ;stdint.h: 187: typedef unsigned short long int uint_fast24_t;
+[; ;stdint.h: 194: typedef unsigned long int uint_fast32_t;
+[; ;stdint.h: 200: typedef int32_t intmax_t;
+[; ;stdint.h: 205: typedef uint32_t uintmax_t;
+[; ;stdint.h: 210: typedef int16_t intptr_t;
+[; ;stdint.h: 215: typedef uint16_t uintptr_t;
+[; ;DMX.h: 13: extern void DMX_init(void);
+[; ;DMX.h: 19: extern void DMX_loop(void);
+[; ;DMX.h: 25: extern void DMX_interrupt(void);
+"41 DMX.h
+[v _RxData `Vuc ~T0 @X0 -> 4 `i e ]
+[; ;DMX.h: 41: volatile char RxData[4];
+"43
+[v _DMX_Address `i ~T0 @X0 1 e ]
+[; ;DMX.h: 43: int DMX_Address;
+"45
+[v _DMX_StartCode `Cuc ~T0 @X0 1 e ]
+[i _DMX_StartCode
+-> -> 0 `i `uc
+]
+[; ;DMX.h: 45: const char DMX_StartCode = 0;
+"47
+[v _RxAddrCount `Vi ~T0 @X0 1 e ]
+[i _RxAddrCount
+-> 0 `i
+]
+[; ;DMX.h: 47: volatile int RxAddrCount = 0;
+"49
+[v _RxDataPtr `*Vuc ~T0 @X0 1 e ]
+[; ;DMX.h: 49: volatile char *RxDataPtr;
+"51
+[v _RxState `Vuc ~T0 @X0 1 e ]
+[i _RxState
+-> -> 0 `i `uc
+]
+[; ;DMX.h: 51: volatile char RxState = 0;
+"53
+[v _RxTimer `Vi ~T0 @X0 1 e ]
+[i _RxTimer
+-> 0 `i
+]
+[; ;DMX.h: 53: volatile int RxTimer = 0;
+[; ;DMX.h: 55: enum {
+[; ;DMX.h: 56: RX_WAIT_FOR_BREAK,
+[; ;DMX.h: 57: WAIT_FOR_START,
+[; ;DMX.h: 58: RX_DMX_READ_DATA,
+[; ;DMX.h: 59: RX_RDM_READ_SubStartCode,
+[; ;DMX.h: 60: RX_RDM_READ_DATA,
+[; ;DMX.h: 61: RX_RDM_PD,
+[; ;DMX.h: 62: };
+[; ;DMX.h: 65: typedef struct {
+[; ;DMX.h: 68: unsigned int RxNew : 1;
+[; ;DMX.h: 70: unsigned int RxBreak : 1;
+[; ;DMX.h: 72: unsigned int RxStart : 1;
+[; ;DMX.h: 74: unsigned int RxTimeout : 1;
+[; ;DMX.h: 77: unsigned int TxRunning : 1;
+[; ;DMX.h: 79: unsigned int TxBREAK : 1;
+[; ;DMX.h: 81: unsigned int TxMAB : 1;
+[; ;DMX.h: 83: unsigned int TxDone : 1;
+[; ;DMX.h: 85: unsigned int RDMNew : 1;
+[; ;DMX.h: 86: } DMX_FLAGS;
+"89
+[v _DMX_Flags `VS593 ~T0 @X0 1 e ]
+[; ;DMX.h: 89: volatile DMX_FLAGS DMX_Flags;
 [; ;PWM.h: 8: extern void Sweep_PWM(void);
 [; ;PWM.h: 9: extern void Sweep_PWM_init(void);
 "11 PWM.h
@@ -4728,7 +4818,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;PWM.h: 19: }PWM[256];
 [; ;PWM.h: 20: }PWM_16;
 "22
-[v _PWM `CS593 ~T0 @X0 1 e ]
+[v _PWM `CS594 ~T0 @X0 1 e ]
 [i _PWM
 :U ..
 :U ..
@@ -5156,35 +5246,41 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;main.c: 65: DMX_init();
 "65
 [e ( _DMX_init ..  ]
-[; ;main.c: 71: while (1) {
-"71
-[e :U 597 ]
-{
-[; ;main.c: 72: DMX_loop();
-"72
-[e ( _DMX_loop ..  ]
-"75
-}
-[e :U 596 ]
-"71
-[e $U 597  ]
+[; ;main.c: 68: timer1_init();
+"68
+[e ( _timer1_init ..  ]
+[; ;main.c: 70: while (1) {
+"70
 [e :U 598 ]
-[; ;main.c: 75: }
-[; ;main.c: 76: }
-"76
-[e :UE 595 ]
-}
-[v F4870 `(v ~T0 @X0 1 tf ]
-"78
-[v _isr `IF4870 ~T0 @X0 1 e ]
 {
-[; ;main.c: 78: void interrupt isr(void) {
+[; ;main.c: 71: DMX_loop();
+"71
+[e ( _DMX_loop ..  ]
+"74
+}
+[e :U 597 ]
+"70
+[e $U 598  ]
+[e :U 599 ]
+[; ;main.c: 74: }
+[; ;main.c: 75: }
+"75
+[e :UE 596 ]
+}
+[v F4925 `(v ~T0 @X0 1 tf ]
+"77
+[v _isr `IF4925 ~T0 @X0 1 e ]
+{
+[; ;main.c: 77: void interrupt isr(void) {
 [e :U _isr ]
 [f ]
-[; ;main.c: 82: DMX_interrput();
-"82
+[; ;main.c: 81: DMX_interrput();
+"81
 [e ( _DMX_interrput ..  ]
+[; ;main.c: 82: timer1_interrupt();
+"82
+[e ( _timer1_interrupt ..  ]
 [; ;main.c: 84: }
 "84
-[e :UE 599 ]
+[e :UE 600 ]
 }

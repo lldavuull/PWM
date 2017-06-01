@@ -65,28 +65,21 @@ void main(void) {
     DMX_init();
 //    Sweep_PWM_init();
 //    ADC_init();
+    timer1_init();
     
-
-
     while (1) {
         DMX_loop();
 //        ADC_loop();
-
+//        timer1_switch();
     }
 }
 
 void interrupt isr(void) {
-    
 //    ADC_interrupt();
 //        Sweep_PWM();
-        DMX_interrput();
-    //    timer_interrupt();
+    DMX_interrput();
+    timer1_interrupt();
 }
-
-
-
-
-
 
 //                RC3=~RC3;
 //                *RxArPtr=RxAddrCount;

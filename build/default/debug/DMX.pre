@@ -6159,14 +6159,155 @@ extern unsigned char __resetbits;
 extern __bit __powerdown;
 extern __bit __timeout;
 
-# 14 "DMX.h"
-extern void DMX_init(void);
+# 13 "C:\Program Files (x86)\Microchip\xc8\v1.41\include\stdint.h"
+typedef signed char int8_t;
 
 # 20
+typedef signed int int16_t;
+
+# 28
+typedef signed short long int int24_t;
+
+# 36
+typedef signed long int int32_t;
+
+# 43
+typedef unsigned char uint8_t;
+
+# 49
+typedef unsigned int uint16_t;
+
+# 56
+typedef unsigned short long int uint24_t;
+
+# 63
+typedef unsigned long int uint32_t;
+
+# 71
+typedef signed char int_least8_t;
+
+# 78
+typedef signed int int_least16_t;
+
+# 90
+typedef signed short long int int_least24_t;
+
+# 98
+typedef signed long int int_least32_t;
+
+# 105
+typedef unsigned char uint_least8_t;
+
+# 111
+typedef unsigned int uint_least16_t;
+
+# 121
+typedef unsigned short long int uint_least24_t;
+
+# 128
+typedef unsigned long int uint_least32_t;
+
+# 137
+typedef signed char int_fast8_t;
+
+# 144
+typedef signed int int_fast16_t;
+
+# 156
+typedef signed short long int int_fast24_t;
+
+# 164
+typedef signed long int int_fast32_t;
+
+# 171
+typedef unsigned char uint_fast8_t;
+
+# 177
+typedef unsigned int uint_fast16_t;
+
+# 187
+typedef unsigned short long int uint_fast24_t;
+
+# 194
+typedef unsigned long int uint_fast32_t;
+
+# 200
+typedef int32_t intmax_t;
+
+
+
+
+typedef uint32_t uintmax_t;
+
+
+
+
+typedef int16_t intptr_t;
+
+
+
+
+typedef uint16_t uintptr_t;
+
+# 13 "DMX.h"
+extern void DMX_init(void);
+
+# 19
 extern void DMX_loop(void);
 
-# 26
+# 25
 extern void DMX_interrupt(void);
+
+# 41
+volatile char RxData[4];
+
+int DMX_Address;
+
+const char DMX_StartCode = 0;
+
+volatile int RxAddrCount = 0;
+
+volatile char *RxDataPtr;
+
+volatile char RxState = 0;
+
+volatile int RxTimer = 0;
+
+enum {
+RX_WAIT_FOR_BREAK,
+WAIT_FOR_START,
+RX_DMX_READ_DATA,
+RX_RDM_READ_SubStartCode,
+RX_RDM_READ_DATA,
+RX_RDM_PD,
+};
+
+
+typedef struct {
+
+
+unsigned int RxNew : 1;
+
+unsigned int RxBreak : 1;
+
+unsigned int RxStart : 1;
+
+unsigned int RxTimeout : 1;
+
+
+unsigned int TxRunning : 1;
+
+unsigned int TxBREAK : 1;
+
+unsigned int TxMAB : 1;
+
+unsigned int TxDone : 1;
+
+unsigned int RDMNew : 1;
+} DMX_FLAGS;
+
+
+volatile DMX_FLAGS DMX_Flags;
 
 # 8 "PWM.h"
 extern void Sweep_PWM(void);
@@ -6212,55 +6353,121 @@ const PWM_16 PWM={
 0x1EE8, 0x1F30, 0x1F78, 0x1FC0, 0x1FE8, 0x1FFF
 };
 
-# 14 "DMX.c"
-volatile char RxData[4];
-
-int DMX_Address = 1;
-
-char DMX_StartCode = 0;
-
-volatile int RxAddrCount = 0;
-
-volatile char *RxDataPtr;
-
-volatile char RxState = 0;
-
-volatile int RxTimer = 0;
-
-enum {
-RX_WAIT_FOR_BREAK,
-RX_WAIT_FOR_START,
-RX_READ_DATA
+# 12 "RDM.h"
+enum{
+ACK=0x00,
+ACK_TIMER=0x01,
+NACK_REASON=0x02,
+ACK_OVERFLOW=0x03,
 };
 
 
-typedef struct {
+enum{
+DISCOVERY_COMMAND= 0x10,
+DISCOVERY_COMMAND_RESPONSE=0x11,
+GET_COMMAND=0x20,
+GET_COMMAND_RESPONSE=0x21,
+SET_COMMAND=0x30,
+SET_COMMAND_RESPONSE=0x31,
 
 
-unsigned int RxNew : 1;
-
-unsigned int RxBreak : 1;
-
-unsigned int RxStart : 1;
-
-unsigned int RxTimeout : 1;
+};
 
 
+enum{
+DISC_UNIQUE_BRANCH = 0x0001,
+DISC_MUTE = 0x0002,
+DISC_UN_MUTE = 0x0003,
+SUPPORTED_PARAMETERS = 0x0050,
+PARAMETER_DESCRIPTION = 0x0051,
+DEVICE_INFO = 0x0060,
+SOFTWARE_VERSION_LABEL = 0x00C0,
+DMX_START_ADDRESS = 0x00F0,
+IDENTIFY_DEVICE = 0x1000
+};
 
-unsigned int TxRunning : 1;
-
-unsigned int TxBREAK : 1;
-
-unsigned int TxMAB : 1;
 
 
-unsigned int TxDone : 1;
+
+const char RDM_StartCode = 0xCC;
 
 
-} DMX_FLAGS;
+const char RDM_SubStartCode = 0x01;
+
+# 56
+extern void RDM_init(void);
+
+# 60
+extern void RDM_tx_interrupt(void);
+
+extern void RDM_rx_loop(void);
+
+# 77
+uint16_t TxCount=0;
+
+uint8_t TxStart=0;
+
+volatile uint8_t *TxByte;
+
+volatile uint8_t TxState=0;
+
+enum
+{
+TX_BREAK,
+TX_MAB,
+TX_START,
+TX_DATA
+};
 
 
-volatile DMX_FLAGS DMX_Flags;
+typedef union{
+unsigned char value[24];
+struct{
+unsigned ML:8;
+struct{
+uint16_t M;
+uint32_t ID;
+}UID;
+struct{
+uint16_t M;
+uint32_t ID;
+}CUID;
+unsigned TN:8;
+unsigned PORT:8;
+unsigned message:8;
+uint16_t subDevice;
+unsigned CC:8;
+uint16_t PID;
+unsigned PDL:8;
+union{
+uint16_t CS;
+struct{
+unsigned CSH:8;
+unsigned CSL:8;
+};
+};
+
+};
+}RDM_Data;
+
+volatile RDM_Data RX_RDM_Data;
+volatile RDM_Data TX_RDM_Data;
+
+
+char PD[231];
+
+char PDCount;
+
+volatile char PackCount;
+volatile unsigned PD_Flag;
+
+# 203
+uint16_t checkSum;
+
+# 14 "Timer.h"
+extern void timer1_interrupt(void);
+extern void timer1_init(void);
+extern void timer1_switch(void);
 
 enum {
 TIMER_1MS,
@@ -6284,19 +6491,16 @@ unsigned int spare : 2;
 };
 char flags;
 };
-
 int MS_Count;
 char SEC_Count;
 char MIN_Count;
 char HR_Count;
+unsigned int Switch : 1;
+} TIMER_DATA;
 
+volatile TIMER_DATA Timer;
 
-} DMX_TIMER_DATA;
-
-volatile DMX_TIMER_DATA Timer;
-
-
-
+# 16 "DMX.c"
 void DMX_init(void) {
 
 RXPPS = 0b10101;
@@ -6310,11 +6514,16 @@ SPBRGH = 0x00;
 SPBRGL = 0x3;
 RCIE = 1;
 
-# 115
+
+
+
+RDM_init();
+DMX_Address=1;
 }
 
-
 void DMX_loop(void) {
+
+
 if (DMX_Flags.RxNew == 1) {
 DMX_Flags.RxNew = 0;
 PWM1DCH = PWM.PWM[RxData[0]].DCH;
@@ -6327,48 +6536,54 @@ PWM4DCH = PWM.PWM[RxData[3]].DCH;
 PWM4DCL = PWM.PWM[RxData[3]].DCL;
 PWM1LDCON = PWM2LDCON = PWM3LDCON = PWM4LDCON = 0b10000000;
 }
-
+RDM_rx_loop();
 if (Timer.MS) {
 Timer.MS = 0;
 
 if (DMX_Flags.RxTimeout == 1) {
+PWM1DC = PWM2DC = PWM3DC = PWM4DC = 0;
+PWM1LDCON = PWM2LDCON = PWM3LDCON = PWM4LDCON = 0b10000000;
 }
 }
 }
-
 
 
 void DMX_interrput(void) {
-if (RCIE & RCIF) {
+
+if (RCIE & RCIF ) {
+
 volatile char RxDat;
 if (FERR)
 {
 RxDat = RCREG;
 DMX_Flags.RxBreak = 1;
-RxState = RX_WAIT_FOR_START;
+RxState = WAIT_FOR_START;
 RxTimer = 0;
 }
-
 switch (RxState) {
 case RX_WAIT_FOR_BREAK:
 RxDat = RCREG;
 break;
-case RX_WAIT_FOR_START:
+case WAIT_FOR_START:
 if (RCIF)
 {
 RxDat = RCREG;
 if (RxDat == DMX_StartCode) {
 
-RxState = RX_READ_DATA;
+RxState = RX_DMX_READ_DATA;
 RxDataPtr = &RxData[0];
 RxAddrCount = 1;
+DMX_Flags.RxStart = 1;
+} else if (RxDat == RDM_StartCode) {
+
+RxState = RX_RDM_READ_SubStartCode;
 DMX_Flags.RxStart = 1;
 } else {
 RxState = RX_WAIT_FOR_BREAK;
 }
 }
 break;
-case RX_READ_DATA:
+case RX_DMX_READ_DATA:
 RxDat = RCREG;
 if (RxAddrCount >= DMX_Address && (DMX_Address != 0))
 {
@@ -6384,10 +6599,63 @@ RxTimer = 0;
 DMX_Flags.RxTimeout = 0;
 }
 break;
+case RX_RDM_READ_SubStartCode:
+RxDat = RCREG;
+if (RxDat == RDM_SubStartCode)
+{
+RxState = RX_RDM_READ_DATA;
+PackCount=0;
+PD_Flag=0;
+}
+break;
+
+case RX_RDM_READ_DATA:
+RxDat = RCREG;
+RX_RDM_Data.value[PackCount]=RxDat;
+PackCount++;
+
+if (PackCount==23 && RX_RDM_Data.PDL>0 && PD_Flag==0) {
+RxState=RX_RDM_PD;
+PDCount=0;
+break;
+}
+
+if(PackCount==24){
+DMX_Flags.RDMNew = 1;
+RxState = RX_WAIT_FOR_BREAK;
+RxTimer = 0;
+DMX_Flags.RxTimeout = 0;
+}
+break;
+case RX_RDM_PD:
+RxDat = RCREG;
+PD[PDCount]=RxDat;
+PDCount++;
+if(RX_RDM_Data.PDL==PDCount){
+RxState=RX_RDM_READ_DATA;
+PackCount++;
+PD_Flag=1;
+}
+break;
 }
 if (RxTimer > 1200) {
 DMX_Flags.RxTimeout = 1;
 RxTimer = 0;
 }
+}
+}
+
+
+void dmx_write(uint16_t addr, uint8_t *data, uint8_t num) {
+if (addr <= 512 && addr != 0) {
+addr--;
+GIE = 0;
+for (; num--; num > 0) {
+
+addr++;
+data++;
+if (addr >= 512)num = 0;
+}
+GIE = 1;
 }
 }

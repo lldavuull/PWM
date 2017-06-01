@@ -6159,14 +6159,155 @@ extern unsigned char __resetbits;
 extern __bit __powerdown;
 extern __bit __timeout;
 
-# 14 "DMX.h"
-extern void DMX_init(void);
+# 13 "C:\Program Files (x86)\Microchip\xc8\v1.41\include\stdint.h"
+typedef signed char int8_t;
 
 # 20
+typedef signed int int16_t;
+
+# 28
+typedef signed short long int int24_t;
+
+# 36
+typedef signed long int int32_t;
+
+# 43
+typedef unsigned char uint8_t;
+
+# 49
+typedef unsigned int uint16_t;
+
+# 56
+typedef unsigned short long int uint24_t;
+
+# 63
+typedef unsigned long int uint32_t;
+
+# 71
+typedef signed char int_least8_t;
+
+# 78
+typedef signed int int_least16_t;
+
+# 90
+typedef signed short long int int_least24_t;
+
+# 98
+typedef signed long int int_least32_t;
+
+# 105
+typedef unsigned char uint_least8_t;
+
+# 111
+typedef unsigned int uint_least16_t;
+
+# 121
+typedef unsigned short long int uint_least24_t;
+
+# 128
+typedef unsigned long int uint_least32_t;
+
+# 137
+typedef signed char int_fast8_t;
+
+# 144
+typedef signed int int_fast16_t;
+
+# 156
+typedef signed short long int int_fast24_t;
+
+# 164
+typedef signed long int int_fast32_t;
+
+# 171
+typedef unsigned char uint_fast8_t;
+
+# 177
+typedef unsigned int uint_fast16_t;
+
+# 187
+typedef unsigned short long int uint_fast24_t;
+
+# 194
+typedef unsigned long int uint_fast32_t;
+
+# 200
+typedef int32_t intmax_t;
+
+
+
+
+typedef uint32_t uintmax_t;
+
+
+
+
+typedef int16_t intptr_t;
+
+
+
+
+typedef uint16_t uintptr_t;
+
+# 13 "DMX.h"
+extern void DMX_init(void);
+
+# 19
 extern void DMX_loop(void);
 
-# 26
+# 25
 extern void DMX_interrupt(void);
+
+# 41
+volatile char RxData[4];
+
+int DMX_Address;
+
+const char DMX_StartCode = 0;
+
+volatile int RxAddrCount = 0;
+
+volatile char *RxDataPtr;
+
+volatile char RxState = 0;
+
+volatile int RxTimer = 0;
+
+enum {
+RX_WAIT_FOR_BREAK,
+WAIT_FOR_START,
+RX_DMX_READ_DATA,
+RX_RDM_READ_SubStartCode,
+RX_RDM_READ_DATA,
+RX_RDM_PD,
+};
+
+
+typedef struct {
+
+
+unsigned int RxNew : 1;
+
+unsigned int RxBreak : 1;
+
+unsigned int RxStart : 1;
+
+unsigned int RxTimeout : 1;
+
+
+unsigned int TxRunning : 1;
+
+unsigned int TxBREAK : 1;
+
+unsigned int TxMAB : 1;
+
+unsigned int TxDone : 1;
+
+unsigned int RDMNew : 1;
+} DMX_FLAGS;
+
+
+volatile DMX_FLAGS DMX_Flags;
 
 # 8 "PWM.h"
 extern void Sweep_PWM(void);
@@ -6212,30 +6353,12 @@ const PWM_16 PWM={
 0x1EE8, 0x1F30, 0x1F78, 0x1FC0, 0x1FE8, 0x1FFF
 };
 
-# 13 "main.c"
+# 16 "main.c"
 __config("__CONFIG", "pic", "FOSC_INTOSC & WDTE_OFF & PWRTE_OFF & MCLRE_ON & CP_OFF & BOREN_OFF & CLKOUTEN_OFF");
 __config("__CONFIG", "pic", "WRT_OFF & PPS1WAY_OFF & PLLEN_ON & STVREN_ON & LPBOREN_OFF & LVP_OFF");
 
-
-
-
-void ADC_interrupt(void);
+# 23
 void timer_interrupt(void);
-
-
-
-volatile char ADC_Data;
-
-typedef struct {
-
-
-unsigned int New : 1;
-
-} ADC_FLAGS;
-
-volatile ADC_FLAGS ADC_Flags;
-
-
 
 void main(void) {
 PWM1CON = PWM2CON = PWM3CON = PWM4CON = 0b10000000;
@@ -6272,58 +6395,29 @@ PWM1CLKCON = PWM2CLKCON = PWM3CLKCON = PWM4CLKCON = 0b00000000;
 
 TRISC3 = 0;
 ANSC3 = 0;
-
-
-
 INTCON = 0b11000000;
 
 
-ADIE = 1;
 
-TRISA4 = 1;
-ANSA4 = 1;
-ADCON0 = 0b00001101;
-ADCON1 = 0b01110000;
 
-ADGO = 1;
-ADIF = 0;
-IOCIE = 1;
-IOCAN3 = IOCAP3 = 1;
+DMX_init();
 
+ADC_init();
+timer1_init();
 
 while (1) {
-
-if(ADC_Flags.New==1){
-ADC_Flags.New = 0;
-PWM1DCH=PWM4DCH = PWM.PWM[ADC_Data].DCH;
-PWM1DCL=PWM4DCL = PWM.PWM[ADC_Data].DCL;
-PWM1LDCON=PWM4LDCON = 0b10000000;
-}
-
-
-
+DMX_loop();
+ADC_loop();
+timer1_switch();
 }
 }
 
 void interrupt isr(void) {
+
 ADC_interrupt();
 
+DMX_interrput();
+timer1_interrupt();
 
-
-}
-
-# 159
-void ADC_interrupt(void) {
-RC3=~RC3;
-if (IOCAF3==1) {
-ADGO = 1;
-IOCAF3=0;
-
-}
-if (ADIF == 1) {
-ADC_Data=ADRESH;
-ADC_Flags.New=1;
-ADIF = 0;
-}
 }
 
