@@ -6258,8 +6258,11 @@ extern void DMX_loop(void);
 # 25
 extern void DMX_interrupt(void);
 
-# 41
-volatile char RxData[4];
+# 39
+volatile unsigned char RGBW[4];
+
+
+volatile unsigned char RxData[4];
 
 int DMX_Address;
 
@@ -6272,6 +6275,28 @@ volatile char *RxDataPtr;
 volatile char RxState = 0;
 
 volatile int RxTimer = 0;
+
+
+
+char DMXPeriod = 100;
+
+volatile char DMXPeriodConst =0;
+
+char DMXPeriodStep[4] =1;
+
+char DMXPeriodStepConst[4] =0;
+
+
+
+typedef struct {
+
+
+unsigned int X: 2;
+} DMX_PERIODSIGN;
+
+volatile DMX_PERIODSIGN DMXPeriodSign[4];
+
+
 
 enum {
 RX_WAIT_FOR_BREAK,
@@ -6301,9 +6326,14 @@ unsigned int TxBREAK : 1;
 
 unsigned int TxMAB : 1;
 
-unsigned int TxDone : 1;
+
 
 unsigned int RDMNew : 1;
+
+unsigned int RDMcheck : 2;
+
+unsigned int RDMmute : 1;
+
 } DMX_FLAGS;
 
 
@@ -6353,6 +6383,11 @@ const PWM_16 PWM={
 0x1EE8, 0x1F30, 0x1F78, 0x1FC0, 0x1FE8, 0x1FFF
 };
 
+
+char *PWMDCLptr[4];
+char *PWMDCHptr[4];
+char *PWMLDCONptr[4];
+
 # 12 "RDM.h"
 enum{
 ACK=0x00,
@@ -6386,35 +6421,44 @@ DMX_START_ADDRESS = 0x00F0,
 IDENTIFY_DEVICE = 0x1000
 };
 
-
-
-
+# 49
 const char RDM_StartCode = 0xCC;
 
 
 const char RDM_SubStartCode = 0x01;
 
-# 56
+# 58
 extern void RDM_init(void);
 
-# 60
+# 62
 extern void RDM_tx_interrupt(void);
+
+extern void RDM_tx_TimerBreak(void);
+extern void RDM_discovery_CC(void);
+
 
 extern void RDM_rx_loop(void);
 
-# 77
+# 75
+char TX_SIZE=26;
+
+# 85
 uint16_t TxCount=0;
 
-uint8_t TxStart=0;
+
 
 volatile uint8_t *TxByte;
 
 volatile uint8_t TxState=0;
 
+
+
+
 enum
 {
-TX_BREAK,
-TX_MAB,
+TX_MARK_BEFORE_BREAK,
+
+TX_DISCOVERY_START,
 TX_START,
 TX_DATA
 };
@@ -6423,46 +6467,62 @@ TX_DATA
 typedef union{
 unsigned char value[24];
 struct{
-unsigned ML:8;
-struct{
-uint16_t M;
-uint32_t ID;
-}UID;
-struct{
-uint16_t M;
-uint32_t ID;
-}CUID;
-unsigned TN:8;
-unsigned PORT:8;
-unsigned message:8;
-uint16_t subDevice;
-unsigned CC:8;
-uint16_t PID;
-unsigned PDL:8;
 union{
 uint16_t CS;
 struct{
-unsigned CSH:8;
 unsigned CSL:8;
+unsigned CSH:8;
 };
 };
 
+unsigned PDL:8;
+uint16_t PID;
+
+unsigned CC:8;
+uint16_t subDevice;
+unsigned message:8;
+unsigned PORT:8;
+unsigned TN:8;
+
+struct{
+uint32_t ID;
+uint16_t M;
+}CUID;
+
+struct{
+uint32_t ID;
+uint16_t M;
+}UID;
+
+unsigned ML:8;
 };
 }RDM_Data;
 
+extern uint16_t RDM_get_checkSum(RDM_Data);
+
+
+const char UID[6]={0x4D,0x52,0x17,0xC3,0x10,0x92};
+
 volatile RDM_Data RX_RDM_Data;
-volatile RDM_Data TX_RDM_Data;
+volatile RDM_Data TX_RDM_Data={0x00,0x4D,0x52,0x17,0xC3,0x10,0x92};
+volatile RDM_Data DISCOVERY_RDM_Data;
+
 
 
 char PD[231];
+
+uint16_t *PD_Manu;
+uint32_t *PD_ID;
 
 char PDCount;
 
 volatile char PackCount;
 volatile unsigned PD_Flag;
 
-# 203
+# 229
 uint16_t checkSum;
+
+uint16_t uint16_tmp;
 
 # 14 "Timer.h"
 extern void timer1_interrupt(void);
@@ -6470,8 +6530,8 @@ extern void timer1_init(void);
 extern void timer1_switch(void);
 
 enum {
-TIMER_1MS,
-TIMER_BREAK,
+TIMER_500US,
+
 TIMER_MAB,
 TIMER_FILL
 };
@@ -6485,7 +6545,7 @@ unsigned int MS : 1;
 unsigned int SEC : 1;
 unsigned int MIN : 1;
 unsigned int HR : 1;
-unsigned int BREAK : 1;
+
 unsigned int MAB : 1;
 unsigned int spare : 2;
 };
@@ -6514,43 +6574,109 @@ SPBRGH = 0x00;
 SPBRGL = 0x3;
 RCIE = 1;
 
+# 33
+DMX_Address = 1;
 
-
-
-RDM_init();
-DMX_Address=1;
+PWMDCLptr[0] = &PWM1DCL;
+PWMDCLptr[1] = &PWM2DCL;
+PWMDCLptr[2] = &PWM3DCL;
+PWMDCLptr[3] = &PWM4DCL;
+PWMDCHptr[0] = &PWM1DCH;
+PWMDCHptr[1] = &PWM2DCH;
+PWMDCHptr[2] = &PWM3DCH;
+PWMDCHptr[3] = &PWM4DCH;
+PWMLDCONptr[0] = &PWM1LDCON;
+PWMLDCONptr[1] = &PWM2LDCON;
+PWMLDCONptr[2] = &PWM3LDCON;
+PWMLDCONptr[3] = &PWM4LDCON;
 }
 
 void DMX_loop(void) {
+char Addr = 0;
 
 
 if (DMX_Flags.RxNew == 1) {
 DMX_Flags.RxNew = 0;
-PWM1DCH = PWM.PWM[RxData[0]].DCH;
-PWM1DCL = PWM.PWM[RxData[0]].DCL;
-PWM2DCH = PWM.PWM[RxData[1]].DCH;
-PWM2DCL = PWM.PWM[RxData[1]].DCL;
-PWM3DCH = PWM.PWM[RxData[2]].DCH;
-PWM3DCL = PWM.PWM[RxData[2]].DCL;
-PWM4DCH = PWM.PWM[RxData[3]].DCH;
-PWM4DCL = PWM.PWM[RxData[3]].DCL;
-PWM1LDCON = PWM2LDCON = PWM3LDCON = PWM4LDCON = 0b10000000;
+
+
+while (Addr < 4) {
+if (RGBW[Addr] > RxData[Addr]) {
+DMXPeriodSign[Addr].X = 0b10;
+if ((RGBW[Addr] - RxData[Addr]) < DMXPeriod) {
+DMXPeriodStep[Addr] = DMXPeriod / (RGBW[Addr] - RxData[Addr]);
+} else {
+DMXPeriodStep[Addr] = 1;
 }
-RDM_rx_loop();
+DMXPeriodStepConst[Addr]=DMXPeriodStep[Addr];
+} else if (RGBW[Addr] < RxData[Addr]) {
+DMXPeriodSign[Addr].X = 0b01;
+if ((RxData[Addr] - RGBW[Addr]) < DMXPeriod) {
+DMXPeriodStep[Addr] = DMXPeriod / (RxData[Addr] - RGBW[Addr]);
+} else {
+DMXPeriodStep[Addr] = 1;
+}
+DMXPeriodStepConst[Addr]=DMXPeriodStep[Addr];
+} else {
+DMXPeriodSign[Addr].X = 0b00;
+DMXPeriodStep[Addr] = 255;
+}
+Addr++;
+}
+}
+
+
 if (Timer.MS) {
+DMXPeriodConst++;
 Timer.MS = 0;
 
+
+Addr = 0;
+while (Addr < 4) {
+switch (DMXPeriodSign[Addr].X) {
+case 0b01:
+if(DMXPeriodStepConst[Addr]==0){
+DMXPeriodStepConst[Addr]=DMXPeriodStep[Addr];
+RGBW[Addr]++;
+}
+DMXPeriodStepConst[Addr]--;
+break;
+case 0b10:
+if(DMXPeriodStepConst[Addr]==0){
+DMXPeriodStepConst[Addr]=DMXPeriodStep[Addr];
+RGBW[Addr]--;
+}
+DMXPeriodStepConst[Addr]--;
+break;
+case 0b00:
+Addr++;
+continue;
+break;
+}
+*PWMDCHptr[Addr] = PWM.PWM[RGBW[Addr]].DCH;
+*PWMDCLptr[Addr] = PWM.PWM[RGBW[Addr]].DCL;
+*PWMLDCONptr[Addr] = 0b10000000;
+if (RGBW[Addr] == RxData[Addr]) {
+DMXPeriodSign[Addr].X = 0b00;
+}
+Addr++;
+}
+
+# 123
 if (DMX_Flags.RxTimeout == 1) {
 PWM1DC = PWM2DC = PWM3DC = PWM4DC = 0;
 PWM1LDCON = PWM2LDCON = PWM3LDCON = PWM4LDCON = 0b10000000;
+Addr=0;
+while (Addr < 4) {
+DMXPeriodSign[Addr].X=0b00;
+Addr++;
 }
 }
 }
-
+}
 
 void DMX_interrput(void) {
 
-if (RCIE & RCIF ) {
+if (RCIE & RCIF) {
 
 volatile char RxDat;
 if (FERR)
@@ -6574,6 +6700,8 @@ RxState = RX_DMX_READ_DATA;
 RxDataPtr = &RxData[0];
 RxAddrCount = 1;
 DMX_Flags.RxStart = 1;
+DMXPeriod = DMXPeriodConst;
+DMXPeriodConst = 0;
 } else if (RxDat == RDM_StartCode) {
 
 RxState = RX_RDM_READ_SubStartCode;
@@ -6604,58 +6732,44 @@ RxDat = RCREG;
 if (RxDat == RDM_SubStartCode)
 {
 RxState = RX_RDM_READ_DATA;
-PackCount=0;
-PD_Flag=0;
+PackCount = 23;
+PD_Flag = 0;
 }
 break;
 
 case RX_RDM_READ_DATA:
 RxDat = RCREG;
-RX_RDM_Data.value[PackCount]=RxDat;
-PackCount++;
+RX_RDM_Data.value[PackCount] = RxDat;
 
-if (PackCount==23 && RX_RDM_Data.PDL>0 && PD_Flag==0) {
-RxState=RX_RDM_PD;
-PDCount=0;
+if (PackCount == 2 && RX_RDM_Data.PDL > 0 && PD_Flag == 0) {
+RxState = RX_RDM_PD;
+PDCount = 230;
 break;
 }
 
-if(PackCount==24){
+if (PackCount == 0) {
 DMX_Flags.RDMNew = 1;
 RxState = RX_WAIT_FOR_BREAK;
 RxTimer = 0;
 DMX_Flags.RxTimeout = 0;
 }
+
+PackCount--;
 break;
 case RX_RDM_PD:
 RxDat = RCREG;
-PD[PDCount]=RxDat;
-PDCount++;
-if(RX_RDM_Data.PDL==PDCount){
-RxState=RX_RDM_READ_DATA;
-PackCount++;
-PD_Flag=1;
+PD[PDCount] = RxDat;
+PDCount--;
+if ((230 - RX_RDM_Data.PDL) == PDCount) {
+RxState = RX_RDM_READ_DATA;
+PD_Flag = 1;
 }
 break;
 }
-if (RxTimer > 1200) {
+if (RxTimer > 2400) {
 DMX_Flags.RxTimeout = 1;
 RxTimer = 0;
 }
 }
 }
 
-
-void dmx_write(uint16_t addr, uint8_t *data, uint8_t num) {
-if (addr <= 512 && addr != 0) {
-addr--;
-GIE = 0;
-for (; num--; num > 0) {
-
-addr++;
-data++;
-if (addr >= 512)num = 0;
-}
-GIE = 1;
-}
-}

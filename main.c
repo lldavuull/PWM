@@ -9,8 +9,7 @@
 #include <xc.h>
 #include "DMX.h"
 #include "PWM.h"
-
-
+#include "PFM.h"
 
 
 __CONFIG(FOSC_INTOSC & WDTE_OFF & PWRTE_OFF & MCLRE_ON & CP_OFF & BOREN_OFF & CLKOUTEN_OFF);
@@ -23,13 +22,15 @@ __CONFIG(WRT_OFF & PPS1WAY_OFF & PLLEN_ON & STVREN_ON & LPBOREN_OFF & LVP_OFF);
 void timer_interrupt(void);
 
 void main(void) {
+
+    
     PWM1CON = PWM2CON = PWM3CON = PWM4CON = PWMxCON_SET;
     PR2 = PRx_SET;
     T2CON = TxCON_SET;
 
     OSCCON = 0b11111000; // 4xPLL,16MHz, Config bits determine source  //   PLL=Phase-locked
     OSCTUNE = 0b000000;
-
+    
     TRISA2 = TRISC0 = TRISC1 = TRISC2 = 0; //RA2, RC0, RC1, RC2 set to output
     ANSA2 = ANSC0 = ANSC1 = ANSC2 = 0; //RA2, RC0, RC1, RC2 set to I/O
 
@@ -38,15 +39,15 @@ void main(void) {
     RC1PPS = 0b0101; //PWM3_out
     RC2PPS = 0b0110; //PWM4_out
 
-    PWM1DCH = 0x0F;
-    PWM2DCH = 0x0C;
-    PWM3DCH = 0x09;
-    PWM4DCH = 0x06;
-
-    PWM1DCL = 0xFF;
-    PWM2DCL = 0x7E;
-    PWM3DCL = 0x0D;
-    PWM4DCL = 0x9C;
+//    PWM1DCH = 0x0F;
+//    PWM2DCH = 0x0C;
+//    PWM3DCH = 0x09;
+//    PWM4DCH = 0x06;
+//
+//    PWM1DCL = 0xFF;
+//    PWM2DCL = 0x7E;
+//    PWM3DCL = 0x0D;
+//    PWM4DCL = 0x9C;
 
     PWM1PHH = PWM2PHH = PWM3PHH = PWM4PHH = 0x00;
     PWM1PHL = PWM2PHL = PWM3PHL = PWM4PHL = 0x00;
@@ -61,16 +62,24 @@ void main(void) {
     
     
     
+
     
     DMX_init();
 //    Sweep_PWM_init();
 //    ADC_init();
     timer1_init();
+//    RDM_init();
+    
+//    DMX_Address=PFM_Read(Flash_DMXAddress);
+//    PFM_Write(Flash_DMXAddress,0x0100);
+//    DMX_Address=PFM_Read(0x0F80);
+    
     
     while (1) {
         DMX_loop();
 //        ADC_loop();
 //        timer1_switch();
+//        RDM_rx_loop();
     }
 }
 
@@ -79,9 +88,10 @@ void interrupt isr(void) {
 //        Sweep_PWM();
     DMX_interrput();
     timer1_interrupt();
+//    RDM_tx_interrupt();
 }
 
-//                RC3=~RC3;
+                
 //                *RxArPtr=RxAddrCount;
 //                RxArPtr++;
 //                *RxArPtr=DMX_Address;

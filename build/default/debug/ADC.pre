@@ -6203,6 +6203,11 @@ const PWM_16 PWM={
 0x1EE8, 0x1F30, 0x1F78, 0x1FC0, 0x1FE8, 0x1FFF
 };
 
+
+char *PWMDCLptr[4];
+char *PWMDCHptr[4];
+char *PWMLDCONptr[4];
+
 # 12 "ADC.h"
 extern void ADC_init(void);
 
@@ -6323,8 +6328,11 @@ extern void DMX_loop(void);
 # 25
 extern void DMX_interrupt(void);
 
-# 41
-volatile char RxData[4];
+# 39
+volatile unsigned char RGBW[4];
+
+
+volatile unsigned char RxData[4];
 
 int DMX_Address;
 
@@ -6337,6 +6345,28 @@ volatile char *RxDataPtr;
 volatile char RxState = 0;
 
 volatile int RxTimer = 0;
+
+
+
+char DMXPeriod = 100;
+
+volatile char DMXPeriodConst =0;
+
+char DMXPeriodStep[4] =1;
+
+char DMXPeriodStepConst[4] =0;
+
+
+
+typedef struct {
+
+
+unsigned int X: 2;
+} DMX_PERIODSIGN;
+
+volatile DMX_PERIODSIGN DMXPeriodSign[4];
+
+
 
 enum {
 RX_WAIT_FOR_BREAK,
@@ -6366,9 +6396,14 @@ unsigned int TxBREAK : 1;
 
 unsigned int TxMAB : 1;
 
-unsigned int TxDone : 1;
+
 
 unsigned int RDMNew : 1;
+
+unsigned int RDMcheck : 2;
+
+unsigned int RDMmute : 1;
+
 } DMX_FLAGS;
 
 

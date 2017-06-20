@@ -4950,6 +4950,15 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;PWM.h: 47: 0x1C30, 0x1C80, 0x1CC8, 0x1D18, 0x1D68, 0x1D80, 0x1DB8, 0x1E08, 0x1E50, 0x1EA0,
 [; ;PWM.h: 48: 0x1EE8, 0x1F30, 0x1F78, 0x1FC0, 0x1FE8, 0x1FFF
 [; ;PWM.h: 49: };
+"52
+[v _PWMDCLptr `*uc ~T0 @X0 -> 4 `i e ]
+[; ;PWM.h: 52: char *PWMDCLptr[4];
+"53
+[v _PWMDCHptr `*uc ~T0 @X0 -> 4 `i e ]
+[; ;PWM.h: 53: char *PWMDCHptr[4];
+"54
+[v _PWMLDCONptr `*uc ~T0 @X0 -> 4 `i e ]
+[; ;PWM.h: 54: char *PWMLDCONptr[4];
 "23 PWM.c
 [v _led `uc ~T0 @X0 1 e ]
 [i _led

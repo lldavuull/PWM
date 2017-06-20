@@ -1,13 +1,16 @@
 Version 3.2 HI-TECH Software Intermediate Code
-"65 DMX.h
-[s S593 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S593 . RxNew RxBreak RxStart RxTimeout TxRunning TxBREAK TxMAB TxDone RDMNew ]
+"68 DMX.h
+[s S593 :2 `uc 1 ]
+[n S593 . X ]
+"88
+[s S594 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :2 `uc 1 :1 `uc 1 ]
+[n S594 . RxNew RxBreak RxStart RxTimeout TxRunning TxBREAK TxMAB RDMNew RDMcheck RDMmute ]
 "16 PWM.h
-[s S595 :8 `uc 1 :8 `uc 1 ]
-[n S595 . DCL DCH ]
+[s S596 :8 `uc 1 :8 `uc 1 ]
+[n S596 . DCL DCH ]
 "14
-[u S594 `ui -> 256 `i `S595 -> 256 `i ]
-[n S594 . D PWM ]
+[u S595 `ui -> 256 `i `S596 -> 256 `i ]
+[n S595 . D PWM ]
 [p mainexit ]
 "4941 C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16f1574.h
 [v _PWM1CON `Vuc ~T0 @X0 0 e@3483 ]
@@ -49,22 +52,6 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _RC1PPS `Vuc ~T0 @X0 0 e@3745 ]
 "10691
 [v _RC2PPS `Vuc ~T0 @X0 0 e@3746 ]
-"4384
-[v _PWM1DCH `Vuc ~T0 @X0 0 e@3476 ]
-"5836
-[v _PWM2DCH `Vuc ~T0 @X0 0 e@3492 ]
-"7288
-[v _PWM3DCH `Vuc ~T0 @X0 0 e@3508 ]
-"8740
-[v _PWM4DCH `Vuc ~T0 @X0 0 e@3524 ]
-"4307
-[v _PWM1DCL `Vuc ~T0 @X0 0 e@3475 ]
-"5759
-[v _PWM2DCL `Vuc ~T0 @X0 0 e@3491 ]
-"7211
-[v _PWM3DCL `Vuc ~T0 @X0 0 e@3507 ]
-"8663
-[v _PWM4DCL `Vuc ~T0 @X0 0 e@3523 ]
 "4224
 [v _PWM1PHH `Vuc ~T0 @X0 0 e@3474 ]
 "5676
@@ -113,21 +100,13 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _INTCON `Vuc ~T0 @X0 0 e@11 ]
 "13 DMX.h
 [v _DMX_init `(v ~T0 @X0 0 ef ]
-"67 main.c
-[v _ADC_init `(i ~T0 @X0 0 ef ]
-"68
+"70 main.c
 [v _timer1_init `(i ~T0 @X0 0 ef ]
 "19 DMX.h
 [v _DMX_loop `(v ~T0 @X0 0 ef ]
-"72 main.c
-[v _ADC_loop `(i ~T0 @X0 0 ef ]
-"73
-[v _timer1_switch `(i ~T0 @X0 0 ef ]
-"79
-[v _ADC_interrupt `(i ~T0 @X0 0 ef ]
-"81
+"89 main.c
 [v _DMX_interrput `(i ~T0 @X0 0 ef ]
-"82
+"90
 [v _timer1_interrupt `(i ~T0 @X0 0 ef ]
 [; ;htc.h: 26: extern const char __xc8_OPTIM_SPEED;
 [; ;htc.h: 28: extern double __fpnormalize(double);
@@ -4752,61 +4731,99 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;DMX.h: 13: extern void DMX_init(void);
 [; ;DMX.h: 19: extern void DMX_loop(void);
 [; ;DMX.h: 25: extern void DMX_interrupt(void);
-"41 DMX.h
+"39 DMX.h
+[v _RGBW `Vuc ~T0 @X0 -> 4 `i e ]
+[; ;DMX.h: 39: volatile unsigned char RGBW[4];
+"42
 [v _RxData `Vuc ~T0 @X0 -> 4 `i e ]
-[; ;DMX.h: 41: volatile char RxData[4];
-"43
+[; ;DMX.h: 42: volatile unsigned char RxData[4];
+"44
 [v _DMX_Address `i ~T0 @X0 1 e ]
-[; ;DMX.h: 43: int DMX_Address;
-"45
+[; ;DMX.h: 44: int DMX_Address;
+"46
 [v _DMX_StartCode `Cuc ~T0 @X0 1 e ]
 [i _DMX_StartCode
 -> -> 0 `i `uc
 ]
-[; ;DMX.h: 45: const char DMX_StartCode = 0;
-"47
+[; ;DMX.h: 46: const char DMX_StartCode = 0;
+"48
 [v _RxAddrCount `Vi ~T0 @X0 1 e ]
 [i _RxAddrCount
 -> 0 `i
 ]
-[; ;DMX.h: 47: volatile int RxAddrCount = 0;
-"49
+[; ;DMX.h: 48: volatile int RxAddrCount = 0;
+"50
 [v _RxDataPtr `*Vuc ~T0 @X0 1 e ]
-[; ;DMX.h: 49: volatile char *RxDataPtr;
-"51
+[; ;DMX.h: 50: volatile char *RxDataPtr;
+"52
 [v _RxState `Vuc ~T0 @X0 1 e ]
 [i _RxState
 -> -> 0 `i `uc
 ]
-[; ;DMX.h: 51: volatile char RxState = 0;
-"53
+[; ;DMX.h: 52: volatile char RxState = 0;
+"54
 [v _RxTimer `Vi ~T0 @X0 1 e ]
 [i _RxTimer
 -> 0 `i
 ]
-[; ;DMX.h: 53: volatile int RxTimer = 0;
-[; ;DMX.h: 55: enum {
-[; ;DMX.h: 56: RX_WAIT_FOR_BREAK,
-[; ;DMX.h: 57: WAIT_FOR_START,
-[; ;DMX.h: 58: RX_DMX_READ_DATA,
-[; ;DMX.h: 59: RX_RDM_READ_SubStartCode,
-[; ;DMX.h: 60: RX_RDM_READ_DATA,
-[; ;DMX.h: 61: RX_RDM_PD,
-[; ;DMX.h: 62: };
-[; ;DMX.h: 65: typedef struct {
-[; ;DMX.h: 68: unsigned int RxNew : 1;
-[; ;DMX.h: 70: unsigned int RxBreak : 1;
-[; ;DMX.h: 72: unsigned int RxStart : 1;
-[; ;DMX.h: 74: unsigned int RxTimeout : 1;
-[; ;DMX.h: 77: unsigned int TxRunning : 1;
-[; ;DMX.h: 79: unsigned int TxBREAK : 1;
-[; ;DMX.h: 81: unsigned int TxMAB : 1;
-[; ;DMX.h: 83: unsigned int TxDone : 1;
-[; ;DMX.h: 85: unsigned int RDMNew : 1;
-[; ;DMX.h: 86: } DMX_FLAGS;
-"89
-[v _DMX_Flags `VS593 ~T0 @X0 1 e ]
-[; ;DMX.h: 89: volatile DMX_FLAGS DMX_Flags;
+[; ;DMX.h: 54: volatile int RxTimer = 0;
+"58
+[v _DMXPeriod `uc ~T0 @X0 1 e ]
+[i _DMXPeriod
+-> -> 100 `i `uc
+]
+[; ;DMX.h: 58: char DMXPeriod = 100;
+"60
+[v _DMXPeriodConst `Vuc ~T0 @X0 1 e ]
+[i _DMXPeriodConst
+-> -> 0 `i `uc
+]
+[; ;DMX.h: 60: volatile char DMXPeriodConst =0;
+"62
+[v _DMXPeriodStep `uc ~T0 @X0 -> 4 `i e ]
+[i _DMXPeriodStep
+:U ..
+-> -> 1 `i `uc
+..
+]
+[; ;DMX.h: 62: char DMXPeriodStep[4] =1;
+"64
+[v _DMXPeriodStepConst `uc ~T0 @X0 -> 4 `i e ]
+[i _DMXPeriodStepConst
+:U ..
+-> -> 0 `i `uc
+..
+]
+[; ;DMX.h: 64: char DMXPeriodStepConst[4] =0;
+[; ;DMX.h: 68: typedef struct {
+[; ;DMX.h: 71: unsigned int X: 2;
+[; ;DMX.h: 72: } DMX_PERIODSIGN;
+"74
+[v _DMXPeriodSign `VS593 ~T0 @X0 -> 4 `i e ]
+[; ;DMX.h: 74: volatile DMX_PERIODSIGN DMXPeriodSign[4];
+[; ;DMX.h: 78: enum {
+[; ;DMX.h: 79: RX_WAIT_FOR_BREAK,
+[; ;DMX.h: 80: WAIT_FOR_START,
+[; ;DMX.h: 81: RX_DMX_READ_DATA,
+[; ;DMX.h: 82: RX_RDM_READ_SubStartCode,
+[; ;DMX.h: 83: RX_RDM_READ_DATA,
+[; ;DMX.h: 84: RX_RDM_PD,
+[; ;DMX.h: 85: };
+[; ;DMX.h: 88: typedef struct {
+[; ;DMX.h: 91: unsigned int RxNew : 1;
+[; ;DMX.h: 93: unsigned int RxBreak : 1;
+[; ;DMX.h: 95: unsigned int RxStart : 1;
+[; ;DMX.h: 97: unsigned int RxTimeout : 1;
+[; ;DMX.h: 100: unsigned int TxRunning : 1;
+[; ;DMX.h: 102: unsigned int TxBREAK : 1;
+[; ;DMX.h: 104: unsigned int TxMAB : 1;
+[; ;DMX.h: 108: unsigned int RDMNew : 1;
+[; ;DMX.h: 110: unsigned int RDMcheck : 2;
+[; ;DMX.h: 112: unsigned int RDMmute : 1;
+[; ;DMX.h: 114: } DMX_FLAGS;
+"117
+[v _DMX_Flags `VS594 ~T0 @X0 1 e ]
+[; ;DMX.h: 117: volatile DMX_FLAGS DMX_Flags;
 [; ;PWM.h: 8: extern void Sweep_PWM(void);
 [; ;PWM.h: 9: extern void Sweep_PWM_init(void);
 "11 PWM.h
@@ -4826,7 +4843,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;PWM.h: 19: }PWM[256];
 [; ;PWM.h: 20: }PWM_16;
 "22
-[v _PWM `CS594 ~T0 @X0 1 e ]
+[v _PWM `CS595 ~T0 @X0 1 e ]
 [i _PWM
 :U ..
 :U ..
@@ -5146,7 +5163,25 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;PWM.h: 47: 0x1C30, 0x1C80, 0x1CC8, 0x1D18, 0x1D68, 0x1D80, 0x1DB8, 0x1E08, 0x1E50, 0x1EA0,
 [; ;PWM.h: 48: 0x1EE8, 0x1F30, 0x1F78, 0x1FC0, 0x1FE8, 0x1FFF
 [; ;PWM.h: 49: };
-"16 main.c
+"52
+[v _PWMDCLptr `*uc ~T0 @X0 -> 4 `i e ]
+[; ;PWM.h: 52: char *PWMDCLptr[4];
+"53
+[v _PWMDCHptr `*uc ~T0 @X0 -> 4 `i e ]
+[; ;PWM.h: 53: char *PWMDCHptr[4];
+"54
+[v _PWMLDCONptr `*uc ~T0 @X0 -> 4 `i e ]
+[; ;PWM.h: 54: char *PWMLDCONptr[4];
+[; ;PFM.h: 13: extern uint16_t PFM_Read(uint16_t);
+[; ;PFM.h: 15: extern void PFM_Write(uint16_t ,uint16_t);
+[; ;PFM.h: 20: enum{
+[; ;PFM.h: 21: Flash_DMXAddress=0x0F80,
+[; ;PFM.h: 22: Flash_UID1=0x0FA0,
+[; ;PFM.h: 23: Flash_UID2=0x0FA1,
+[; ;PFM.h: 24: Flash_UID3=0x0FA2,
+[; ;PFM.h: 25: Flash_UID4=0x0FA3,
+[; ;PFM.h: 26: };
+"15 main.c
 [p x FOSC=INTOSC ]
 [p x WDTE=OFF ]
 [p x PWRTE=OFF ]
@@ -5154,153 +5189,117 @@ Version 3.2 HI-TECH Software Intermediate Code
 [p x CP=OFF ]
 [p x BOREN=OFF ]
 [p x CLKOUTEN=OFF ]
-"17
+"16
 [p x WRT=OFF ]
 [p x PPS1WAY=OFF ]
 [p x PLLEN=ON ]
 [p x STVREN=ON ]
 [p x LPBOREN=OFF ]
 [p x LVP=OFF ]
-[; ;main.c: 16: __config("__CONFIG", "pic", "FOSC_INTOSC & WDTE_OFF & PWRTE_OFF & MCLRE_ON & CP_OFF & BOREN_OFF & CLKOUTEN_OFF");
-[; ;main.c: 17: __config("__CONFIG", "pic", "WRT_OFF & PPS1WAY_OFF & PLLEN_ON & STVREN_ON & LPBOREN_OFF & LVP_OFF");
-[; ;main.c: 23: void timer_interrupt(void);
-"25
+[; ;main.c: 15: __config("__CONFIG", "pic", "FOSC_INTOSC & WDTE_OFF & PWRTE_OFF & MCLRE_ON & CP_OFF & BOREN_OFF & CLKOUTEN_OFF");
+[; ;main.c: 16: __config("__CONFIG", "pic", "WRT_OFF & PPS1WAY_OFF & PLLEN_ON & STVREN_ON & LPBOREN_OFF & LVP_OFF");
+[; ;main.c: 22: void timer_interrupt(void);
+"24
 [v _main `(v ~T0 @X0 1 ef ]
 {
-[; ;main.c: 25: void main(void) {
+[; ;main.c: 24: void main(void) {
 [e :U _main ]
 [f ]
-[; ;main.c: 26: PWM1CON = PWM2CON = PWM3CON = PWM4CON = 0b10000000;
-"26
-[e = _PWM1CON = _PWM2CON = _PWM3CON = _PWM4CON -> -> 128 `i `uc ]
-[; ;main.c: 27: PR2 = 0xFF;
+[; ;main.c: 27: PWM1CON = PWM2CON = PWM3CON = PWM4CON = 0b10000000;
 "27
-[e = _PR2 -> -> 255 `i `uc ]
-[; ;main.c: 28: T2CON = 0b00000101;
+[e = _PWM1CON = _PWM2CON = _PWM3CON = _PWM4CON -> -> 128 `i `uc ]
+[; ;main.c: 28: PR2 = 0xFF;
 "28
+[e = _PR2 -> -> 255 `i `uc ]
+[; ;main.c: 29: T2CON = 0b00000101;
+"29
 [e = _T2CON -> -> 5 `i `uc ]
-[; ;main.c: 30: OSCCON = 0b11111000;
-"30
-[e = _OSCCON -> -> 248 `i `uc ]
-[; ;main.c: 31: OSCTUNE = 0b000000;
+[; ;main.c: 31: OSCCON = 0b11111000;
 "31
+[e = _OSCCON -> -> 248 `i `uc ]
+[; ;main.c: 32: OSCTUNE = 0b000000;
+"32
 [e = _OSCTUNE -> -> 0 `i `uc ]
-[; ;main.c: 33: TRISA2 = TRISC0 = TRISC1 = TRISC2 = 0;
-"33
-[e = _TRISA2 = _TRISC0 = _TRISC1 = _TRISC2 -> -> 0 `i `b ]
-[; ;main.c: 34: ANSA2 = ANSC0 = ANSC1 = ANSC2 = 0;
+[; ;main.c: 34: TRISA2 = TRISC0 = TRISC1 = TRISC2 = 0;
 "34
+[e = _TRISA2 = _TRISC0 = _TRISC1 = _TRISC2 -> -> 0 `i `b ]
+[; ;main.c: 35: ANSA2 = ANSC0 = ANSC1 = ANSC2 = 0;
+"35
 [e = _ANSA2 = _ANSC0 = _ANSC1 = _ANSC2 -> -> 0 `i `b ]
-[; ;main.c: 36: RA2PPS = 0b0011;
-"36
-[e = _RA2PPS -> -> 3 `i `uc ]
-[; ;main.c: 37: RC0PPS = 0b0100;
+[; ;main.c: 37: RA2PPS = 0b0011;
 "37
-[e = _RC0PPS -> -> 4 `i `uc ]
-[; ;main.c: 38: RC1PPS = 0b0101;
+[e = _RA2PPS -> -> 3 `i `uc ]
+[; ;main.c: 38: RC0PPS = 0b0100;
 "38
-[e = _RC1PPS -> -> 5 `i `uc ]
-[; ;main.c: 39: RC2PPS = 0b0110;
+[e = _RC0PPS -> -> 4 `i `uc ]
+[; ;main.c: 39: RC1PPS = 0b0101;
 "39
+[e = _RC1PPS -> -> 5 `i `uc ]
+[; ;main.c: 40: RC2PPS = 0b0110;
+"40
 [e = _RC2PPS -> -> 6 `i `uc ]
-[; ;main.c: 41: PWM1DCH = 0x0F;
-"41
-[e = _PWM1DCH -> -> 15 `i `uc ]
-[; ;main.c: 42: PWM2DCH = 0x0C;
-"42
-[e = _PWM2DCH -> -> 12 `i `uc ]
-[; ;main.c: 43: PWM3DCH = 0x09;
-"43
-[e = _PWM3DCH -> -> 9 `i `uc ]
-[; ;main.c: 44: PWM4DCH = 0x06;
-"44
-[e = _PWM4DCH -> -> 6 `i `uc ]
-[; ;main.c: 46: PWM1DCL = 0xFF;
-"46
-[e = _PWM1DCL -> -> 255 `i `uc ]
-[; ;main.c: 47: PWM2DCL = 0x7E;
-"47
-[e = _PWM2DCL -> -> 126 `i `uc ]
-[; ;main.c: 48: PWM3DCL = 0x0D;
-"48
-[e = _PWM3DCL -> -> 13 `i `uc ]
-[; ;main.c: 49: PWM4DCL = 0x9C;
-"49
-[e = _PWM4DCL -> -> 156 `i `uc ]
-[; ;main.c: 51: PWM1PHH = PWM2PHH = PWM3PHH = PWM4PHH = 0x00;
-"51
-[e = _PWM1PHH = _PWM2PHH = _PWM3PHH = _PWM4PHH -> -> 0 `i `uc ]
-[; ;main.c: 52: PWM1PHL = PWM2PHL = PWM3PHL = PWM4PHL = 0x00;
+[; ;main.c: 52: PWM1PHH = PWM2PHH = PWM3PHH = PWM4PHH = 0x00;
 "52
-[e = _PWM1PHL = _PWM2PHL = _PWM3PHL = _PWM4PHL -> -> 0 `i `uc ]
-[; ;main.c: 53: PWM1PRH = PWM2PRH = PWM3PRH = PWM4PRH = 0x1F;
+[e = _PWM1PHH = _PWM2PHH = _PWM3PHH = _PWM4PHH -> -> 0 `i `uc ]
+[; ;main.c: 53: PWM1PHL = PWM2PHL = PWM3PHL = PWM4PHL = 0x00;
 "53
-[e = _PWM1PRH = _PWM2PRH = _PWM3PRH = _PWM4PRH -> -> 31 `i `uc ]
-[; ;main.c: 54: PWM1PRL = PWM2PRL = PWM3PRL = PWM4PRL = 0xFF;
+[e = _PWM1PHL = _PWM2PHL = _PWM3PHL = _PWM4PHL -> -> 0 `i `uc ]
+[; ;main.c: 54: PWM1PRH = PWM2PRH = PWM3PRH = PWM4PRH = 0x1F;
 "54
-[e = _PWM1PRL = _PWM2PRL = _PWM3PRL = _PWM4PRL -> -> 255 `i `uc ]
-[; ;main.c: 55: PWM1CLKCON = PWM2CLKCON = PWM3CLKCON = PWM4CLKCON = 0b00000000;
+[e = _PWM1PRH = _PWM2PRH = _PWM3PRH = _PWM4PRH -> -> 31 `i `uc ]
+[; ;main.c: 55: PWM1PRL = PWM2PRL = PWM3PRL = PWM4PRL = 0xFF;
 "55
+[e = _PWM1PRL = _PWM2PRL = _PWM3PRL = _PWM4PRL -> -> 255 `i `uc ]
+[; ;main.c: 56: PWM1CLKCON = PWM2CLKCON = PWM3CLKCON = PWM4CLKCON = 0b00000000;
+"56
 [e = _PWM1CLKCON = _PWM2CLKCON = _PWM3CLKCON = _PWM4CLKCON -> -> 0 `i `uc ]
-[; ;main.c: 58: TRISC3 = 0;
-"58
-[e = _TRISC3 -> -> 0 `i `b ]
-[; ;main.c: 59: ANSC3 = 0;
+[; ;main.c: 59: TRISC3 = 0;
 "59
-[e = _ANSC3 -> -> 0 `i `b ]
-[; ;main.c: 60: INTCON = 0b11000000;
+[e = _TRISC3 -> -> 0 `i `b ]
+[; ;main.c: 60: ANSC3 = 0;
 "60
+[e = _ANSC3 -> -> 0 `i `b ]
+[; ;main.c: 61: INTCON = 0b11000000;
+"61
 [e = _INTCON -> -> 192 `i `uc ]
-[; ;main.c: 65: DMX_init();
-"65
-[e ( _DMX_init ..  ]
-[; ;main.c: 67: ADC_init();
+[; ;main.c: 67: DMX_init();
 "67
-[e ( _ADC_init ..  ]
-[; ;main.c: 68: timer1_init();
-"68
+[e ( _DMX_init ..  ]
+[; ;main.c: 70: timer1_init();
+"70
 [e ( _timer1_init ..  ]
-[; ;main.c: 70: while (1) {
-"70
-[e :U 598 ]
-{
-[; ;main.c: 71: DMX_loop();
-"71
-[e ( _DMX_loop ..  ]
-[; ;main.c: 72: ADC_loop();
-"72
-[e ( _ADC_loop ..  ]
-[; ;main.c: 73: timer1_switch();
-"73
-[e ( _timer1_switch ..  ]
-"74
-}
-[e :U 597 ]
-"70
-[e $U 598  ]
+[; ;main.c: 78: while (1) {
+"78
 [e :U 599 ]
-[; ;main.c: 74: }
-[; ;main.c: 75: }
-"75
-[e :UE 596 ]
-}
-[v F4928 `(v ~T0 @X0 1 tf ]
-"77
-[v _isr `IF4928 ~T0 @X0 1 e ]
 {
-[; ;main.c: 77: void interrupt isr(void) {
-[e :U _isr ]
-[f ]
-[; ;main.c: 79: ADC_interrupt();
+[; ;main.c: 79: DMX_loop();
 "79
-[e ( _ADC_interrupt ..  ]
-[; ;main.c: 81: DMX_interrput();
-"81
-[e ( _DMX_interrput ..  ]
-[; ;main.c: 82: timer1_interrupt();
-"82
-[e ( _timer1_interrupt ..  ]
+[e ( _DMX_loop ..  ]
+"83
+}
+[e :U 598 ]
+"78
+[e $U 599  ]
+[e :U 600 ]
+[; ;main.c: 83: }
 [; ;main.c: 84: }
 "84
-[e :UE 600 ]
+[e :UE 597 ]
+}
+[v F4949 `(v ~T0 @X0 1 tf ]
+"86
+[v _isr `IF4949 ~T0 @X0 1 e ]
+{
+[; ;main.c: 86: void interrupt isr(void) {
+[e :U _isr ]
+[f ]
+[; ;main.c: 89: DMX_interrput();
+"89
+[e ( _DMX_interrput ..  ]
+[; ;main.c: 90: timer1_interrupt();
+"90
+[e ( _timer1_interrupt ..  ]
+[; ;main.c: 92: }
+"92
+[e :UE 601 ]
 }

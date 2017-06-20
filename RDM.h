@@ -42,6 +42,8 @@ enum{
 };
 
 
+
+
 //RDM set start
 /** RxStart The Start Code for a valid data stream */
 const char RDM_StartCode = 0xCC;
@@ -59,33 +61,43 @@ extern void RDM_init(void);
 */
 extern void RDM_tx_interrupt(void);
 
+extern void RDM_tx_TimerBreak(void);
+extern void RDM_discovery_CC(void);
+
+
 extern void RDM_rx_loop(void);
 /**
  *  Select the size of the transmit buffer
  *  This is the Maximum number of channels that will be sent.
- *  DMX512a requires a minimum of 20 and a maximum of 512
+ *  RDM requires a minimum of 24 and a maximum of 257
  *  This depends on how much RAM your PIC has available.
  */
-#define TX_BUFFER_SIZE 512
+char TX_SIZE=26;
+
 
 #define TX_PIN      LATC4   // TX pin use RC4
 #define TX_TRIS     TRISC4  // Set TX pin as output
+#define TX_PPS      RC4PPS  //RC4
 
 /** TxData Transmit Data Buffer  */
 //volatile uint8_t   TxData[TX_BUFFER_SIZE];
 /** TxCount Counts how many bytes sent. Used in interrupt  */
 uint16_t         TxCount=0;
-/** TxStart Start code to transmit  */
-uint8_t          TxStart=0;
+///** TxStart Start code to transmit  */
+//const uint8_t          TxStart=0;
 /** *TxByte Pointer to data to send  */
 volatile uint8_t *TxByte;
 /** TxState State for the Transmit state machine  */
 volatile uint8_t TxState=0;
 
+#define METEOR 0x4D52
+#define DriverID 0x17C31092
+
  enum
  {
-    TX_BREAK,
-    TX_MAB,
+    TX_MARK_BEFORE_BREAK,
+//    TX_MAB,
+    TX_DISCOVERY_START,
     TX_START,
     TX_DATA
  };
@@ -94,38 +106,52 @@ volatile uint8_t TxState=0;
 typedef union{
     unsigned char value[24]; 
     struct{
-        unsigned ML:8;      //MessageLength
-        struct{
-            uint16_t M;     //Manufacture
-            uint32_t ID;
-        }UID;   // this.device UID
-        struct{
-            uint16_t M;     //Manufacture
-            uint32_t ID;    
-        }CUID;          //Controller UID
-        unsigned TN:8;      //Transaction Number
-        unsigned PORT:8;     //Port ID / Response Type
-        unsigned message:8;     //message count
-        uint16_t subDevice;      //sub device
-        unsigned CC:8;          //Command Class
-        uint16_t PID;        //Parameter ID
-        unsigned PDL:8;         //Parameter Data Length
         union{
-            uint16_t CS;
+            uint16_t CS;                //value[0~1]
             struct{
-                unsigned CSH:8;         //ChechSum High
                 unsigned CSL:8;         //ChechSum Low
+                unsigned CSH:8;         //ChechSum High
             };
         };
         
+        unsigned PDL:8;         //Parameter Data Length         //value[2]
+        uint16_t PID;        //Parameter ID     //value[3~4]
+        
+        unsigned CC:8;          //Command Class     //value[5]
+        uint16_t subDevice;      //sub device   //value[6~7]
+        unsigned message:8;     //message count     //value[8]
+        unsigned PORT:8;     //Port ID / Response Type  //value[9]
+        unsigned TN:8;      //Transaction Number    //value[10]
+        
+        struct{
+            uint32_t ID;
+            uint16_t M;     //Manufacture
+        }CUID;          //Controller UID    //value[11~16]
+        
+        struct{
+            uint32_t ID;
+            uint16_t M;     //Manufacture
+        }UID;   // this.device UID      //value[17~22]
+        
+        unsigned ML:8;      //MessageLength     //value[23]
     };
 }RDM_Data;
 
-volatile RDM_Data RX_RDM_Data;
-volatile RDM_Data TX_RDM_Data;
+extern uint16_t RDM_get_checkSum(RDM_Data);
 
+
+const char UID[6]={0x4D,0x52,0x17,0xC3,0x10,0x92};
+
+volatile RDM_Data RX_RDM_Data;
+volatile RDM_Data TX_RDM_Data={0x00,0x4D,0x52,0x17,0xC3,0x10,0x92};
+volatile RDM_Data DISCOVERY_RDM_Data;
+
+#define PD_LEN      230   // Parameter Data Length
 //RDM Parameter Data
 char PD[231];
+
+uint16_t *PD_Manu;
+uint32_t *PD_ID;
 
 char PDCount;
 
@@ -202,4 +228,5 @@ volatile unsigned PD_Flag;
 
 uint16_t checkSum;
 
+uint16_t uint16_tmp;
 //RDM end start

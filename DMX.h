@@ -32,13 +32,14 @@ extern void DMX_interrupt(void);
 /** Selects the ms between breaks that sets the timeout flag.
     This is usually just over 1 second and is common for DMX Fixtures
     to go into a blackout or default mode if this occurs (i.e. signal lost) */
-#define DMX_RX_TIMEOUT_MS 1200
+#define DMX_RX_TIMEOUT_MS 2400  //1200ms
 
 
-
+/** RGBW Receive Data Buffer  */
+volatile unsigned char RGBW[RX_BUFFER_SIZE];
 
 /** RxData Receive Data Buffer  */
-volatile char RxData[RX_BUFFER_SIZE];
+volatile unsigned char RxData[RX_BUFFER_SIZE];
 /** RxChannel Base Address / Channel to start reading from */
 int DMX_Address;
 /** RxStart The Start Code for a valid data stream */
@@ -49,8 +50,30 @@ volatile int RxAddrCount = 0;
 volatile char *RxDataPtr;
 /** RxState Current state in the receive state machine */
 volatile char RxState = 0;
-/** RxTimer Counts ms since last overflow - used for 1 second timeout */
+/** RxTimer Counts 0.5ms since last overflow - used for 1 second timeout */
 volatile int RxTimer = 0;
+
+//PWM SMOOTH//
+/** DMXperiod Counts 500us since DMX period, period records when RX recieve DMX_StartCode*/
+char DMXPeriod = 100;
+/** DMXperiodConst incerease per 500us, Return to zero when RX recieve DMX_StartCode */
+volatile char DMXPeriodConst =0;
+/** DMXPeriodStep will change PWM at 500us Timer per DMXPeriodStep period */
+char DMXPeriodStep[4] =1; //0 is unchange , 1 is always change per 0.5ms Timer up, 2 is 1ms, 3 is 1.5ms, ....
+/** DMXPeriodStepconst decerease per 500us, when DMXPeriodStepconst decrease to zero, DMXPeriodStepconst will set to DMXPeriodStep and PWM will be changed */
+char DMXPeriodStepConst[4] =0;
+
+
+
+typedef struct {
+    // Update PWM per 500us
+    /**  00 =unchange  01 = Increment   10=Decrement */
+        unsigned int X: 2;
+} DMX_PERIODSIGN;
+/** SMOOTH_Pwm Set in the ISR to indicate to helper functions etc */
+volatile DMX_PERIODSIGN DMXPeriodSign[4]; /**  00 =unchange  01 = Increment   10=Decrement */
+//PWM SMOOTH END//
+
 
 enum {
     RX_WAIT_FOR_BREAK,
@@ -80,12 +103,18 @@ typedef struct {
     /**  Mark after Break Active */
     unsigned int TxMAB : 1;
     /** Indicates a transmission is complete (Last Byte loaded into buffer) */
-    unsigned int TxDone : 1;
+//    unsigned int TxDone : 1;
     /** DMX_FLAGS Used to pass information from the ISR */
     unsigned int RDMNew : 1;
+    
+    unsigned int RDMcheck : 2;
+    
+    unsigned int RDMmute : 1;
+    
 } DMX_FLAGS;
 
 /** DMX_Flags Set in the ISR to indicate to helper functions etc */
 volatile DMX_FLAGS DMX_Flags;
 //DMX set end
+
 

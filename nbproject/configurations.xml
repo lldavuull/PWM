@@ -9,6 +9,7 @@
       <itemPath>ADC.h</itemPath>
       <itemPath>RDM.h</itemPath>
       <itemPath>Timer.h</itemPath>
+      <itemPath>PFM.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -23,6 +24,7 @@
       <itemPath>ADC.c</itemPath>
       <itemPath>RDM.c</itemPath>
       <itemPath>Timer.c</itemPath>
+      <itemPath>PFM.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -142,7 +144,6 @@
         <property key="ToolFirmwareFilePath"
                   value="Press to browse for a specific firmware version"/>
         <property key="ToolFirmwareOption.UseLatestFirmware" value="true"/>
-        <property key="firmware.download.all" value="false"/>
         <property key="hwtoolclock.frcindebug" value="false"/>
         <property key="memories.aux" value="false"/>
         <property key="memories.bootflash" value="true"/>

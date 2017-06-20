@@ -6255,8 +6255,8 @@ extern void timer1_init(void);
 extern void timer1_switch(void);
 
 enum {
-TIMER_1MS,
-TIMER_BREAK,
+TIMER_500US,
+
 TIMER_MAB,
 TIMER_FILL
 };
@@ -6270,7 +6270,7 @@ unsigned int MS : 1;
 unsigned int SEC : 1;
 unsigned int MIN : 1;
 unsigned int HR : 1;
-unsigned int BREAK : 1;
+
 unsigned int MAB : 1;
 unsigned int spare : 2;
 };
@@ -6294,8 +6294,11 @@ extern void DMX_loop(void);
 # 25
 extern void DMX_interrupt(void);
 
-# 41
-volatile char RxData[4];
+# 39
+volatile unsigned char RGBW[4];
+
+
+volatile unsigned char RxData[4];
 
 int DMX_Address;
 
@@ -6308,6 +6311,28 @@ volatile char *RxDataPtr;
 volatile char RxState = 0;
 
 volatile int RxTimer = 0;
+
+
+
+char DMXPeriod = 100;
+
+volatile char DMXPeriodConst =0;
+
+char DMXPeriodStep[4] =1;
+
+char DMXPeriodStepConst[4] =0;
+
+
+
+typedef struct {
+
+
+unsigned int X: 2;
+} DMX_PERIODSIGN;
+
+volatile DMX_PERIODSIGN DMXPeriodSign[4];
+
+
 
 enum {
 RX_WAIT_FOR_BREAK,
@@ -6337,9 +6362,14 @@ unsigned int TxBREAK : 1;
 
 unsigned int TxMAB : 1;
 
-unsigned int TxDone : 1;
+
 
 unsigned int RDMNew : 1;
+
+unsigned int RDMcheck : 2;
+
+unsigned int RDMmute : 1;
+
 } DMX_FLAGS;
 
 
@@ -6389,6 +6419,11 @@ const PWM_16 PWM={
 0x1EE8, 0x1F30, 0x1F78, 0x1FC0, 0x1FE8, 0x1FFF
 };
 
+
+char *PWMDCLptr[4];
+char *PWMDCHptr[4];
+char *PWMLDCONptr[4];
+
 # 12 "RDM.h"
 enum{
 ACK=0x00,
@@ -6422,35 +6457,44 @@ DMX_START_ADDRESS = 0x00F0,
 IDENTIFY_DEVICE = 0x1000
 };
 
-
-
-
+# 49
 const char RDM_StartCode = 0xCC;
 
 
 const char RDM_SubStartCode = 0x01;
 
-# 56
+# 58
 extern void RDM_init(void);
 
-# 60
+# 62
 extern void RDM_tx_interrupt(void);
+
+extern void RDM_tx_TimerBreak(void);
+extern void RDM_discovery_CC(void);
+
 
 extern void RDM_rx_loop(void);
 
-# 77
+# 75
+char TX_SIZE=26;
+
+# 85
 uint16_t TxCount=0;
 
-uint8_t TxStart=0;
+
 
 volatile uint8_t *TxByte;
 
 volatile uint8_t TxState=0;
 
+
+
+
 enum
 {
-TX_BREAK,
-TX_MAB,
+TX_MARK_BEFORE_BREAK,
+
+TX_DISCOVERY_START,
 TX_START,
 TX_DATA
 };
@@ -6459,46 +6503,62 @@ TX_DATA
 typedef union{
 unsigned char value[24];
 struct{
-unsigned ML:8;
-struct{
-uint16_t M;
-uint32_t ID;
-}UID;
-struct{
-uint16_t M;
-uint32_t ID;
-}CUID;
-unsigned TN:8;
-unsigned PORT:8;
-unsigned message:8;
-uint16_t subDevice;
-unsigned CC:8;
-uint16_t PID;
-unsigned PDL:8;
 union{
 uint16_t CS;
 struct{
-unsigned CSH:8;
 unsigned CSL:8;
+unsigned CSH:8;
 };
 };
 
+unsigned PDL:8;
+uint16_t PID;
+
+unsigned CC:8;
+uint16_t subDevice;
+unsigned message:8;
+unsigned PORT:8;
+unsigned TN:8;
+
+struct{
+uint32_t ID;
+uint16_t M;
+}CUID;
+
+struct{
+uint32_t ID;
+uint16_t M;
+}UID;
+
+unsigned ML:8;
 };
 }RDM_Data;
 
+extern uint16_t RDM_get_checkSum(RDM_Data);
+
+
+const char UID[6]={0x4D,0x52,0x17,0xC3,0x10,0x92};
+
 volatile RDM_Data RX_RDM_Data;
-volatile RDM_Data TX_RDM_Data;
+volatile RDM_Data TX_RDM_Data={0x00,0x4D,0x52,0x17,0xC3,0x10,0x92};
+volatile RDM_Data DISCOVERY_RDM_Data;
+
 
 
 char PD[231];
+
+uint16_t *PD_Manu;
+uint32_t *PD_ID;
 
 char PDCount;
 
 volatile char PackCount;
 volatile unsigned PD_Flag;
 
-# 203
+# 229
 uint16_t checkSum;
+
+uint16_t uint16_tmp;
 
 # 15 "Timer.c"
 void timer1_init(void) {
@@ -6510,26 +6570,19 @@ T1CON = 0b00100001;
 void timer1_interrupt(void) {
 if (TMR1IE && TMR1IF) {
 TMR1IF = 0;
-
 switch (TimerState) {
 default:
-TimerState = TIMER_1MS;
-case TIMER_1MS:
+TimerState = TIMER_500US;
+case TIMER_500US:
 
-if (Timer.BREAK == 1 && DMX_Flags.TxRunning == 1)
-{
-TMR1 = 0xFF4B;
-LATC4 = 0;
-TimerState = TIMER_BREAK;
-Timer.BREAK = 0;
-} else {
+# 37
 if(ADIE==RA5){
 Timer.Switch=1;
 }
-TMR1 = 0xFc17;
+TMR1 = 0xFE0B;
 RxTimer++;
-if (RxTimer == 1200) {
-RxTimer = 1200 + 1;
+if (RxTimer == 2400) {
+RxTimer = 2400 + 1;
 DMX_Flags.RxTimeout = 1;
 }
 
@@ -6554,20 +6607,15 @@ Timer.HR = 1;
 }
 }
 }
-}
+
 break;
 
-case TIMER_BREAK:
-LATC4 = 1;
-TMR1 = 0xFFEB;
-TimerState = TIMER_MAB;
-break;
-
+# 77
 case TIMER_MAB:
 TXEN = 1;
 TXIE = 1;
 TMR1 = 0xFCDF;
-TimerState = TIMER_1MS;
+TimerState = TIMER_500US;
 break;
 }
 }
@@ -6575,6 +6623,7 @@ break;
 
 void timer1_switch(void){
 if(Timer.Switch==1){
+SPEN=RA5;
 RC3=RA5;
 RCIE=RA5;
 volatile char RxDat2;

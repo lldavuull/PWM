@@ -6258,8 +6258,11 @@ extern void DMX_loop(void);
 # 25
 extern void DMX_interrupt(void);
 
-# 41
-volatile char RxData[4];
+# 39
+volatile unsigned char RGBW[4];
+
+
+volatile unsigned char RxData[4];
 
 int DMX_Address;
 
@@ -6272,6 +6275,28 @@ volatile char *RxDataPtr;
 volatile char RxState = 0;
 
 volatile int RxTimer = 0;
+
+
+
+char DMXPeriod = 100;
+
+volatile char DMXPeriodConst =0;
+
+char DMXPeriodStep[4] =1;
+
+char DMXPeriodStepConst[4] =0;
+
+
+
+typedef struct {
+
+
+unsigned int X: 2;
+} DMX_PERIODSIGN;
+
+volatile DMX_PERIODSIGN DMXPeriodSign[4];
+
+
 
 enum {
 RX_WAIT_FOR_BREAK,
@@ -6301,9 +6326,14 @@ unsigned int TxBREAK : 1;
 
 unsigned int TxMAB : 1;
 
-unsigned int TxDone : 1;
+
 
 unsigned int RDMNew : 1;
+
+unsigned int RDMcheck : 2;
+
+unsigned int RDMmute : 1;
+
 } DMX_FLAGS;
 
 
@@ -6353,14 +6383,37 @@ const PWM_16 PWM={
 0x1EE8, 0x1F30, 0x1F78, 0x1FC0, 0x1FE8, 0x1FFF
 };
 
-# 16 "main.c"
+
+char *PWMDCLptr[4];
+char *PWMDCHptr[4];
+char *PWMLDCONptr[4];
+
+# 13 "PFM.h"
+extern uint16_t PFM_Read(uint16_t);
+
+extern void PFM_Write(uint16_t ,uint16_t);
+
+
+
+
+enum{
+Flash_DMXAddress=0x0F80,
+Flash_UID1=0x0FA0,
+Flash_UID2=0x0FA1,
+Flash_UID3=0x0FA2,
+Flash_UID4=0x0FA3,
+};
+
+# 15 "main.c"
 __config("__CONFIG", "pic", "FOSC_INTOSC & WDTE_OFF & PWRTE_OFF & MCLRE_ON & CP_OFF & BOREN_OFF & CLKOUTEN_OFF");
 __config("__CONFIG", "pic", "WRT_OFF & PPS1WAY_OFF & PLLEN_ON & STVREN_ON & LPBOREN_OFF & LVP_OFF");
 
-# 23
+# 22
 void timer_interrupt(void);
 
 void main(void) {
+
+
 PWM1CON = PWM2CON = PWM3CON = PWM4CON = 0b10000000;
 PR2 = 0xFF;
 T2CON = 0b00000101;
@@ -6376,16 +6429,7 @@ RC0PPS = 0b0100;
 RC1PPS = 0b0101;
 RC2PPS = 0b0110;
 
-PWM1DCH = 0x0F;
-PWM2DCH = 0x0C;
-PWM3DCH = 0x09;
-PWM4DCH = 0x06;
-
-PWM1DCL = 0xFF;
-PWM2DCL = 0x7E;
-PWM3DCL = 0x0D;
-PWM4DCL = 0x9C;
-
+# 52
 PWM1PHH = PWM2PHH = PWM3PHH = PWM4PHH = 0x00;
 PWM1PHL = PWM2PHL = PWM3PHL = PWM4PHL = 0x00;
 PWM1PRH = PWM2PRH = PWM3PRH = PWM4PRH = 0x1F;
@@ -6397,24 +6441,23 @@ TRISC3 = 0;
 ANSC3 = 0;
 INTCON = 0b11000000;
 
-
-
-
+# 67
 DMX_init();
 
-ADC_init();
+
 timer1_init();
 
+# 78
 while (1) {
 DMX_loop();
-ADC_loop();
-timer1_switch();
+
+
+
 }
 }
 
 void interrupt isr(void) {
 
-ADC_interrupt();
 
 DMX_interrput();
 timer1_interrupt();

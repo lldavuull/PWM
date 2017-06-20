@@ -1,40 +1,43 @@
 Version 3.2 HI-TECH Software Intermediate Code
-"65 DMX.h
-[s S593 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
-[n S593 . RxNew RxBreak RxStart RxTimeout TxRunning TxBREAK TxMAB TxDone RDMNew ]
+"68 DMX.h
+[s S593 :2 `uc 1 ]
+[n S593 . X ]
+"88
+[s S594 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :2 `uc 1 :1 `uc 1 ]
+[n S594 . RxNew RxBreak RxStart RxTimeout TxRunning TxBREAK TxMAB RDMNew RDMcheck RDMmute ]
 "16 PWM.h
-[s S595 :8 `uc 1 :8 `uc 1 ]
-[n S595 . DCL DCH ]
+[s S596 :8 `uc 1 :8 `uc 1 ]
+[n S596 . DCL DCH ]
 "14
-[u S594 `ui -> 256 `i `S595 -> 256 `i ]
-[n S594 . D PWM ]
-"98 RDM.h
-[s S598 `ui 1 `ul 1 ]
-[n S598 . M ID ]
-"102
-[s S599 `ui 1 `ul 1 ]
-[n S599 . M ID ]
-"115
-[s S601 :8 `uc 1 :8 `uc 1 ]
-[n S601 . CSH CSL ]
-"113
-[u S600 `ui 1 `S601 1 ]
-[n S600 . CS . ]
-"96
-[s S597 :8 `uc 1 `S598 1 `S599 1 :8 `uc 1 :8 `uc 1 :8 `uc 1 `ui 1 :8 `uc 1 `ui 1 :8 `uc 1 `S600 1 ]
-[n S597 . ML UID CUID TN PORT message subDevice CC PID PDL . ]
-"94
-[u S596 `uc -> 24 `i `S597 1 ]
-[n S596 . value . ]
+[u S595 `ui -> 256 `i `S596 -> 256 `i ]
+[n S595 . D PWM ]
+"111 RDM.h
+[s S600 :8 `uc 1 :8 `uc 1 ]
+[n S600 . CSL CSH ]
+"109
+[u S599 `ui 1 `S600 1 ]
+[n S599 . CS . ]
+"126
+[s S601 `ul 1 `ui 1 ]
+[n S601 . ID M ]
+"131
+[s S602 `ul 1 `ui 1 ]
+[n S602 . ID M ]
+"108
+[s S598 `S599 1 :8 `uc 1 `ui 1 :8 `uc 1 `ui 1 :8 `uc 1 :8 `uc 1 :8 `uc 1 `S601 1 `S602 1 :8 `uc 1 ]
+[n S598 . . PDL PID CC subDevice message PORT TN CUID UID ML ]
+"106
+[u S597 `uc -> 24 `i `S598 1 ]
+[n S597 . value . ]
 "29 Timer.h
-[s S604 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :2 `uc 1 ]
-[n S604 . MS SEC MIN HR BREAK MAB spare ]
+[s S605 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :2 `uc 1 ]
+[n S605 . MS SEC MIN HR MAB spare ]
 "28
-[u S603 `S604 1 `uc 1 ]
-[n S603 . . flags ]
+[u S604 `S605 1 `uc 1 ]
+[n S604 . . flags ]
 "27
-[s S602 `S603 1 `i 1 `uc 1 `uc 1 `uc 1 :1 `uc 1 ]
-[n S602 . . MS_Count SEC_Count MIN_Count HR_Count Switch ]
+[s S603 `S604 1 `i 1 `uc 1 `uc 1 `uc 1 :1 `uc 1 ]
+[n S603 . . MS_Count SEC_Count MIN_Count HR_Count Switch ]
 "10223 C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16f1574.h
 [v _RXPPS `Vuc ~T0 @X0 0 e@3605 ]
 "12826
@@ -53,24 +56,22 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _SPBRGL `Vuc ~T0 @X0 0 e@411 ]
 "12628
 [v _RCIE `Vb ~T0 @X0 0 e@1165 ]
-"56 RDM.h
-[v _RDM_init `(v ~T0 @X0 0 ef ]
-"4384 C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16f1574.h
-[v _PWM1DCH `Vuc ~T0 @X0 0 e@3476 ]
 "4307
 [v _PWM1DCL `Vuc ~T0 @X0 0 e@3475 ]
-"5836
-[v _PWM2DCH `Vuc ~T0 @X0 0 e@3492 ]
 "5759
 [v _PWM2DCL `Vuc ~T0 @X0 0 e@3491 ]
-"7288
-[v _PWM3DCH `Vuc ~T0 @X0 0 e@3508 ]
 "7211
 [v _PWM3DCL `Vuc ~T0 @X0 0 e@3507 ]
-"8740
-[v _PWM4DCH `Vuc ~T0 @X0 0 e@3524 ]
 "8663
 [v _PWM4DCL `Vuc ~T0 @X0 0 e@3523 ]
+"4384
+[v _PWM1DCH `Vuc ~T0 @X0 0 e@3476 ]
+"5836
+[v _PWM2DCH `Vuc ~T0 @X0 0 e@3492 ]
+"7288
+[v _PWM3DCH `Vuc ~T0 @X0 0 e@3508 ]
+"8740
+[v _PWM4DCH `Vuc ~T0 @X0 0 e@3524 ]
 "5405
 [v _PWM1LDCON `Vuc ~T0 @X0 0 e@3487 ]
 "6857
@@ -79,9 +80,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _PWM3LDCON `Vuc ~T0 @X0 0 e@3519 ]
 "9761
 [v _PWM4LDCON `Vuc ~T0 @X0 0 e@3535 ]
-"62 RDM.h
-[v _RDM_rx_loop `(v ~T0 @X0 0 ef ]
-"4301 C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16f1574.h
+"4301
 [v _PWM1DC `Vus ~T0 @X0 0 e@3475 ]
 "5753
 [v _PWM2DC `Vus ~T0 @X0 0 e@3491 ]
@@ -95,11 +94,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _FERR `Vb ~T0 @X0 0 e@3306 ]
 "2634
 [v _RCREG `Vuc ~T0 @X0 0 e@409 ]
-"72 DMX.c
-[c E4885 0 1 2 3 4 5 .. ]
-[n E4885 . RX_WAIT_FOR_BREAK WAIT_FOR_START RX_DMX_READ_DATA RX_RDM_READ_SubStartCode RX_RDM_READ_DATA RX_RDM_PD  ]
-"11390 C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16f1574.h
-[v _GIE `Vb ~T0 @X0 0 e@95 ]
+"144 DMX.c
+[c E4894 0 1 2 3 4 5 .. ]
+[n E4894 . RX_WAIT_FOR_BREAK WAIT_FOR_START RX_DMX_READ_DATA RX_RDM_READ_SubStartCode RX_RDM_READ_DATA RX_RDM_PD  ]
 [; ;htc.h: 26: extern const char __xc8_OPTIM_SPEED;
 [; ;htc.h: 28: extern double __fpnormalize(double);
 [; ;xc8debug.h: 14: extern void __builtin_software_breakpoint(void);
@@ -4723,61 +4720,99 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;DMX.h: 13: extern void DMX_init(void);
 [; ;DMX.h: 19: extern void DMX_loop(void);
 [; ;DMX.h: 25: extern void DMX_interrupt(void);
-"41 DMX.h
+"39 DMX.h
+[v _RGBW `Vuc ~T0 @X0 -> 4 `i e ]
+[; ;DMX.h: 39: volatile unsigned char RGBW[4];
+"42
 [v _RxData `Vuc ~T0 @X0 -> 4 `i e ]
-[; ;DMX.h: 41: volatile char RxData[4];
-"43
+[; ;DMX.h: 42: volatile unsigned char RxData[4];
+"44
 [v _DMX_Address `i ~T0 @X0 1 e ]
-[; ;DMX.h: 43: int DMX_Address;
-"45
+[; ;DMX.h: 44: int DMX_Address;
+"46
 [v _DMX_StartCode `Cuc ~T0 @X0 1 e ]
 [i _DMX_StartCode
 -> -> 0 `i `uc
 ]
-[; ;DMX.h: 45: const char DMX_StartCode = 0;
-"47
+[; ;DMX.h: 46: const char DMX_StartCode = 0;
+"48
 [v _RxAddrCount `Vi ~T0 @X0 1 e ]
 [i _RxAddrCount
 -> 0 `i
 ]
-[; ;DMX.h: 47: volatile int RxAddrCount = 0;
-"49
+[; ;DMX.h: 48: volatile int RxAddrCount = 0;
+"50
 [v _RxDataPtr `*Vuc ~T0 @X0 1 e ]
-[; ;DMX.h: 49: volatile char *RxDataPtr;
-"51
+[; ;DMX.h: 50: volatile char *RxDataPtr;
+"52
 [v _RxState `Vuc ~T0 @X0 1 e ]
 [i _RxState
 -> -> 0 `i `uc
 ]
-[; ;DMX.h: 51: volatile char RxState = 0;
-"53
+[; ;DMX.h: 52: volatile char RxState = 0;
+"54
 [v _RxTimer `Vi ~T0 @X0 1 e ]
 [i _RxTimer
 -> 0 `i
 ]
-[; ;DMX.h: 53: volatile int RxTimer = 0;
-[; ;DMX.h: 55: enum {
-[; ;DMX.h: 56: RX_WAIT_FOR_BREAK,
-[; ;DMX.h: 57: WAIT_FOR_START,
-[; ;DMX.h: 58: RX_DMX_READ_DATA,
-[; ;DMX.h: 59: RX_RDM_READ_SubStartCode,
-[; ;DMX.h: 60: RX_RDM_READ_DATA,
-[; ;DMX.h: 61: RX_RDM_PD,
-[; ;DMX.h: 62: };
-[; ;DMX.h: 65: typedef struct {
-[; ;DMX.h: 68: unsigned int RxNew : 1;
-[; ;DMX.h: 70: unsigned int RxBreak : 1;
-[; ;DMX.h: 72: unsigned int RxStart : 1;
-[; ;DMX.h: 74: unsigned int RxTimeout : 1;
-[; ;DMX.h: 77: unsigned int TxRunning : 1;
-[; ;DMX.h: 79: unsigned int TxBREAK : 1;
-[; ;DMX.h: 81: unsigned int TxMAB : 1;
-[; ;DMX.h: 83: unsigned int TxDone : 1;
-[; ;DMX.h: 85: unsigned int RDMNew : 1;
-[; ;DMX.h: 86: } DMX_FLAGS;
-"89
-[v _DMX_Flags `VS593 ~T0 @X0 1 e ]
-[; ;DMX.h: 89: volatile DMX_FLAGS DMX_Flags;
+[; ;DMX.h: 54: volatile int RxTimer = 0;
+"58
+[v _DMXPeriod `uc ~T0 @X0 1 e ]
+[i _DMXPeriod
+-> -> 100 `i `uc
+]
+[; ;DMX.h: 58: char DMXPeriod = 100;
+"60
+[v _DMXPeriodConst `Vuc ~T0 @X0 1 e ]
+[i _DMXPeriodConst
+-> -> 0 `i `uc
+]
+[; ;DMX.h: 60: volatile char DMXPeriodConst =0;
+"62
+[v _DMXPeriodStep `uc ~T0 @X0 -> 4 `i e ]
+[i _DMXPeriodStep
+:U ..
+-> -> 1 `i `uc
+..
+]
+[; ;DMX.h: 62: char DMXPeriodStep[4] =1;
+"64
+[v _DMXPeriodStepConst `uc ~T0 @X0 -> 4 `i e ]
+[i _DMXPeriodStepConst
+:U ..
+-> -> 0 `i `uc
+..
+]
+[; ;DMX.h: 64: char DMXPeriodStepConst[4] =0;
+[; ;DMX.h: 68: typedef struct {
+[; ;DMX.h: 71: unsigned int X: 2;
+[; ;DMX.h: 72: } DMX_PERIODSIGN;
+"74
+[v _DMXPeriodSign `VS593 ~T0 @X0 -> 4 `i e ]
+[; ;DMX.h: 74: volatile DMX_PERIODSIGN DMXPeriodSign[4];
+[; ;DMX.h: 78: enum {
+[; ;DMX.h: 79: RX_WAIT_FOR_BREAK,
+[; ;DMX.h: 80: WAIT_FOR_START,
+[; ;DMX.h: 81: RX_DMX_READ_DATA,
+[; ;DMX.h: 82: RX_RDM_READ_SubStartCode,
+[; ;DMX.h: 83: RX_RDM_READ_DATA,
+[; ;DMX.h: 84: RX_RDM_PD,
+[; ;DMX.h: 85: };
+[; ;DMX.h: 88: typedef struct {
+[; ;DMX.h: 91: unsigned int RxNew : 1;
+[; ;DMX.h: 93: unsigned int RxBreak : 1;
+[; ;DMX.h: 95: unsigned int RxStart : 1;
+[; ;DMX.h: 97: unsigned int RxTimeout : 1;
+[; ;DMX.h: 100: unsigned int TxRunning : 1;
+[; ;DMX.h: 102: unsigned int TxBREAK : 1;
+[; ;DMX.h: 104: unsigned int TxMAB : 1;
+[; ;DMX.h: 108: unsigned int RDMNew : 1;
+[; ;DMX.h: 110: unsigned int RDMcheck : 2;
+[; ;DMX.h: 112: unsigned int RDMmute : 1;
+[; ;DMX.h: 114: } DMX_FLAGS;
+"117
+[v _DMX_Flags `VS594 ~T0 @X0 1 e ]
+[; ;DMX.h: 117: volatile DMX_FLAGS DMX_Flags;
 [; ;PWM.h: 8: extern void Sweep_PWM(void);
 [; ;PWM.h: 9: extern void Sweep_PWM_init(void);
 "11 PWM.h
@@ -4797,7 +4832,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;PWM.h: 19: }PWM[256];
 [; ;PWM.h: 20: }PWM_16;
 "22
-[v _PWM `CS594 ~T0 @X0 1 e ]
+[v _PWM `CS595 ~T0 @X0 1 e ]
 [i _PWM
 :U ..
 :U ..
@@ -5117,6 +5152,15 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;PWM.h: 47: 0x1C30, 0x1C80, 0x1CC8, 0x1D18, 0x1D68, 0x1D80, 0x1DB8, 0x1E08, 0x1E50, 0x1EA0,
 [; ;PWM.h: 48: 0x1EE8, 0x1F30, 0x1F78, 0x1FC0, 0x1FE8, 0x1FFF
 [; ;PWM.h: 49: };
+"52
+[v _PWMDCLptr `*uc ~T0 @X0 -> 4 `i e ]
+[; ;PWM.h: 52: char *PWMDCLptr[4];
+"53
+[v _PWMDCHptr `*uc ~T0 @X0 -> 4 `i e ]
+[; ;PWM.h: 53: char *PWMDCHptr[4];
+"54
+[v _PWMLDCONptr `*uc ~T0 @X0 -> 4 `i e ]
+[; ;PWM.h: 54: char *PWMLDCONptr[4];
 [; ;RDM.h: 12: enum{
 [; ;RDM.h: 13: ACK=0x00,
 [; ;RDM.h: 14: ACK_TIMER=0x01,
@@ -5142,104 +5186,146 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;RDM.h: 40: DMX_START_ADDRESS = 0x00F0,
 [; ;RDM.h: 41: IDENTIFY_DEVICE = 0x1000
 [; ;RDM.h: 42: };
-"47 RDM.h
+"49 RDM.h
 [v _RDM_StartCode `Cuc ~T0 @X0 1 e ]
 [i _RDM_StartCode
 -> -> 204 `i `uc
 ]
-[; ;RDM.h: 47: const char RDM_StartCode = 0xCC;
-"50
+[; ;RDM.h: 49: const char RDM_StartCode = 0xCC;
+"52
 [v _RDM_SubStartCode `Cuc ~T0 @X0 1 e ]
 [i _RDM_SubStartCode
 -> -> 1 `i `uc
 ]
-[; ;RDM.h: 50: const char RDM_SubStartCode = 0x01;
-[; ;RDM.h: 56: extern void RDM_init(void);
-[; ;RDM.h: 60: extern void RDM_tx_interrupt(void);
-[; ;RDM.h: 62: extern void RDM_rx_loop(void);
-"77
+[; ;RDM.h: 52: const char RDM_SubStartCode = 0x01;
+[; ;RDM.h: 58: extern void RDM_init(void);
+[; ;RDM.h: 62: extern void RDM_tx_interrupt(void);
+[; ;RDM.h: 64: extern void RDM_tx_TimerBreak(void);
+[; ;RDM.h: 65: extern void RDM_discovery_CC(void);
+[; ;RDM.h: 68: extern void RDM_rx_loop(void);
+"75
+[v _TX_SIZE `uc ~T0 @X0 1 e ]
+[i _TX_SIZE
+-> -> 26 `i `uc
+]
+[; ;RDM.h: 75: char TX_SIZE=26;
+"85
 [v _TxCount `ui ~T0 @X0 1 e ]
 [i _TxCount
 -> -> 0 `i `ui
 ]
-[; ;RDM.h: 77: uint16_t TxCount=0;
-"79
-[v _TxStart `uc ~T0 @X0 1 e ]
-[i _TxStart
--> -> 0 `i `uc
-]
-[; ;RDM.h: 79: uint8_t TxStart=0;
-"81
+[; ;RDM.h: 85: uint16_t TxCount=0;
+"89
 [v _TxByte `*Vuc ~T0 @X0 1 e ]
-[; ;RDM.h: 81: volatile uint8_t *TxByte;
-"83
+[; ;RDM.h: 89: volatile uint8_t *TxByte;
+"91
 [v _TxState `Vuc ~T0 @X0 1 e ]
 [i _TxState
 -> -> 0 `i `uc
 ]
-[; ;RDM.h: 83: volatile uint8_t TxState=0;
-[; ;RDM.h: 85: enum
-[; ;RDM.h: 86: {
-[; ;RDM.h: 87: TX_BREAK,
-[; ;RDM.h: 88: TX_MAB,
-[; ;RDM.h: 89: TX_START,
-[; ;RDM.h: 90: TX_DATA
-[; ;RDM.h: 91: };
-[; ;RDM.h: 94: typedef union{
-[; ;RDM.h: 95: unsigned char value[24];
-[; ;RDM.h: 96: struct{
-[; ;RDM.h: 97: unsigned ML:8;
-[; ;RDM.h: 98: struct{
-[; ;RDM.h: 99: uint16_t M;
-[; ;RDM.h: 100: uint32_t ID;
-[; ;RDM.h: 101: }UID;
-[; ;RDM.h: 102: struct{
-[; ;RDM.h: 103: uint16_t M;
-[; ;RDM.h: 104: uint32_t ID;
-[; ;RDM.h: 105: }CUID;
-[; ;RDM.h: 106: unsigned TN:8;
-[; ;RDM.h: 107: unsigned PORT:8;
-[; ;RDM.h: 108: unsigned message:8;
-[; ;RDM.h: 109: uint16_t subDevice;
-[; ;RDM.h: 110: unsigned CC:8;
-[; ;RDM.h: 111: uint16_t PID;
-[; ;RDM.h: 112: unsigned PDL:8;
-[; ;RDM.h: 113: union{
-[; ;RDM.h: 114: uint16_t CS;
-[; ;RDM.h: 115: struct{
-[; ;RDM.h: 116: unsigned CSH:8;
-[; ;RDM.h: 117: unsigned CSL:8;
-[; ;RDM.h: 118: };
-[; ;RDM.h: 119: };
-[; ;RDM.h: 121: };
-[; ;RDM.h: 122: }RDM_Data;
-"124
-[v _RX_RDM_Data `VS596 ~T0 @X0 1 e ]
-[; ;RDM.h: 124: volatile RDM_Data RX_RDM_Data;
-"125
-[v _TX_RDM_Data `VS596 ~T0 @X0 1 e ]
-[; ;RDM.h: 125: volatile RDM_Data TX_RDM_Data;
-"128
+[; ;RDM.h: 91: volatile uint8_t TxState=0;
+[; ;RDM.h: 96: enum
+[; ;RDM.h: 97: {
+[; ;RDM.h: 98: TX_MARK_BEFORE_BREAK,
+[; ;RDM.h: 100: TX_DISCOVERY_START,
+[; ;RDM.h: 101: TX_START,
+[; ;RDM.h: 102: TX_DATA
+[; ;RDM.h: 103: };
+[; ;RDM.h: 106: typedef union{
+[; ;RDM.h: 107: unsigned char value[24];
+[; ;RDM.h: 108: struct{
+[; ;RDM.h: 109: union{
+[; ;RDM.h: 110: uint16_t CS;
+[; ;RDM.h: 111: struct{
+[; ;RDM.h: 112: unsigned CSL:8;
+[; ;RDM.h: 113: unsigned CSH:8;
+[; ;RDM.h: 114: };
+[; ;RDM.h: 115: };
+[; ;RDM.h: 117: unsigned PDL:8;
+[; ;RDM.h: 118: uint16_t PID;
+[; ;RDM.h: 120: unsigned CC:8;
+[; ;RDM.h: 121: uint16_t subDevice;
+[; ;RDM.h: 122: unsigned message:8;
+[; ;RDM.h: 123: unsigned PORT:8;
+[; ;RDM.h: 124: unsigned TN:8;
+[; ;RDM.h: 126: struct{
+[; ;RDM.h: 127: uint32_t ID;
+[; ;RDM.h: 128: uint16_t M;
+[; ;RDM.h: 129: }CUID;
+[; ;RDM.h: 131: struct{
+[; ;RDM.h: 132: uint32_t ID;
+[; ;RDM.h: 133: uint16_t M;
+[; ;RDM.h: 134: }UID;
+[; ;RDM.h: 136: unsigned ML:8;
+[; ;RDM.h: 137: };
+[; ;RDM.h: 138: }RDM_Data;
+[; ;RDM.h: 140: extern uint16_t RDM_get_checkSum(RDM_Data);
+"143
+[v _UID `Cuc ~T0 @X0 -> 6 `i e ]
+[i _UID
+:U ..
+-> -> 77 `i `uc
+-> -> 82 `i `uc
+-> -> 23 `i `uc
+-> -> 195 `i `uc
+-> -> 16 `i `uc
+-> -> 146 `i `uc
+..
+]
+[; ;RDM.h: 143: const char UID[6]={0x4D,0x52,0x17,0xC3,0x10,0x92};
+"145
+[v _RX_RDM_Data `VS597 ~T0 @X0 1 e ]
+[; ;RDM.h: 145: volatile RDM_Data RX_RDM_Data;
+"146
+[v _TX_RDM_Data `VS597 ~T0 @X0 1 e ]
+[i _TX_RDM_Data
+:U ..
+:U ..
+:U ..
+-> -> 0 `i `uc
+-> -> 77 `i `uc
+-> -> 82 `i `uc
+-> -> 23 `i `uc
+-> -> 195 `i `uc
+-> -> 16 `i `uc
+-> -> 146 `i `uc
+..
+..
+..
+]
+[; ;RDM.h: 146: volatile RDM_Data TX_RDM_Data={0x00,0x4D,0x52,0x17,0xC3,0x10,0x92};
+"147
+[v _DISCOVERY_RDM_Data `VS597 ~T0 @X0 1 e ]
+[; ;RDM.h: 147: volatile RDM_Data DISCOVERY_RDM_Data;
+"151
 [v _PD `uc ~T0 @X0 -> 231 `i e ]
-[; ;RDM.h: 128: char PD[231];
-"130
+[; ;RDM.h: 151: char PD[231];
+"153
+[v _PD_Manu `*ui ~T0 @X0 1 e ]
+[; ;RDM.h: 153: uint16_t *PD_Manu;
+"154
+[v _PD_ID `*ul ~T0 @X0 1 e ]
+[; ;RDM.h: 154: uint32_t *PD_ID;
+"156
 [v _PDCount `uc ~T0 @X0 1 e ]
-[; ;RDM.h: 130: char PDCount;
-"132
+[; ;RDM.h: 156: char PDCount;
+"158
 [v _PackCount `Vuc ~T0 @X0 1 e ]
-[; ;RDM.h: 132: volatile char PackCount;
-"133
+[; ;RDM.h: 158: volatile char PackCount;
+"159
 [v _PD_Flag `Vui ~T0 @X0 1 e ]
-[; ;RDM.h: 133: volatile unsigned PD_Flag;
-"203
+[; ;RDM.h: 159: volatile unsigned PD_Flag;
+"229
 [v _checkSum `ui ~T0 @X0 1 e ]
-[; ;RDM.h: 203: uint16_t checkSum;
+[; ;RDM.h: 229: uint16_t checkSum;
+"231
+[v _uint16_tmp `ui ~T0 @X0 1 e ]
+[; ;RDM.h: 231: uint16_t uint16_tmp;
 [; ;Timer.h: 14: extern void timer1_interrupt(void);
 [; ;Timer.h: 15: extern void timer1_init(void);
 [; ;Timer.h: 16: extern void timer1_switch(void);
 [; ;Timer.h: 18: enum {
-[; ;Timer.h: 19: TIMER_1MS,
-[; ;Timer.h: 20: TIMER_BREAK,
+[; ;Timer.h: 19: TIMER_500US,
 [; ;Timer.h: 21: TIMER_MAB,
 [; ;Timer.h: 22: TIMER_FILL
 [; ;Timer.h: 23: };
@@ -5256,7 +5342,6 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;Timer.h: 31: unsigned int SEC : 1;
 [; ;Timer.h: 32: unsigned int MIN : 1;
 [; ;Timer.h: 33: unsigned int HR : 1;
-[; ;Timer.h: 34: unsigned int BREAK : 1;
 [; ;Timer.h: 35: unsigned int MAB : 1;
 [; ;Timer.h: 36: unsigned int spare : 2;
 [; ;Timer.h: 37: };
@@ -5269,7 +5354,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;Timer.h: 44: unsigned int Switch : 1;
 [; ;Timer.h: 45: } TIMER_DATA;
 "47
-[v _Timer `VS602 ~T0 @X0 1 e ]
+[v _Timer `VS603 ~T0 @X0 1 e ]
 [; ;Timer.h: 47: volatile TIMER_DATA Timer;
 "16 DMX.c
 [v _DMX_init `(v ~T0 @X0 1 ef ]
@@ -5304,453 +5389,637 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;DMX.c: 27: RCIE = 1;
 "27
 [e = _RCIE -> -> 1 `i `b ]
-[; ;DMX.c: 32: RDM_init();
-"32
-[e ( _RDM_init ..  ]
-[; ;DMX.c: 33: DMX_Address=1;
+[; ;DMX.c: 33: DMX_Address = 1;
 "33
 [e = _DMX_Address -> 1 `i ]
-[; ;DMX.c: 34: }
-"34
-[e :UE 605 ]
-}
+[; ;DMX.c: 35: PWMDCLptr[0] = &PWM1DCL;
+"35
+[e = *U + &U _PWMDCLptr * -> -> -> 0 `i `ui `ux -> -> # *U &U _PWMDCLptr `ui `ux -> &U _PWM1DCL `*uc ]
+[; ;DMX.c: 36: PWMDCLptr[1] = &PWM2DCL;
 "36
-[v _DMX_loop `(v ~T0 @X0 1 ef ]
-{
-[; ;DMX.c: 36: void DMX_loop(void) {
-[e :U _DMX_loop ]
-[f ]
-[; ;DMX.c: 39: if (DMX_Flags.RxNew == 1) {
+[e = *U + &U _PWMDCLptr * -> -> -> 1 `i `ui `ux -> -> # *U &U _PWMDCLptr `ui `ux -> &U _PWM2DCL `*uc ]
+[; ;DMX.c: 37: PWMDCLptr[2] = &PWM3DCL;
+"37
+[e = *U + &U _PWMDCLptr * -> -> -> 2 `i `ui `ux -> -> # *U &U _PWMDCLptr `ui `ux -> &U _PWM3DCL `*uc ]
+[; ;DMX.c: 38: PWMDCLptr[3] = &PWM4DCL;
+"38
+[e = *U + &U _PWMDCLptr * -> -> -> 3 `i `ui `ux -> -> # *U &U _PWMDCLptr `ui `ux -> &U _PWM4DCL `*uc ]
+[; ;DMX.c: 39: PWMDCHptr[0] = &PWM1DCH;
 "39
-[e $ ! == -> . _DMX_Flags 0 `i -> 1 `i 607  ]
-{
-[; ;DMX.c: 40: DMX_Flags.RxNew = 0;
+[e = *U + &U _PWMDCHptr * -> -> -> 0 `i `ui `ux -> -> # *U &U _PWMDCHptr `ui `ux -> &U _PWM1DCH `*uc ]
+[; ;DMX.c: 40: PWMDCHptr[1] = &PWM2DCH;
 "40
-[e = . _DMX_Flags 0 -> -> 0 `i `uc ]
-[; ;DMX.c: 41: PWM1DCH = PWM.PWM[RxData[0]].DCH;
+[e = *U + &U _PWMDCHptr * -> -> -> 1 `i `ui `ux -> -> # *U &U _PWMDCHptr `ui `ux -> &U _PWM2DCH `*uc ]
+[; ;DMX.c: 41: PWMDCHptr[2] = &PWM3DCH;
 "41
-[e = _PWM1DCH . *U + &U . _PWM 1 * -> *U + &U _RxData * -> -> -> 0 `i `ui `ux -> -> # *U &U _RxData `ui `ux `ux -> -> # *U &U . _PWM 1 `ui `ux 1 ]
-[; ;DMX.c: 42: PWM1DCL = PWM.PWM[RxData[0]].DCL;
+[e = *U + &U _PWMDCHptr * -> -> -> 2 `i `ui `ux -> -> # *U &U _PWMDCHptr `ui `ux -> &U _PWM3DCH `*uc ]
+[; ;DMX.c: 42: PWMDCHptr[3] = &PWM4DCH;
 "42
-[e = _PWM1DCL . *U + &U . _PWM 1 * -> *U + &U _RxData * -> -> -> 0 `i `ui `ux -> -> # *U &U _RxData `ui `ux `ux -> -> # *U &U . _PWM 1 `ui `ux 0 ]
-[; ;DMX.c: 43: PWM2DCH = PWM.PWM[RxData[1]].DCH;
+[e = *U + &U _PWMDCHptr * -> -> -> 3 `i `ui `ux -> -> # *U &U _PWMDCHptr `ui `ux -> &U _PWM4DCH `*uc ]
+[; ;DMX.c: 43: PWMLDCONptr[0] = &PWM1LDCON;
 "43
-[e = _PWM2DCH . *U + &U . _PWM 1 * -> *U + &U _RxData * -> -> -> 1 `i `ui `ux -> -> # *U &U _RxData `ui `ux `ux -> -> # *U &U . _PWM 1 `ui `ux 1 ]
-[; ;DMX.c: 44: PWM2DCL = PWM.PWM[RxData[1]].DCL;
+[e = *U + &U _PWMLDCONptr * -> -> -> 0 `i `ui `ux -> -> # *U &U _PWMLDCONptr `ui `ux -> &U _PWM1LDCON `*uc ]
+[; ;DMX.c: 44: PWMLDCONptr[1] = &PWM2LDCON;
 "44
-[e = _PWM2DCL . *U + &U . _PWM 1 * -> *U + &U _RxData * -> -> -> 1 `i `ui `ux -> -> # *U &U _RxData `ui `ux `ux -> -> # *U &U . _PWM 1 `ui `ux 0 ]
-[; ;DMX.c: 45: PWM3DCH = PWM.PWM[RxData[2]].DCH;
+[e = *U + &U _PWMLDCONptr * -> -> -> 1 `i `ui `ux -> -> # *U &U _PWMLDCONptr `ui `ux -> &U _PWM2LDCON `*uc ]
+[; ;DMX.c: 45: PWMLDCONptr[2] = &PWM3LDCON;
 "45
-[e = _PWM3DCH . *U + &U . _PWM 1 * -> *U + &U _RxData * -> -> -> 2 `i `ui `ux -> -> # *U &U _RxData `ui `ux `ux -> -> # *U &U . _PWM 1 `ui `ux 1 ]
-[; ;DMX.c: 46: PWM3DCL = PWM.PWM[RxData[2]].DCL;
+[e = *U + &U _PWMLDCONptr * -> -> -> 2 `i `ui `ux -> -> # *U &U _PWMLDCONptr `ui `ux -> &U _PWM3LDCON `*uc ]
+[; ;DMX.c: 46: PWMLDCONptr[3] = &PWM4LDCON;
 "46
-[e = _PWM3DCL . *U + &U . _PWM 1 * -> *U + &U _RxData * -> -> -> 2 `i `ui `ux -> -> # *U &U _RxData `ui `ux `ux -> -> # *U &U . _PWM 1 `ui `ux 0 ]
-[; ;DMX.c: 47: PWM4DCH = PWM.PWM[RxData[3]].DCH;
+[e = *U + &U _PWMLDCONptr * -> -> -> 3 `i `ui `ux -> -> # *U &U _PWMLDCONptr `ui `ux -> &U _PWM4LDCON `*uc ]
+[; ;DMX.c: 47: }
 "47
-[e = _PWM4DCH . *U + &U . _PWM 1 * -> *U + &U _RxData * -> -> -> 3 `i `ui `ux -> -> # *U &U _RxData `ui `ux `ux -> -> # *U &U . _PWM 1 `ui `ux 1 ]
-[; ;DMX.c: 48: PWM4DCL = PWM.PWM[RxData[3]].DCL;
-"48
-[e = _PWM4DCL . *U + &U . _PWM 1 * -> *U + &U _RxData * -> -> -> 3 `i `ui `ux -> -> # *U &U _RxData `ui `ux `ux -> -> # *U &U . _PWM 1 `ui `ux 0 ]
-[; ;DMX.c: 49: PWM1LDCON = PWM2LDCON = PWM3LDCON = PWM4LDCON = 0b10000000;
-"49
-[e = _PWM1LDCON = _PWM2LDCON = _PWM3LDCON = _PWM4LDCON -> -> 128 `i `uc ]
-"50
-}
-[e :U 607 ]
-[; ;DMX.c: 50: }
-[; ;DMX.c: 51: RDM_rx_loop();
-"51
-[e ( _RDM_rx_loop ..  ]
-[; ;DMX.c: 52: if (Timer.MS) {
-"52
-[e $ ! != -> . . . _Timer 0 0 0 `i -> -> -> 0 `i `Vuc `i 608  ]
-{
-[; ;DMX.c: 53: Timer.MS = 0;
-"53
-[e = . . . _Timer 0 0 0 -> -> 0 `i `uc ]
-[; ;DMX.c: 55: if (DMX_Flags.RxTimeout == 1) {
-"55
-[e $ ! == -> . _DMX_Flags 3 `i -> 1 `i 609  ]
-{
-[; ;DMX.c: 56: PWM1DC = PWM2DC = PWM3DC = PWM4DC = 0;
-"56
-[e = _PWM1DC = _PWM2DC = _PWM3DC = _PWM4DC -> -> 0 `i `us ]
-[; ;DMX.c: 57: PWM1LDCON = PWM2LDCON = PWM3LDCON = PWM4LDCON = 0b10000000;
-"57
-[e = _PWM1LDCON = _PWM2LDCON = _PWM3LDCON = _PWM4LDCON -> -> 128 `i `uc ]
-"58
-}
-[e :U 609 ]
-"59
-}
-[e :U 608 ]
-[; ;DMX.c: 58: }
-[; ;DMX.c: 59: }
-[; ;DMX.c: 60: }
-"60
 [e :UE 606 ]
 }
-"63
-[v _DMX_interrput `(v ~T0 @X0 1 ef ]
+"49
+[v _DMX_loop `(v ~T0 @X0 1 ef ]
 {
-[; ;DMX.c: 63: void DMX_interrput(void) {
-[e :U _DMX_interrput ]
+[; ;DMX.c: 49: void DMX_loop(void) {
+[e :U _DMX_loop ]
 [f ]
-[; ;DMX.c: 65: if (RCIE & RCIF ) {
+"50
+[v _Addr `uc ~T0 @X0 1 a ]
+[; ;DMX.c: 50: char Addr = 0;
+[e = _Addr -> -> 0 `i `uc ]
+[; ;DMX.c: 53: if (DMX_Flags.RxNew == 1) {
+"53
+[e $ ! == -> . _DMX_Flags 0 `i -> 1 `i 608  ]
+{
+[; ;DMX.c: 54: DMX_Flags.RxNew = 0;
+"54
+[e = . _DMX_Flags 0 -> -> 0 `i `uc ]
+[; ;DMX.c: 57: while (Addr < 4) {
+"57
+[e $U 609  ]
+[e :U 610 ]
+{
+[; ;DMX.c: 58: if (RGBW[Addr] > RxData[Addr]) {
+"58
+[e $ ! > -> *U + &U _RGBW * -> _Addr `ux -> -> # *U &U _RGBW `ui `ux `i -> *U + &U _RxData * -> _Addr `ux -> -> # *U &U _RxData `ui `ux `i 612  ]
+{
+[; ;DMX.c: 59: DMXPeriodSign[Addr].X = 0b10;
+"59
+[e = . *U + &U _DMXPeriodSign * -> _Addr `ux -> -> # *U &U _DMXPeriodSign `ui `ux 0 -> -> 2 `i `uc ]
+[; ;DMX.c: 60: if ((RGBW[Addr] - RxData[Addr]) < DMXPeriod) {
+"60
+[e $ ! < - -> *U + &U _RGBW * -> _Addr `ux -> -> # *U &U _RGBW `ui `ux `i -> *U + &U _RxData * -> _Addr `ux -> -> # *U &U _RxData `ui `ux `i -> _DMXPeriod `i 613  ]
+{
+[; ;DMX.c: 61: DMXPeriodStep[Addr] = DMXPeriod / (RGBW[Addr] - RxData[Addr]);
+"61
+[e = *U + &U _DMXPeriodStep * -> _Addr `ux -> -> # *U &U _DMXPeriodStep `ui `ux -> / -> _DMXPeriod `i - -> *U + &U _RGBW * -> _Addr `ux -> -> # *U &U _RGBW `ui `ux `i -> *U + &U _RxData * -> _Addr `ux -> -> # *U &U _RxData `ui `ux `i `uc ]
+"62
+}
+[; ;DMX.c: 62: } else {
+[e $U 614  ]
+[e :U 613 ]
+{
+[; ;DMX.c: 63: DMXPeriodStep[Addr] = 1;
+"63
+[e = *U + &U _DMXPeriodStep * -> _Addr `ux -> -> # *U &U _DMXPeriodStep `ui `ux -> -> 1 `i `uc ]
+"64
+}
+[e :U 614 ]
+[; ;DMX.c: 64: }
+[; ;DMX.c: 65: DMXPeriodStepConst[Addr]=DMXPeriodStep[Addr];
 "65
-[e $ ! & _RCIE _RCIF 611  ]
+[e = *U + &U _DMXPeriodStepConst * -> _Addr `ux -> -> # *U &U _DMXPeriodStepConst `ui `ux *U + &U _DMXPeriodStep * -> _Addr `ux -> -> # *U &U _DMXPeriodStep `ui `ux ]
+"66
+}
+[; ;DMX.c: 66: } else if (RGBW[Addr] < RxData[Addr]) {
+[e $U 615  ]
+[e :U 612 ]
+[e $ ! < -> *U + &U _RGBW * -> _Addr `ux -> -> # *U &U _RGBW `ui `ux `i -> *U + &U _RxData * -> _Addr `ux -> -> # *U &U _RxData `ui `ux `i 616  ]
 {
+[; ;DMX.c: 67: DMXPeriodSign[Addr].X = 0b01;
 "67
-[v _RxDat `Vuc ~T0 @X0 1 a ]
-[; ;DMX.c: 67: volatile char RxDat;
-[; ;DMX.c: 68: if (FERR)
+[e = . *U + &U _DMXPeriodSign * -> _Addr `ux -> -> # *U &U _DMXPeriodSign `ui `ux 0 -> -> 1 `i `uc ]
+[; ;DMX.c: 68: if ((RxData[Addr] - RGBW[Addr]) < DMXPeriod) {
 "68
-[e $ ! _FERR 612  ]
-[; ;DMX.c: 69: {
-"69
+[e $ ! < - -> *U + &U _RxData * -> _Addr `ux -> -> # *U &U _RxData `ui `ux `i -> *U + &U _RGBW * -> _Addr `ux -> -> # *U &U _RGBW `ui `ux `i -> _DMXPeriod `i 617  ]
 {
-[; ;DMX.c: 70: RxDat = RCREG;
+[; ;DMX.c: 69: DMXPeriodStep[Addr] = DMXPeriod / (RxData[Addr] - RGBW[Addr]);
+"69
+[e = *U + &U _DMXPeriodStep * -> _Addr `ux -> -> # *U &U _DMXPeriodStep `ui `ux -> / -> _DMXPeriod `i - -> *U + &U _RxData * -> _Addr `ux -> -> # *U &U _RxData `ui `ux `i -> *U + &U _RGBW * -> _Addr `ux -> -> # *U &U _RGBW `ui `ux `i `uc ]
 "70
-[e = _RxDat _RCREG ]
-[; ;DMX.c: 71: DMX_Flags.RxBreak = 1;
+}
+[; ;DMX.c: 70: } else {
+[e $U 618  ]
+[e :U 617 ]
+{
+[; ;DMX.c: 71: DMXPeriodStep[Addr] = 1;
 "71
-[e = . _DMX_Flags 1 -> -> 1 `i `uc ]
-[; ;DMX.c: 72: RxState = WAIT_FOR_START;
+[e = *U + &U _DMXPeriodStep * -> _Addr `ux -> -> # *U &U _DMXPeriodStep `ui `ux -> -> 1 `i `uc ]
 "72
-[e = _RxState -> . `E4885 1 `uc ]
-[; ;DMX.c: 73: RxTimer = 0;
+}
+[e :U 618 ]
+[; ;DMX.c: 72: }
+[; ;DMX.c: 73: DMXPeriodStepConst[Addr]=DMXPeriodStep[Addr];
 "73
-[e = _RxTimer -> 0 `i ]
+[e = *U + &U _DMXPeriodStepConst * -> _Addr `ux -> -> # *U &U _DMXPeriodStepConst `ui `ux *U + &U _DMXPeriodStep * -> _Addr `ux -> -> # *U &U _DMXPeriodStep `ui `ux ]
 "74
 }
-[e :U 612 ]
-[; ;DMX.c: 74: }
-[; ;DMX.c: 75: switch (RxState) {
-"75
-[e $U 614  ]
-{
-[; ;DMX.c: 76: case RX_WAIT_FOR_BREAK:
-"76
-[e :U 615 ]
-[; ;DMX.c: 77: RxDat = RCREG;
-"77
-[e = _RxDat _RCREG ]
-[; ;DMX.c: 78: break;
-"78
-[e $U 613  ]
-[; ;DMX.c: 79: case WAIT_FOR_START:
-"79
-[e :U 616 ]
-[; ;DMX.c: 80: if (RCIF)
-"80
-[e $ ! _RCIF 617  ]
-[; ;DMX.c: 81: {
-"81
-{
-[; ;DMX.c: 82: RxDat = RCREG;
-"82
-[e = _RxDat _RCREG ]
-[; ;DMX.c: 83: if (RxDat == DMX_StartCode) {
-"83
-[e $ ! == -> _RxDat `i -> _DMX_StartCode `i 618  ]
-{
-[; ;DMX.c: 85: RxState = RX_DMX_READ_DATA;
-"85
-[e = _RxState -> . `E4885 2 `uc ]
-[; ;DMX.c: 86: RxDataPtr = &RxData[0];
-"86
-[e = _RxDataPtr &U *U + &U _RxData * -> -> -> 0 `i `ui `ux -> -> # *U &U _RxData `ui `ux ]
-[; ;DMX.c: 87: RxAddrCount = 1;
-"87
-[e = _RxAddrCount -> 1 `i ]
-[; ;DMX.c: 88: DMX_Flags.RxStart = 1;
-"88
-[e = . _DMX_Flags 2 -> -> 1 `i `uc ]
-"89
-}
-[; ;DMX.c: 89: } else if (RxDat == RDM_StartCode) {
+[; ;DMX.c: 74: } else {
 [e $U 619  ]
-[e :U 618 ]
-[e $ ! == -> _RxDat `i -> _RDM_StartCode `i 620  ]
+[e :U 616 ]
 {
-[; ;DMX.c: 91: RxState = RX_RDM_READ_SubStartCode;
-"91
-[e = _RxState -> . `E4885 3 `uc ]
-[; ;DMX.c: 92: DMX_Flags.RxStart = 1;
-"92
-[e = . _DMX_Flags 2 -> -> 1 `i `uc ]
-"93
+[; ;DMX.c: 75: DMXPeriodSign[Addr].X = 0b00;
+"75
+[e = . *U + &U _DMXPeriodSign * -> _Addr `ux -> -> # *U &U _DMXPeriodSign `ui `ux 0 -> -> 0 `i `uc ]
+[; ;DMX.c: 76: DMXPeriodStep[Addr] = 255;
+"76
+[e = *U + &U _DMXPeriodStep * -> _Addr `ux -> -> # *U &U _DMXPeriodStep `ui `ux -> -> 255 `i `uc ]
+"77
 }
-[; ;DMX.c: 93: } else {
-[e $U 621  ]
-[e :U 620 ]
+[e :U 619 ]
+[e :U 615 ]
+[; ;DMX.c: 77: }
+[; ;DMX.c: 78: Addr++;
+"78
+[e ++ _Addr -> -> 1 `i `uc ]
+"79
+}
+[e :U 609 ]
+"57
+[e $ < -> _Addr `i -> 4 `i 610  ]
+[e :U 611 ]
+"80
+}
+[e :U 608 ]
+[; ;DMX.c: 79: }
+[; ;DMX.c: 80: }
+[; ;DMX.c: 83: if (Timer.MS) {
+"83
+[e $ ! != -> . . . _Timer 0 0 0 `i -> -> -> 0 `i `Vuc `i 620  ]
 {
-[; ;DMX.c: 94: RxState = RX_WAIT_FOR_BREAK;
+[; ;DMX.c: 84: DMXPeriodConst++;
+"84
+[e ++ _DMXPeriodConst -> -> 1 `i `uc ]
+[; ;DMX.c: 85: Timer.MS = 0;
+"85
+[e = . . . _Timer 0 0 0 -> -> 0 `i `uc ]
+[; ;DMX.c: 88: Addr = 0;
+"88
+[e = _Addr -> -> 0 `i `uc ]
+[; ;DMX.c: 89: while (Addr < 4) {
+"89
+[e $U 621  ]
+[e :U 622 ]
+{
+[; ;DMX.c: 90: switch (DMXPeriodSign[Addr].X) {
+"90
+[e $U 625  ]
+{
+[; ;DMX.c: 91: case 0b01:
+"91
+[e :U 626 ]
+[; ;DMX.c: 92: if(DMXPeriodStepConst[Addr]==0){
+"92
+[e $ ! == -> *U + &U _DMXPeriodStepConst * -> _Addr `ux -> -> # *U &U _DMXPeriodStepConst `ui `ux `i -> 0 `i 627  ]
+{
+[; ;DMX.c: 93: DMXPeriodStepConst[Addr]=DMXPeriodStep[Addr];
+"93
+[e = *U + &U _DMXPeriodStepConst * -> _Addr `ux -> -> # *U &U _DMXPeriodStepConst `ui `ux *U + &U _DMXPeriodStep * -> _Addr `ux -> -> # *U &U _DMXPeriodStep `ui `ux ]
+[; ;DMX.c: 94: RGBW[Addr]++;
 "94
-[e = _RxState -> . `E4885 0 `uc ]
+[e ++ *U + &U _RGBW * -> _Addr `ux -> -> # *U &U _RGBW `ui `ux -> -> 1 `i `uc ]
 "95
 }
-[e :U 621 ]
-[e :U 619 ]
-"96
-}
-[e :U 617 ]
+[e :U 627 ]
 [; ;DMX.c: 95: }
-[; ;DMX.c: 96: }
+[; ;DMX.c: 96: DMXPeriodStepConst[Addr]--;
+"96
+[e -- *U + &U _DMXPeriodStepConst * -> _Addr `ux -> -> # *U &U _DMXPeriodStepConst `ui `ux -> -> 1 `i `uc ]
 [; ;DMX.c: 97: break;
 "97
-[e $U 613  ]
-[; ;DMX.c: 98: case RX_DMX_READ_DATA:
+[e $U 624  ]
+[; ;DMX.c: 98: case 0b10:
 "98
-[e :U 622 ]
-[; ;DMX.c: 99: RxDat = RCREG;
-"99
-[e = _RxDat _RCREG ]
-[; ;DMX.c: 100: if (RxAddrCount >= DMX_Address && (DMX_Address != 0))
-"100
-[e $ ! && >= _RxAddrCount _DMX_Address != _DMX_Address -> 0 `i 623  ]
-[; ;DMX.c: 101: {
-"101
-{
-[; ;DMX.c: 102: *RxDataPtr = RxDat;
-"102
-[e = *U _RxDataPtr _RxDat ]
-[; ;DMX.c: 103: RxDataPtr++;
-"103
-[e ++ _RxDataPtr * -> -> 1 `i `x -> -> # *U _RxDataPtr `i `x ]
-"104
-}
-[e :U 623 ]
-[; ;DMX.c: 104: }
-[; ;DMX.c: 105: RxAddrCount++;
-"105
-[e ++ _RxAddrCount -> 1 `i ]
-[; ;DMX.c: 107: if (RxAddrCount >= (DMX_Address + 4) && DMX_Address != 0) {
-"107
-[e $ ! && >= _RxAddrCount + _DMX_Address -> 4 `i != _DMX_Address -> 0 `i 624  ]
-{
-[; ;DMX.c: 108: DMX_Flags.RxNew = 1;
-"108
-[e = . _DMX_Flags 0 -> -> 1 `i `uc ]
-[; ;DMX.c: 109: RxState = RX_WAIT_FOR_BREAK;
-"109
-[e = _RxState -> . `E4885 0 `uc ]
-[; ;DMX.c: 110: RxTimer = 0;
-"110
-[e = _RxTimer -> 0 `i ]
-[; ;DMX.c: 111: DMX_Flags.RxTimeout = 0;
-"111
-[e = . _DMX_Flags 3 -> -> 0 `i `uc ]
-"112
-}
-[e :U 624 ]
-[; ;DMX.c: 112: }
-[; ;DMX.c: 113: break;
-"113
-[e $U 613  ]
-[; ;DMX.c: 114: case RX_RDM_READ_SubStartCode:
-"114
-[e :U 625 ]
-[; ;DMX.c: 115: RxDat = RCREG;
-"115
-[e = _RxDat _RCREG ]
-[; ;DMX.c: 116: if (RxDat == RDM_SubStartCode)
-"116
-[e $ ! == -> _RxDat `i -> _RDM_SubStartCode `i 626  ]
-[; ;DMX.c: 117: {
-"117
-{
-[; ;DMX.c: 118: RxState = RX_RDM_READ_DATA;
-"118
-[e = _RxState -> . `E4885 4 `uc ]
-[; ;DMX.c: 119: PackCount=0;
-"119
-[e = _PackCount -> -> 0 `i `uc ]
-[; ;DMX.c: 120: PD_Flag=0;
-"120
-[e = _PD_Flag -> -> 0 `i `ui ]
-"121
-}
-[e :U 626 ]
-[; ;DMX.c: 121: }
-[; ;DMX.c: 122: break;
-"122
-[e $U 613  ]
-[; ;DMX.c: 124: case RX_RDM_READ_DATA:
-"124
-[e :U 627 ]
-[; ;DMX.c: 125: RxDat = RCREG;
-"125
-[e = _RxDat _RCREG ]
-[; ;DMX.c: 126: RX_RDM_Data.value[PackCount]=RxDat;
-"126
-[e = *U + &U . _RX_RDM_Data 0 * -> _PackCount `ux -> -> # *U &U . _RX_RDM_Data 0 `ui `ux _RxDat ]
-[; ;DMX.c: 127: PackCount++;
-"127
-[e ++ _PackCount -> -> 1 `i `uc ]
-[; ;DMX.c: 129: if (PackCount==23 && RX_RDM_Data.PDL>0 && PD_Flag==0) {
-"129
-[e $ ! && && == -> _PackCount `i -> 23 `i > -> . . _RX_RDM_Data 1 9 `i -> 0 `i == _PD_Flag -> -> 0 `i `ui 628  ]
-{
-[; ;DMX.c: 130: RxState=RX_RDM_PD;
-"130
-[e = _RxState -> . `E4885 5 `uc ]
-[; ;DMX.c: 131: PDCount=0;
-"131
-[e = _PDCount -> -> 0 `i `uc ]
-[; ;DMX.c: 132: break;
-"132
-[e $U 613  ]
-"133
-}
 [e :U 628 ]
-[; ;DMX.c: 133: }
-[; ;DMX.c: 135: if(PackCount==24){
-"135
-[e $ ! == -> _PackCount `i -> 24 `i 629  ]
+[; ;DMX.c: 99: if(DMXPeriodStepConst[Addr]==0){
+"99
+[e $ ! == -> *U + &U _DMXPeriodStepConst * -> _Addr `ux -> -> # *U &U _DMXPeriodStepConst `ui `ux `i -> 0 `i 629  ]
 {
-[; ;DMX.c: 136: DMX_Flags.RDMNew = 1;
-"136
-[e = . _DMX_Flags 8 -> -> 1 `i `uc ]
-[; ;DMX.c: 137: RxState = RX_WAIT_FOR_BREAK;
-"137
-[e = _RxState -> . `E4885 0 `uc ]
-[; ;DMX.c: 138: RxTimer = 0;
-"138
-[e = _RxTimer -> 0 `i ]
-[; ;DMX.c: 139: DMX_Flags.RxTimeout = 0;
-"139
-[e = . _DMX_Flags 3 -> -> 0 `i `uc ]
-"140
+[; ;DMX.c: 100: DMXPeriodStepConst[Addr]=DMXPeriodStep[Addr];
+"100
+[e = *U + &U _DMXPeriodStepConst * -> _Addr `ux -> -> # *U &U _DMXPeriodStepConst `ui `ux *U + &U _DMXPeriodStep * -> _Addr `ux -> -> # *U &U _DMXPeriodStep `ui `ux ]
+[; ;DMX.c: 101: RGBW[Addr]--;
+"101
+[e -- *U + &U _RGBW * -> _Addr `ux -> -> # *U &U _RGBW `ui `ux -> -> 1 `i `uc ]
+"102
 }
 [e :U 629 ]
-[; ;DMX.c: 140: }
-[; ;DMX.c: 141: break;
-"141
-[e $U 613  ]
-[; ;DMX.c: 142: case RX_RDM_PD:
-"142
+[; ;DMX.c: 102: }
+[; ;DMX.c: 103: DMXPeriodStepConst[Addr]--;
+"103
+[e -- *U + &U _DMXPeriodStepConst * -> _Addr `ux -> -> # *U &U _DMXPeriodStepConst `ui `ux -> -> 1 `i `uc ]
+[; ;DMX.c: 104: break;
+"104
+[e $U 624  ]
+[; ;DMX.c: 105: case 0b00:
+"105
 [e :U 630 ]
-[; ;DMX.c: 143: RxDat = RCREG;
-"143
-[e = _RxDat _RCREG ]
-[; ;DMX.c: 144: PD[PDCount]=RxDat;
-"144
-[e = *U + &U _PD * -> _PDCount `ux -> -> # *U &U _PD `ui `ux _RxDat ]
-[; ;DMX.c: 145: PDCount++;
-"145
-[e ++ _PDCount -> -> 1 `i `uc ]
-[; ;DMX.c: 146: if(RX_RDM_Data.PDL==PDCount){
-"146
-[e $ ! == -> . . _RX_RDM_Data 1 9 `i -> _PDCount `i 631  ]
+[; ;DMX.c: 106: Addr++;
+"106
+[e ++ _Addr -> -> 1 `i `uc ]
+[; ;DMX.c: 107: continue;
+"107
+[e $U 621  ]
+[; ;DMX.c: 108: break;
+"108
+[e $U 624  ]
+"109
+}
+[; ;DMX.c: 109: }
+[e $U 624  ]
+"90
+[e :U 625 ]
+[e [\ . *U + &U _DMXPeriodSign * -> _Addr `ux -> -> # *U &U _DMXPeriodSign `ui `ux 0 , $ -> -> 1 `i `uc 626
+ , $ -> -> 2 `i `uc 628
+ , $ -> -> 0 `i `uc 630
+ 624 ]
+"109
+[e :U 624 ]
+[; ;DMX.c: 110: *PWMDCHptr[Addr] = PWM.PWM[RGBW[Addr]].DCH;
+"110
+[e = *U *U + &U _PWMDCHptr * -> _Addr `ux -> -> # *U &U _PWMDCHptr `ui `ux . *U + &U . _PWM 1 * -> *U + &U _RGBW * -> _Addr `ux -> -> # *U &U _RGBW `ui `ux `ux -> -> # *U &U . _PWM 1 `ui `ux 1 ]
+[; ;DMX.c: 111: *PWMDCLptr[Addr] = PWM.PWM[RGBW[Addr]].DCL;
+"111
+[e = *U *U + &U _PWMDCLptr * -> _Addr `ux -> -> # *U &U _PWMDCLptr `ui `ux . *U + &U . _PWM 1 * -> *U + &U _RGBW * -> _Addr `ux -> -> # *U &U _RGBW `ui `ux `ux -> -> # *U &U . _PWM 1 `ui `ux 0 ]
+[; ;DMX.c: 112: *PWMLDCONptr[Addr] = 0b10000000;
+"112
+[e = *U *U + &U _PWMLDCONptr * -> _Addr `ux -> -> # *U &U _PWMLDCONptr `ui `ux -> -> 128 `i `uc ]
+[; ;DMX.c: 113: if (RGBW[Addr] == RxData[Addr]) {
+"113
+[e $ ! == -> *U + &U _RGBW * -> _Addr `ux -> -> # *U &U _RGBW `ui `ux `i -> *U + &U _RxData * -> _Addr `ux -> -> # *U &U _RxData `ui `ux `i 631  ]
 {
-[; ;DMX.c: 147: RxState=RX_RDM_READ_DATA;
-"147
-[e = _RxState -> . `E4885 4 `uc ]
-[; ;DMX.c: 148: PackCount++;
-"148
-[e ++ _PackCount -> -> 1 `i `uc ]
-[; ;DMX.c: 149: PD_Flag=1;
-"149
-[e = _PD_Flag -> -> 1 `i `ui ]
-"150
+[; ;DMX.c: 114: DMXPeriodSign[Addr].X = 0b00;
+"114
+[e = . *U + &U _DMXPeriodSign * -> _Addr `ux -> -> # *U &U _DMXPeriodSign `ui `ux 0 -> -> 0 `i `uc ]
+"115
 }
 [e :U 631 ]
-[; ;DMX.c: 150: }
-[; ;DMX.c: 151: break;
-"151
-[e $U 613  ]
-"152
+[; ;DMX.c: 115: }
+[; ;DMX.c: 116: Addr++;
+"116
+[e ++ _Addr -> -> 1 `i `uc ]
+"117
 }
-[; ;DMX.c: 152: }
-[e $U 613  ]
-"75
-[e :U 614 ]
-[e [\ _RxState , $ -> . `E4885 0 `uc 615
- , $ -> . `E4885 1 `uc 616
- , $ -> . `E4885 2 `uc 622
- , $ -> . `E4885 3 `uc 625
- , $ -> . `E4885 4 `uc 627
- , $ -> . `E4885 5 `uc 630
- 613 ]
-"152
-[e :U 613 ]
-[; ;DMX.c: 153: if (RxTimer > 1200) {
-"153
-[e $ ! > _RxTimer -> 1200 `i 632  ]
+[e :U 621 ]
+"89
+[e $ < -> _Addr `i -> 4 `i 622  ]
+[e :U 623 ]
+[; ;DMX.c: 117: }
+[; ;DMX.c: 123: if (DMX_Flags.RxTimeout == 1) {
+"123
+[e $ ! == -> . _DMX_Flags 3 `i -> 1 `i 632  ]
 {
-[; ;DMX.c: 154: DMX_Flags.RxTimeout = 1;
-"154
-[e = . _DMX_Flags 3 -> -> 1 `i `uc ]
-[; ;DMX.c: 155: RxTimer = 0;
-"155
-[e = _RxTimer -> 0 `i ]
-"156
+[; ;DMX.c: 124: PWM1DC = PWM2DC = PWM3DC = PWM4DC = 0;
+"124
+[e = _PWM1DC = _PWM2DC = _PWM3DC = _PWM4DC -> -> 0 `i `us ]
+[; ;DMX.c: 125: PWM1LDCON = PWM2LDCON = PWM3LDCON = PWM4LDCON = 0b10000000;
+"125
+[e = _PWM1LDCON = _PWM2LDCON = _PWM3LDCON = _PWM4LDCON -> -> 128 `i `uc ]
+[; ;DMX.c: 126: Addr=0;
+"126
+[e = _Addr -> -> 0 `i `uc ]
+[; ;DMX.c: 127: while (Addr < 4) {
+"127
+[e $U 633  ]
+[e :U 634 ]
+{
+[; ;DMX.c: 128: DMXPeriodSign[Addr].X=0b00;
+"128
+[e = . *U + &U _DMXPeriodSign * -> _Addr `ux -> -> # *U &U _DMXPeriodSign `ui `ux 0 -> -> 0 `i `uc ]
+[; ;DMX.c: 129: Addr++;
+"129
+[e ++ _Addr -> -> 1 `i `uc ]
+"130
+}
+[e :U 633 ]
+"127
+[e $ < -> _Addr `i -> 4 `i 634  ]
+[e :U 635 ]
+"131
 }
 [e :U 632 ]
-"157
+"132
 }
-[e :U 611 ]
-[; ;DMX.c: 156: }
-[; ;DMX.c: 157: }
-[; ;DMX.c: 158: }
-"158
-[e :UE 610 ]
+[e :U 620 ]
+[; ;DMX.c: 130: }
+[; ;DMX.c: 131: }
+[; ;DMX.c: 132: }
+[; ;DMX.c: 133: }
+"133
+[e :UE 607 ]
 }
-"161
-[v _dmx_write `(v ~T0 @X0 1 ef3`ui`*uc`uc ]
+"135
+[v _DMX_interrput `(v ~T0 @X0 1 ef ]
 {
-[; ;DMX.c: 161: void dmx_write(uint16_t addr, uint8_t *data, uint8_t num) {
-[e :U _dmx_write ]
-[v _addr `ui ~T0 @X0 1 r1 ]
-[v _data `*uc ~T0 @X0 1 r2 ]
-[v _num `uc ~T0 @X0 1 r3 ]
+[; ;DMX.c: 135: void DMX_interrput(void) {
+[e :U _DMX_interrput ]
 [f ]
-[; ;DMX.c: 162: if (addr <= 512 && addr != 0) {
-"162
-[e $ ! && <= _addr -> -> 512 `i `ui != _addr -> -> 0 `i `ui 634  ]
+[; ;DMX.c: 137: if (RCIE & RCIF) {
+"137
+[e $ ! & _RCIE _RCIF 637  ]
 {
-[; ;DMX.c: 163: addr--;
-"163
-[e -- _addr -> -> 1 `i `ui ]
-[; ;DMX.c: 164: GIE = 0;
-"164
-[e = _GIE -> -> 0 `i `b ]
-[; ;DMX.c: 165: for (; num--; num > 0) {
-"165
+"139
+[v _RxDat `Vuc ~T0 @X0 1 a ]
+[; ;DMX.c: 139: volatile char RxDat;
+[; ;DMX.c: 140: if (FERR)
+"140
+[e $ ! _FERR 638  ]
+[; ;DMX.c: 141: {
+"141
 {
-[e $U 638  ]
-[e :U 635 ]
-{
-[; ;DMX.c: 167: addr++;
-"167
-[e ++ _addr -> -> 1 `i `ui ]
-[; ;DMX.c: 168: data++;
-"168
-[e ++ _data * -> -> 1 `i `x -> -> # *U _data `i `x ]
-[; ;DMX.c: 169: if (addr >= 512)num = 0;
-"169
-[e $ ! >= _addr -> -> 512 `i `ui 639  ]
-[e = _num -> -> 0 `i `uc ]
-[e :U 639 ]
-"170
+[; ;DMX.c: 142: RxDat = RCREG;
+"142
+[e = _RxDat _RCREG ]
+[; ;DMX.c: 143: DMX_Flags.RxBreak = 1;
+"143
+[e = . _DMX_Flags 1 -> -> 1 `i `uc ]
+[; ;DMX.c: 144: RxState = WAIT_FOR_START;
+"144
+[e = _RxState -> . `E4894 1 `uc ]
+[; ;DMX.c: 145: RxTimer = 0;
+"145
+[e = _RxTimer -> 0 `i ]
+"146
 }
-"165
-[e > -> _num `i -> 0 `i ]
 [e :U 638 ]
-[e $ != -> -- _num -> -> 1 `i `uc `i -> -> -> 0 `i `uc `i 635  ]
-[e :U 636 ]
+[; ;DMX.c: 146: }
+[; ;DMX.c: 147: switch (RxState) {
+"147
+[e $U 640  ]
+{
+[; ;DMX.c: 148: case RX_WAIT_FOR_BREAK:
+"148
+[e :U 641 ]
+[; ;DMX.c: 149: RxDat = RCREG;
+"149
+[e = _RxDat _RCREG ]
+[; ;DMX.c: 150: break;
+"150
+[e $U 639  ]
+[; ;DMX.c: 151: case WAIT_FOR_START:
+"151
+[e :U 642 ]
+[; ;DMX.c: 152: if (RCIF)
+"152
+[e $ ! _RCIF 643  ]
+[; ;DMX.c: 153: {
+"153
+{
+[; ;DMX.c: 154: RxDat = RCREG;
+"154
+[e = _RxDat _RCREG ]
+[; ;DMX.c: 155: if (RxDat == DMX_StartCode) {
+"155
+[e $ ! == -> _RxDat `i -> _DMX_StartCode `i 644  ]
+{
+[; ;DMX.c: 157: RxState = RX_DMX_READ_DATA;
+"157
+[e = _RxState -> . `E4894 2 `uc ]
+[; ;DMX.c: 158: RxDataPtr = &RxData[0];
+"158
+[e = _RxDataPtr &U *U + &U _RxData * -> -> -> 0 `i `ui `ux -> -> # *U &U _RxData `ui `ux ]
+[; ;DMX.c: 159: RxAddrCount = 1;
+"159
+[e = _RxAddrCount -> 1 `i ]
+[; ;DMX.c: 160: DMX_Flags.RxStart = 1;
+"160
+[e = . _DMX_Flags 2 -> -> 1 `i `uc ]
+[; ;DMX.c: 161: DMXPeriod = DMXPeriodConst;
+"161
+[e = _DMXPeriod _DMXPeriodConst ]
+[; ;DMX.c: 162: DMXPeriodConst = 0;
+"162
+[e = _DMXPeriodConst -> -> 0 `i `uc ]
+"163
+}
+[; ;DMX.c: 163: } else if (RxDat == RDM_StartCode) {
+[e $U 645  ]
+[e :U 644 ]
+[e $ ! == -> _RxDat `i -> _RDM_StartCode `i 646  ]
+{
+[; ;DMX.c: 165: RxState = RX_RDM_READ_SubStartCode;
+"165
+[e = _RxState -> . `E4894 3 `uc ]
+[; ;DMX.c: 166: DMX_Flags.RxStart = 1;
+"166
+[e = . _DMX_Flags 2 -> -> 1 `i `uc ]
+"167
+}
+[; ;DMX.c: 167: } else {
+[e $U 647  ]
+[e :U 646 ]
+{
+[; ;DMX.c: 168: RxState = RX_WAIT_FOR_BREAK;
+"168
+[e = _RxState -> . `E4894 0 `uc ]
+"169
+}
+[e :U 647 ]
+[e :U 645 ]
 "170
 }
+[e :U 643 ]
+[; ;DMX.c: 169: }
 [; ;DMX.c: 170: }
-[; ;DMX.c: 171: GIE = 1;
+[; ;DMX.c: 171: break;
 "171
-[e = _GIE -> -> 1 `i `b ]
+[e $U 639  ]
+[; ;DMX.c: 172: case RX_DMX_READ_DATA:
 "172
-}
-[e :U 634 ]
-[; ;DMX.c: 172: }
-[; ;DMX.c: 173: }
+[e :U 648 ]
+[; ;DMX.c: 173: RxDat = RCREG;
 "173
-[e :UE 633 ]
+[e = _RxDat _RCREG ]
+[; ;DMX.c: 174: if (RxAddrCount >= DMX_Address && (DMX_Address != 0))
+"174
+[e $ ! && >= _RxAddrCount _DMX_Address != _DMX_Address -> 0 `i 649  ]
+[; ;DMX.c: 175: {
+"175
+{
+[; ;DMX.c: 176: *RxDataPtr = RxDat;
+"176
+[e = *U _RxDataPtr _RxDat ]
+[; ;DMX.c: 177: RxDataPtr++;
+"177
+[e ++ _RxDataPtr * -> -> 1 `i `x -> -> # *U _RxDataPtr `i `x ]
+"178
+}
+[e :U 649 ]
+[; ;DMX.c: 178: }
+[; ;DMX.c: 179: RxAddrCount++;
+"179
+[e ++ _RxAddrCount -> 1 `i ]
+[; ;DMX.c: 181: if (RxAddrCount >= (DMX_Address + 4) && DMX_Address != 0) {
+"181
+[e $ ! && >= _RxAddrCount + _DMX_Address -> 4 `i != _DMX_Address -> 0 `i 650  ]
+{
+[; ;DMX.c: 182: DMX_Flags.RxNew = 1;
+"182
+[e = . _DMX_Flags 0 -> -> 1 `i `uc ]
+[; ;DMX.c: 183: RxState = RX_WAIT_FOR_BREAK;
+"183
+[e = _RxState -> . `E4894 0 `uc ]
+[; ;DMX.c: 184: RxTimer = 0;
+"184
+[e = _RxTimer -> 0 `i ]
+[; ;DMX.c: 185: DMX_Flags.RxTimeout = 0;
+"185
+[e = . _DMX_Flags 3 -> -> 0 `i `uc ]
+"186
+}
+[e :U 650 ]
+[; ;DMX.c: 186: }
+[; ;DMX.c: 187: break;
+"187
+[e $U 639  ]
+[; ;DMX.c: 188: case RX_RDM_READ_SubStartCode:
+"188
+[e :U 651 ]
+[; ;DMX.c: 189: RxDat = RCREG;
+"189
+[e = _RxDat _RCREG ]
+[; ;DMX.c: 190: if (RxDat == RDM_SubStartCode)
+"190
+[e $ ! == -> _RxDat `i -> _RDM_SubStartCode `i 652  ]
+[; ;DMX.c: 191: {
+"191
+{
+[; ;DMX.c: 192: RxState = RX_RDM_READ_DATA;
+"192
+[e = _RxState -> . `E4894 4 `uc ]
+[; ;DMX.c: 193: PackCount = 23;
+"193
+[e = _PackCount -> -> 23 `i `uc ]
+[; ;DMX.c: 194: PD_Flag = 0;
+"194
+[e = _PD_Flag -> -> 0 `i `ui ]
+"195
+}
+[e :U 652 ]
+[; ;DMX.c: 195: }
+[; ;DMX.c: 196: break;
+"196
+[e $U 639  ]
+[; ;DMX.c: 198: case RX_RDM_READ_DATA:
+"198
+[e :U 653 ]
+[; ;DMX.c: 199: RxDat = RCREG;
+"199
+[e = _RxDat _RCREG ]
+[; ;DMX.c: 200: RX_RDM_Data.value[PackCount] = RxDat;
+"200
+[e = *U + &U . _RX_RDM_Data 0 * -> _PackCount `ux -> -> # *U &U . _RX_RDM_Data 0 `ui `ux _RxDat ]
+[; ;DMX.c: 202: if (PackCount == 2 && RX_RDM_Data.PDL > 0 && PD_Flag == 0) {
+"202
+[e $ ! && && == -> _PackCount `i -> 2 `i > -> . . _RX_RDM_Data 1 1 `i -> 0 `i == _PD_Flag -> -> 0 `i `ui 654  ]
+{
+[; ;DMX.c: 203: RxState = RX_RDM_PD;
+"203
+[e = _RxState -> . `E4894 5 `uc ]
+[; ;DMX.c: 204: PDCount = 230;
+"204
+[e = _PDCount -> -> 230 `i `uc ]
+[; ;DMX.c: 205: break;
+"205
+[e $U 639  ]
+"206
+}
+[e :U 654 ]
+[; ;DMX.c: 206: }
+[; ;DMX.c: 208: if (PackCount == 0) {
+"208
+[e $ ! == -> _PackCount `i -> 0 `i 655  ]
+{
+[; ;DMX.c: 209: DMX_Flags.RDMNew = 1;
+"209
+[e = . _DMX_Flags 7 -> -> 1 `i `uc ]
+[; ;DMX.c: 210: RxState = RX_WAIT_FOR_BREAK;
+"210
+[e = _RxState -> . `E4894 0 `uc ]
+[; ;DMX.c: 211: RxTimer = 0;
+"211
+[e = _RxTimer -> 0 `i ]
+[; ;DMX.c: 212: DMX_Flags.RxTimeout = 0;
+"212
+[e = . _DMX_Flags 3 -> -> 0 `i `uc ]
+"213
+}
+[e :U 655 ]
+[; ;DMX.c: 213: }
+[; ;DMX.c: 215: PackCount--;
+"215
+[e -- _PackCount -> -> 1 `i `uc ]
+[; ;DMX.c: 216: break;
+"216
+[e $U 639  ]
+[; ;DMX.c: 217: case RX_RDM_PD:
+"217
+[e :U 656 ]
+[; ;DMX.c: 218: RxDat = RCREG;
+"218
+[e = _RxDat _RCREG ]
+[; ;DMX.c: 219: PD[PDCount] = RxDat;
+"219
+[e = *U + &U _PD * -> _PDCount `ux -> -> # *U &U _PD `ui `ux _RxDat ]
+[; ;DMX.c: 220: PDCount--;
+"220
+[e -- _PDCount -> -> 1 `i `uc ]
+[; ;DMX.c: 221: if ((230 - RX_RDM_Data.PDL) == PDCount) {
+"221
+[e $ ! == - -> 230 `i -> . . _RX_RDM_Data 1 1 `i -> _PDCount `i 657  ]
+{
+[; ;DMX.c: 222: RxState = RX_RDM_READ_DATA;
+"222
+[e = _RxState -> . `E4894 4 `uc ]
+[; ;DMX.c: 223: PD_Flag = 1;
+"223
+[e = _PD_Flag -> -> 1 `i `ui ]
+"224
+}
+[e :U 657 ]
+[; ;DMX.c: 224: }
+[; ;DMX.c: 225: break;
+"225
+[e $U 639  ]
+"226
+}
+[; ;DMX.c: 226: }
+[e $U 639  ]
+"147
+[e :U 640 ]
+[e [\ _RxState , $ -> . `E4894 0 `uc 641
+ , $ -> . `E4894 1 `uc 642
+ , $ -> . `E4894 2 `uc 648
+ , $ -> . `E4894 3 `uc 651
+ , $ -> . `E4894 4 `uc 653
+ , $ -> . `E4894 5 `uc 656
+ 639 ]
+"226
+[e :U 639 ]
+[; ;DMX.c: 227: if (RxTimer > 2400) {
+"227
+[e $ ! > _RxTimer -> 2400 `i 658  ]
+{
+[; ;DMX.c: 228: DMX_Flags.RxTimeout = 1;
+"228
+[e = . _DMX_Flags 3 -> -> 1 `i `uc ]
+[; ;DMX.c: 229: RxTimer = 0;
+"229
+[e = _RxTimer -> 0 `i ]
+"230
+}
+[e :U 658 ]
+"231
+}
+[e :U 637 ]
+[; ;DMX.c: 230: }
+[; ;DMX.c: 231: }
+[; ;DMX.c: 232: }
+"232
+[e :UE 636 ]
 }

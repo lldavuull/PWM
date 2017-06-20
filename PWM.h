@@ -48,3 +48,21 @@ const PWM_16 PWM={
     0x1EE8, 0x1F30, 0x1F78, 0x1FC0, 0x1FE8, 0x1FFF
 };
 
+
+char *PWMDCLptr[4];
+char *PWMDCHptr[4];
+char *PWMLDCONptr[4];
+
+//#define PWMDCH[0] PWM1DCH
+//#define PWMDCL[0] PWM1DCH
+//#define PWMDCH[1] PWM2DCH
+//#define PWMDCL[1] PWM2DCH
+//#define PWMDCH[2] PWM3DCH
+//#define PWMDCL[2] PWM3DCH
+//#define PWMDCH[3] PWM4DCH
+//#define PWMDCL[3] PWM4DCH
+//
+//#define PWMLDCON[0]=PWM1LDCON
+//#define PWMLDCON[1]=PWM2LDCON
+//#define PWMLDCON[2]=PWM3LDCON
+//#define PWMLDCON[3]=PWM4LDCON
