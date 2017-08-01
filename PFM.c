@@ -15,7 +15,6 @@ uint16_t PFM_Read(uint16_t Addr){
 //    CFGS=0;         //Not configuration space
     PMADR=Addr;
     RD=1;
-    
     asm("nop");
     asm("nop");
     return  PMDAT;
@@ -46,12 +45,8 @@ void PFM_Write(uint16_t Addr,uint16_t Data){
         WR=1;
         asm("nop");//NOP instructions are forced as processor
         asm("nop");
-    
-    
-        
     }while(PFM_Read(Addr)!=Data);       //Write Verify
     
     WREN=0;
     GIE=1;
-    
 }

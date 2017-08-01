@@ -17,9 +17,9 @@ extern void timer1_switch(void);
 
 enum {
     TIMER_500US,  //(500us)
-//    TIMER_BREAK,  //(180us)
-    TIMER_MAB,  //(20us)
-    TIMER_FILL  //(800us)
+    TIMER_BREAK,  //(180us)
+    TX_TIMER_MAB,  //(20us)
+//    TIMER_FILL  //(800us)
 };
 
 volatile char TimerState = 0;
@@ -46,7 +46,8 @@ typedef struct {
 
 volatile TIMER_DATA Timer;
 
-// 1ms = 0xFFFF - 1000 = 0xFc17
+// 1ms = 0xFFFF - 1000 = 0xFC17
+// 500us = 0xFFFF - 500 = 0xFE0B
 #define TMR1_LOAD_500US     0xFE0B  // Load value for 1ms   
 
 //1MS     0xFc17

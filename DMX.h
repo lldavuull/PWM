@@ -24,6 +24,16 @@ extern void DMX_loop(void);
 */
 extern void DMX_interrupt(void);
 
+extern char DMX_Variety(char);
+
+extern void DMX_InterStep(char,char);
+
+extern void DMX_Step(char,char,char,char,uint16_t);
+
+extern void PWMStep(char, signed char);
+
+extern void InterPWM(char, signed char, signed char);
+
 /** Select the size of the receive buffer.
     This is the number of DMX512 Channels you will recieve
     For example a RGBW fixture may use 4 channels where a scanner may need 10 */
@@ -35,13 +45,12 @@ extern void DMX_interrupt(void);
 #define DMX_RX_TIMEOUT_MS 2400  //1200ms
 
 
-/** RGBW Receive Data Buffer  */
-volatile unsigned char RGBW[RX_BUFFER_SIZE];
-
+///** RGBW Receive Data Buffer  */
+//volatile unsigned char RGBW[RX_BUFFER_SIZE];
 /** RxData Receive Data Buffer  */
 volatile unsigned char RxData[RX_BUFFER_SIZE];
 /** RxChannel Base Address / Channel to start reading from */
-int DMX_Address;
+uint16_t DMX_Address;
 /** RxStart The Start Code for a valid data stream */
 const char DMX_StartCode = 0;
 /** AddrCount Address counter used in the interrupt routine */
@@ -53,28 +62,8 @@ volatile char RxState = 0;
 /** RxTimer Counts 0.5ms since last overflow - used for 1 second timeout */
 volatile int RxTimer = 0;
 
-//PWM SMOOTH//
-/** DMXperiod Counts 500us since DMX period, period records when RX recieve DMX_StartCode*/
-char DMXPeriod = 100;
-/** DMXperiodConst incerease per 500us, Return to zero when RX recieve DMX_StartCode */
-volatile char DMXPeriodConst =0;
-/** DMXPeriodStep will change PWM at 500us Timer per DMXPeriodStep period */
-char DMXPeriodStep[4] =1; //0 is unchange , 1 is always change per 0.5ms Timer up, 2 is 1ms, 3 is 1.5ms, ....
-/** DMXPeriodStepconst decerease per 500us, when DMXPeriodStepconst decrease to zero, DMXPeriodStepconst will set to DMXPeriodStep and PWM will be changed */
-char DMXPeriodStepConst[4] =0;
 
-
-
-typedef struct {
-    // Update PWM per 500us
-    /**  00 =unchange  01 = Increment   10=Decrement */
-        unsigned int X: 2;
-} DMX_PERIODSIGN;
-/** SMOOTH_Pwm Set in the ISR to indicate to helper functions etc */
-volatile DMX_PERIODSIGN DMXPeriodSign[4]; /**  00 =unchange  01 = Increment   10=Decrement */
-//PWM SMOOTH END//
-
-
+//char DMXhistoryCount;
 enum {
     RX_WAIT_FOR_BREAK,
     WAIT_FOR_START,
@@ -91,8 +80,8 @@ typedef struct {
     unsigned int RxNew : 1;
     /**  Indicate valid break detected */
     unsigned int RxBreak : 1;
-    /**  Indicates valid start is detected so store data */
-    unsigned int RxStart : 1;
+//    /**  Indicates valid start is detected so store data */
+//    unsigned int RxStart : 1;
     /** Indicates 1 second timout occured */
     unsigned int RxTimeout : 1;
     // Transmit Flags
@@ -111,10 +100,105 @@ typedef struct {
     
     unsigned int RDMmute : 1;
     
+    unsigned int RDMidentify : 1;
+    
 } DMX_FLAGS;
 
 /** DMX_Flags Set in the ISR to indicate to helper functions etc */
 volatile DMX_FLAGS DMX_Flags;
 //DMX set end
 
+
+//typedef struct {
+//    char m14[3];
+//}t;
+//t ptrc;
+
+
+
+
+
+
+//???= ??????????? 200?212????6????????2
+//???= ??DC???????? 200?201????6???????? (PWM[201].DC-PWM[200].DC/6)
+//??????0.5ms
+//PWM SMOOTH//
+/** DMXperiod Counts 500us since DMX period, period records when RX recieve DMX_StartCode*/
+unsigned char DMXPeriod = 100;
+/** DMXperiodConst incerease per 500us, Return to zero when RX recieve DMX_StartCode */
+volatile char DMXPeriodConst =0;
+
+//?????
+/** DMXPeriodStep will change PWM at 500us Timer per DMXPeriodStep period */
+//char DMXStep[RX_BUFFER_SIZE] =1; //0 is unchange , 1 is always change per 0.5ms Timer up, 2 is 1ms, 3 is 1.5ms, ....
+/** DMXPeriodStepconst decerease per 500us, when DMXPeriodStepconst decrease to zero, DMXPeriodStepconst will set to DMXPeriodStep and PWM will be changed */
+char DMXStepConst=0;
+
+//char DMXOrder[RX_BUFFER_SIZE];
+//char DMXOrderConst[RX_BUFFER_SIZE];
+//char DMXBright[RX_BUFFER_SIZE];
+
+
+//??????14bit
+typedef union{
+    uint16_t DC[RX_BUFFER_SIZE];
+    struct{
+    unsigned DCL :8;
+    unsigned DCH :8;
+    }PWM[RX_BUFFER_SIZE];
+}Inter_PWM_16;
+Inter_PWM_16 CurrentPWM=0;  //InterPolation PWM
+//?????
+//unsigned char DMXInterStep[RX_BUFFER_SIZE] =1;
+////????????
+//unsigned char DMXInterStepConst[RX_BUFFER_SIZE] =0;
+//char DMXInOrder[RX_BUFFER_SIZE];
+//char DMXInOrderConst[RX_BUFFER_SIZE];
+//char DMXInBright[RX_BUFFER_SIZE];
+
+//char pre[RX_BUFFER_SIZE][2]=0;
+//char repeat[RX_BUFFER_SIZE][2]=1;
+//PWM SMOOTH END//
+
+
+//uint16_t DMXBigPeriod;
+
+//char PWM_Flag[RX_BUFFER_SIZE]=0;
+//enum{
+//    NoneStep,
+//    PositiveStep,
+//    PositiveBigStep,
+//    PositiveCompensateStep,
+//    NegativeStep,
+//    NegativeBigStep,
+//    NegativeCompensateStep,
+//    
+////    PositiveFullStep,
+////    MonsterStep,
+////    BigPeriodStep,
+//};
+
+typedef struct {
+    // Update PWM per 500us
+    /**  00 =unchange  01 = Increment   10=Decrement */
+//        unsigned int ctu: 1;
+//        unsigned int rp: 1;
+        unsigned int SIGN: 2;
+        unsigned int InfiniteLoop: 1;
+} DMX_SIGN;
+/** SMOOTH_Pwm Set in the ISR to indicate to helper functions etc */
+volatile DMX_SIGN DMXSign[RX_BUFFER_SIZE]; /**  00 =unchange  01 = Increment   10=Decrement */
+//char DCdifference;
+char rxdata;//avoid violatile to acculate.
+//char rgbw;//avoid violatile to acculate.
+float DMX_difference=0.0;
+float DMX_CurrentBright[RX_BUFFER_SIZE]=0;
+float DMX_SpaceBright[RX_BUFFER_SIZE]=0; 
+float DMX_TargetBright[RX_BUFFER_SIZE]=0; 
+char DMX_sumRepeat[RX_BUFFER_SIZE]=2;
+char DMX_Repeat[RX_BUFFER_SIZE][2]=1;
+char preRxData[RX_BUFFER_SIZE]=0;
+
+
+//char send=0;
 

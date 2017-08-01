@@ -1,5 +1,5 @@
 
-# 1 "PFM.c"
+# 1 "RDM_Read.c"
 
 # 26 "C:\Program Files (x86)\Microchip\xc8\v1.41\include\htc.h"
 extern const char __xc8_OPTIM_SPEED;
@@ -6249,21 +6249,122 @@ typedef int16_t intptr_t;
 
 typedef uint16_t uintptr_t;
 
-# 13 "PFM.h"
-extern uint16_t PFM_Read(uint16_t);
-
-extern void PFM_Write(uint16_t ,uint16_t);
-
-
-
-
+# 12 "RDM.h"
 enum{
-Flash_DMXAddress=0x0F80,
-Flash_UID1=0x0FA0,
-Flash_UID2=0x0FA1,
-Flash_UID3=0x0FA2,
-Flash_UID4=0x0FA3,
+ACK=0x00,
+ACK_TIMER=0x01,
+NACK_REASON=0x02,
+ACK_OVERFLOW=0x03,
 };
+
+# 35
+enum{
+SUPPORTED_PARAMETERS = 0x0050,
+PARAMETER_DESCRIPTION = 0x0051,
+DEVICE_INFO = 0x0060,
+SOFTWARE_VERSION_LABEL = 0x00C0,
+DMX_START_ADDRESS = 0x00F0,
+IDENTIFY_DEVICE = 0x1000
+};
+
+# 58
+extern void RDM_init(void);
+
+# 62
+extern void RDM_tx_interrupt(void);
+
+extern void RDM_tx_TimerBreak(void);
+extern void RDM_discovery_CC(void);
+extern void RDM_GET_CC(void);
+extern void RDM_SET_CC(void);
+extern void TX_RDM_Response_Set(void);
+
+extern void RDM_rx_loop(void);
+
+# 88
+uint16_t TxCount=0;
+
+
+
+volatile uint8_t *TxByte;
+
+volatile uint8_t TxState=0;
+
+
+
+
+enum
+{
+
+
+TX_DISCOVERY,
+TX_START,
+TX_SART_DISCOVERY,
+TX_DATA,
+TX_RDM_PD
+};
+
+
+typedef union{
+unsigned char value[24];
+struct{
+union{
+uint16_t CS;
+struct{
+unsigned CSL:8;
+unsigned CSH:8;
+};
+};
+
+unsigned PDL:8;
+uint16_t PID;
+
+unsigned CC:8;
+uint16_t subDevice;
+unsigned message:8;
+unsigned PORT:8;
+unsigned TN:8;
+
+struct{
+uint32_t ID;
+uint16_t M;
+}SUID;
+
+struct{
+uint32_t ID;
+uint16_t M;
+}DUID;
+
+unsigned ML:8;
+};
+}RDM_Data;
+
+extern uint16_t RDM_get_checkSum(RDM_Data, char);
+extern uint16_t RDM_set_checkSum(RDM_Data);
+
+const char UID[6]={0x4D,0x52,0x17,0xC3,0x10,0x92};
+
+volatile char *DataPtr;
+
+volatile RDM_Data RX_RDM_Data;
+volatile RDM_Data TX_RDM_Data;
+volatile RDM_Data DISCOVERY_RDM_Data;
+
+# 164
+char PD[101];
+
+uint16_t *PD_Manu;
+uint32_t *PD_ID;
+
+char PDCount;
+char TX_PDCount;
+
+volatile char PackCount;
+volatile unsigned PD_Flag;
+volatile unsigned TX_PD_Flag;
+
+# 243
+uint16_t checkSum;
 
 # 13 "DMX.h"
 extern void DMX_init(void);
@@ -6384,44 +6485,165 @@ char DMX_sumRepeat[4]=2;
 char DMX_Repeat[4][2]=1;
 char preRxData[4]=0;
 
-# 13 "PFM.c"
-uint16_t PFM_Read(uint16_t Addr){
+# 13 "PFM.h"
+extern uint16_t PFM_Read(uint16_t);
+
+extern void PFM_Write(uint16_t ,uint16_t);
 
 
-PMADR=Addr;
-RD=1;
-asm("nop");
-asm("nop");
-return PMDAT;
+
+
+enum{
+Flash_DMXAddress=0x0F80,
+Flash_UID1=0x0FA0,
+Flash_UID2=0x0FA1,
+Flash_UID3=0x0FA2,
+Flash_UID4=0x0FA3,
+};
+
+# 15 "RDM_Read.c"
+void RDM_GET_CC(void){
+switch (RX_RDM_Data.PID){
+case 0x1000:
+TX_RDM_Response_Set();
+TX_RDM_Data.ML=26;
+TX_RDM_Data.PORT=0x00;
+TX_RDM_Data.PDL=1;
+PD[40-1] =DMX_Flags.RDMidentify;
+break;
+
+case 0x0060:
+TX_RDM_Data.PDL=0x13;
+TX_RDM_Response_Set();
+TX_RDM_Data.PORT=0x00;
+PD_Manu=&PD[40-2];
+*PD_Manu=0x0100;
+PD_Manu=&PD[40-4];
+*PD_Manu=0x0080;
+PD_Manu=&PD[40-6];
+*PD_Manu=0x0004;
+PD_ID=&PD[40-10];
+*PD_ID=1;
+PD_Manu=&PD[40-12];
+*PD_Manu=0x04;
+PD_Manu=&PD[40-14];
+*PD_Manu=0x01;
+PD_Manu=&PD[40-16];
+*PD_Manu=DMX_Address;
+PD_Manu=&PD[40-18];
+*PD_Manu=0;
+PD[40-19]=0;
+
+
+
+break;
+case 0x00F0:
+PD_Manu=&PD[40-2];
+*PD_Manu=DMX_Address;
+TX_RDM_Response_Set();
+TX_RDM_Data.ML=26;
+TX_RDM_Data.PORT=0x00;
+TX_RDM_Data.PDL=2;
+break;
+}
+TX_RDM_Data.CS=RDM_get_checkSum(TX_RDM_Data,40);
+TxState = TX_START;
+TXREG = 0xCC;
+RDM_tx_TimerBreak();
 }
 
-void PFM_Write(uint16_t Addr,uint16_t Data){
-do{
-GIE=0;
-CFGS=0;
-PMADR=Addr;
 
-
-FREE = 1;
-WREN = 1;
-PMCON2=0x55;
-PMCON2=0xAA;
-WR=1;
-asm("nop");
-asm("nop");
-
-
-FREE = 0;
-LWLO = 1;
-PMDAT=Data;
-LWLO=0;
-PMCON2=0x55;
-PMCON2=0xAA;
-WR=1;
-asm("nop");
-asm("nop");
-}while(PFM_Read(Addr)!=Data);
-
-WREN=0;
-GIE=1;
+void RDM_SET_CC(void){
+switch (RX_RDM_Data.PID){
+case 0x00F0:
+PD_Manu=&PD[101-2];
+DMX_Address=*PD_Manu;
+TX_RDM_Response_Set();
+TX_RDM_Data.ML=24;
+TX_RDM_Data.PORT=0x00;
+TX_RDM_Data.PDL=0;
+break;
 }
+TX_RDM_Data.CS=RDM_get_checkSum(TX_RDM_Data,40);
+TxState = TX_START;
+TXREG = 0xCC;
+RDM_tx_TimerBreak();
+}
+
+void RDM_discovery_CC(void){
+switch (RX_RDM_Data.PID) {
+case 0x0001:
+if (!DMX_Flags.RDMmute) {
+DMX_Flags.RDMcheck = 1;
+PD_Manu = &PD[101-2];
+PD_ID = &PD[101-6];
+if (*PD_Manu <= 0x4D52) {
+DMX_Flags.RDMcheck++;
+if (*PD_Manu == 0x4D52 && *PD_ID > 0x17C31092) {
+DMX_Flags.RDMcheck = 0;
+}
+}
+PD_Manu = &PD[101-8];
+PD_ID = &PD[101-12];
+if (*PD_Manu >= 0x4D52) {
+DMX_Flags.RDMcheck++;
+if (*PD_Manu == 0x4D52 && *PD_ID < 0x17C31092) {
+DMX_Flags.RDMcheck = 0;
+}
+}
+if (DMX_Flags.RDMcheck == 3) {
+TxState = TX_SART_DISCOVERY;
+TXREG = 0xCC;
+TxByte= &DISCOVERY_RDM_Data.value[23];
+TxCount = 0;
+RDM_tx_TimerBreak();
+}
+}
+break;
+
+case 0x0002:
+DMX_Flags.RDMmute = 1;
+TX_RDM_Response_Set();
+TX_RDM_Data.ML=26;
+TX_RDM_Data.PORT=0x00;
+TX_RDM_Data.PDL=2;
+PD[40-1] = PD[40-2] = 0;
+TX_RDM_Data.CS=RDM_get_checkSum(TX_RDM_Data,40);
+TxState = TX_START;
+TXREG = 0xCC;
+RDM_tx_TimerBreak();
+break;
+case 0x0003:
+DMX_Flags.RDMmute = 0;
+break;
+default:
+break;
+}
+}
+
+
+void TX_RDM_Response_Set(){
+TX_RDM_Data.DUID.ID=RX_RDM_Data.SUID.ID;
+TX_RDM_Data.DUID.M=RX_RDM_Data.SUID.M;
+TX_RDM_Data.TN=RX_RDM_Data.TN;
+TX_RDM_Data.CC=RX_RDM_Data.CC+1;
+TX_RDM_Data.PID=RX_RDM_Data.PID;
+}
+
+
+uint16_t RDM_get_checkSum(RDM_Data Data, char len) {
+checkSum = 0x00CD;
+PackCount = 23;
+while (PackCount > 1) {
+checkSum += Data.value[PackCount];
+PackCount--;
+}
+PackCount = len-1;
+PDCount = len - Data.PDL;
+while (PackCount >= PDCount) {
+checkSum += PD[PDCount];
+PDCount++;
+}
+return checkSum;
+}
+

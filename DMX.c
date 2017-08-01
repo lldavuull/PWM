@@ -12,6 +12,7 @@
 #include "RDM.h"
 #include "Timer.h"
 #include <stdint.h>
+#include "rdm_define.h"
 
 void DMX_init(void) {
     // DMX UART START
@@ -23,7 +24,7 @@ void DMX_init(void) {
     BAUDCON = 0b00000000; //BRG16 =0
     BRGH = 1; //High Buad Speed
     SPBRGH = 0x00;
-    SPBRGL = 0x3; //  16M/(16*(SPBRG+1)) = 250k
+    SPBRGL = 0x7; //  32M/(16*(SPBRG+1)) = 250k
     RCIE = 1; //Enable RC interrupt
     //    RxArPtr = &RxAr[0];
     // DMX UART END
@@ -31,7 +32,6 @@ void DMX_init(void) {
     //    TXSTA=0b01000101;//disable TX,
 
     DMX_Address = 1;
-
     PWMDCLptr[0] = &PWM1DCL;
     PWMDCLptr[1] = &PWM2DCL;
     PWMDCLptr[2] = &PWM3DCL;
@@ -44,88 +44,137 @@ void DMX_init(void) {
     PWMLDCONptr[1] = &PWM2LDCON;
     PWMLDCONptr[2] = &PWM3LDCON;
     PWMLDCONptr[3] = &PWM4LDCON;
-}
+    
 
+    
+    char Addr=0;
+    while(Addr<4){
+        DMX_sumRepeat[Addr]=2;
+        DMX_Repeat[Addr][0]=DMX_Repeat[Addr][1]=1;
+        DMXSign[Addr].InfiniteLoop=0;
+        DMX_TargetBright[Addr]=DMX_CurrentBright[Addr]=0.0;
+        Addr++;
+    }
+    
+    
+}
 void DMX_loop(void) {
     char Addr = 0;
-
     //DMX Renew
     if (DMX_Flags.RxNew == 1) {
         DMX_Flags.RxNew = 0;
-
-        //Smooth PWM
+            //////////
+        DMXStepConst=4;
         while (Addr < 4) {
-            if (RGBW[Addr] > RxData[Addr]) {
-                DMXPeriodSign[Addr].X = 0b10;//decrease
-                if ((RGBW[Addr] - RxData[Addr]) < DMXPeriod) {
-                    DMXPeriodStep[Addr] = DMXPeriod / (RGBW[Addr] - RxData[Addr]);
-                } else {
-                    DMXPeriodStep[Addr] = 1;
+            rxdata=RxData[Addr];  //avoid violatile to acculate.
+            if (DMX_TargetBright[Addr] < rxdata) {
+                DMX_difference=rxdata-DMX_TargetBright[Addr];
+                if(DMX_difference<0.05){
+                    DMXSign[Addr].SIGN = 0b00;//increase
+                    DMX_CurrentBright[Addr]=DMX_TargetBright[Addr]=rxdata;
+//                    DMXStep[Addr] = 255;
+                }else{
+                    DMXSign[Addr].SIGN = 0b01;//increase
+                    DMX_CurrentBright[Addr]=DMX_TargetBright[Addr];
+                    DMX_TargetBright[Addr]=DMX_TargetBright[Addr]+(DMX_difference*2/DMX_sumRepeat[Addr]);
+                    DMX_SpaceBright[Addr]=(DMX_TargetBright[Addr]-DMX_CurrentBright[Addr])/(DMXPeriod>>2);
                 }
-                DMXPeriodStepConst[Addr]=DMXPeriodStep[Addr];
-            } else if (RGBW[Addr] < RxData[Addr]) {
-                DMXPeriodSign[Addr].X = 0b01;//increase
-                if ((RxData[Addr] - RGBW[Addr]) < DMXPeriod) {
-                    DMXPeriodStep[Addr] = DMXPeriod / (RxData[Addr] - RGBW[Addr]);
-                } else {
-                    DMXPeriodStep[Addr] = 1;
+            } else if (DMX_TargetBright[Addr] > rxdata) {
+                DMX_difference=DMX_TargetBright[Addr]-rxdata;
+                if(DMX_difference<0.05){
+                    DMXSign[Addr].SIGN = 0b00;//increase
+                    DMX_CurrentBright[Addr]=DMX_TargetBright[Addr]=rxdata;
+//                    DMXStep[Addr] = 255;
                 }
-                DMXPeriodStepConst[Addr]=DMXPeriodStep[Addr];
+                else{
+                    DMXSign[Addr].SIGN = 0b10;//decrease
+                    DMX_CurrentBright[Addr]=DMX_TargetBright[Addr];
+                    DMX_TargetBright[Addr]=DMX_TargetBright[Addr]-(DMX_difference*2/DMX_sumRepeat[Addr]);
+                    DMX_SpaceBright[Addr]=(DMX_CurrentBright[Addr]-DMX_TargetBright[Addr])/(DMXPeriod>>2);
+                    
+                }
             } else {    //unchage
-                DMXPeriodSign[Addr].X = 0b00;
-                DMXPeriodStep[Addr] = 255;
+                DMX_CurrentBright[Addr]=DMX_TargetBright[Addr]=rxdata;
+                DMXSign[Addr].SIGN = 0b00;
             }
+            
+            if(preRxData[Addr]==RxData[Addr]){
+                if( !DMXSign[Addr].InfiniteLoop){
+                    DMX_Repeat[Addr][0]++;
+                    if(DMX_Repeat[Addr][0]==0x10){
+                        DMX_Repeat[Addr][0]=DMX_Repeat[Addr][1]=1;
+                        DMX_sumRepeat[Addr]=2;
+                        DMXSign[Addr].InfiniteLoop=1;
+                    }
+                }
+            }else{
+                DMX_Repeat[Addr][1]=DMX_Repeat[Addr][0];
+                DMX_sumRepeat[Addr]=DMX_Repeat[Addr][0]+DMX_Repeat[Addr][1];
+                DMX_Repeat[Addr][0]=1;
+                DMXSign[Addr].InfiniteLoop=0;
+            }
+            preRxData[Addr]=RxData[Addr];
             Addr++;
         }
     }
-
     //DMX didn't get Signal
     if (Timer.MS) {
         DMXPeriodConst++;
         Timer.MS = 0;
-        
-
         Addr = 0;
-        while (Addr < 4) {
-            switch (DMXPeriodSign[Addr].X) {
-                case 0b01:
-                    if(DMXPeriodStepConst[Addr]==0){
-                        DMXPeriodStepConst[Addr]=DMXPeriodStep[Addr];
-                        RGBW[Addr]++;
-                    }
-                    DMXPeriodStepConst[Addr]--;
-                    break;
-                case 0b10:
-                    if(DMXPeriodStepConst[Addr]==0){
-                        DMXPeriodStepConst[Addr]=DMXPeriodStep[Addr];
-                        RGBW[Addr]--;
-                    }
-                    DMXPeriodStepConst[Addr]--;
-                    break;
-                case 0b00:
-                    Addr++;
-                    continue;
-                    break;
+        if(DMXStepConst==0){
+            DMXStepConst=3;
+            while (Addr < 4) {
+                switch (DMXSign[Addr].SIGN) {
+                    case 0b01:
+                        DMX_CurrentBright[Addr]=DMX_CurrentBright[Addr]+DMX_SpaceBright[Addr];
+                        rxdata=DMX_CurrentBright[Addr];
+                        CurrentPWM.DC[Addr]=PWM.DC[rxdata]+(PWM.DC[rxdata+1]-PWM.DC[rxdata])*(DMX_CurrentBright[Addr]-rxdata); //interpolation
+//                        TXREG=CurrentPWM.PWM[Addr].DCH;
+//                        send=CurrentPWM.PWM[Addr].DCL;
+//                        TXIE=1;
+                        *PWMDCHptr[Addr] = CurrentPWM.PWM[Addr].DCH;
+                        *PWMDCLptr[Addr] = CurrentPWM.PWM[Addr].DCL;
+                        *PWMLDCONptr[Addr] = 0b10000000;
+                        break;
+                    case 0b10:
+                        DMX_CurrentBright[Addr]=DMX_CurrentBright[Addr]-DMX_SpaceBright[Addr];
+                        rxdata=DMX_CurrentBright[Addr];
+                        CurrentPWM.DC[Addr]=PWM.DC[rxdata]+(PWM.DC[rxdata+1]-PWM.DC[rxdata])*(DMX_CurrentBright[Addr]-rxdata); //interpolation
+//                        TXREG=CurrentPWM.PWM[Addr].DCH;
+//                        send=CurrentPWM.PWM[Addr].DCL;
+//                        TXIE=1;
+                        *PWMDCHptr[Addr] = CurrentPWM.PWM[Addr].DCH;
+                        *PWMDCLptr[Addr] = CurrentPWM.PWM[Addr].DCL;
+                        *PWMLDCONptr[Addr] = 0b10000000;
+                        break;
+                    case 0b00:
+                        rxdata=DMX_CurrentBright[Addr];
+                        CurrentPWM.DC[Addr]=PWM.DC[rxdata]; //interpolation
+                        *PWMDCHptr[Addr] = CurrentPWM.PWM[Addr].DCH;
+                        *PWMDCLptr[Addr] = CurrentPWM.PWM[Addr].DCL;
+                        *PWMLDCONptr[Addr] = 0b10000000;
+    //                    continue;
+                        break;
+                }
+                Addr++;
             }
-            *PWMDCHptr[Addr] = PWM.PWM[RGBW[Addr]].DCH;
-            *PWMDCLptr[Addr] = PWM.PWM[RGBW[Addr]].DCL;
-            *PWMLDCONptr[Addr] = 0b10000000;
-            if (RGBW[Addr] == RxData[Addr]) {
-                DMXPeriodSign[Addr].X = 0b00;
-            }
-            Addr++;
+        }else{
+            DMXStepConst--;
         }
-
-//        TXREG = RGBW[0];
-//        TXIE = 1;
         
         // If no data received for 1200ms turn the lights off
         if (DMX_Flags.RxTimeout == 1) {
             PWM1DC = PWM2DC = PWM3DC = PWM4DC = 0;
             PWM1LDCON = PWM2LDCON = PWM3LDCON = PWM4LDCON = 0b10000000;
-            Addr=0;
+            Addr = 0;
             while (Addr < 4) {
-                DMXPeriodSign[Addr].X=0b00;
+                DMXSign[Addr].SIGN = 0b00;
+                CurrentPWM.DC[Addr]=0;
+                DMX_TargetBright[Addr]=DMX_CurrentBright[Addr]=0.0;
+                DMX_Repeat[Addr][0]=DMX_Repeat[Addr][1]=1;
+                DMX_sumRepeat[Addr]=2;
+                DMXSign[Addr].InfiniteLoop=1;
                 Addr++;
             }
         }
@@ -133,9 +182,7 @@ void DMX_loop(void) {
 }
 
 void DMX_interrput(void) {
-
     if (RCIE & RCIF) {
-
         volatile char RxDat;
         if (FERR) // if get error bit, clear the bit ;  occur at space for "break"
         {
@@ -157,13 +204,13 @@ void DMX_interrput(void) {
                         RxState = RX_DMX_READ_DATA;
                         RxDataPtr = &RxData[0]; // Point to Buffer
                         RxAddrCount = 1; // Reset current addr - Start at address 1! (zero is OFF)
-                        DMX_Flags.RxStart = 1; // Indicate a Start
+//                        DMX_Flags.RxStart = 1; // Indicate a Start
                         DMXPeriod = DMXPeriodConst; // DMX period Record;
                         DMXPeriodConst = 0; // DMX period reset;
-                    } else if (RxDat == RDM_StartCode) { // RDM_StartCode == 0xCC;
+                    } else if (RxDat == E120_SC_RDM) { // RDM_StartCode == 0xCC;
                         // Valid Start Received
                         RxState = RX_RDM_READ_SubStartCode;
-                        DMX_Flags.RxStart = 1; // Indicate a Start
+//                        DMX_Flags.RxStart = 1; // Indicate a Start
                     } else {
                         RxState = RX_WAIT_FOR_BREAK;
                     }
@@ -187,7 +234,7 @@ void DMX_interrput(void) {
                 break;
             case RX_RDM_READ_SubStartCode:
                 RxDat = RCREG;
-                if (RxDat == RDM_SubStartCode) // RDM_SubStartCode == 0x01;
+                if (RxDat == E120_SC_SUB_MESSAGE) // RDM_SubStartCode == 0x01;
                 {
                     RxState = RX_RDM_READ_DATA;
                     PackCount = 23;
@@ -199,12 +246,12 @@ void DMX_interrput(void) {
                 RxDat = RCREG;
                 RX_RDM_Data.value[PackCount] = RxDat;
 
-                if (PackCount == 2 && RX_RDM_Data.PDL > 0 && PD_Flag == 0) {
+                if (PackCount == 2 && RX_RDM_Data.value[PackCount] > 0 && PD_Flag == 0) {
                     RxState = RX_RDM_PD;
-                    PDCount = 230;
+                    PDCount = PD_LEN-1;
+                    PackCount--;
                     break;
                 }
-
                 if (PackCount == 0) {
                     DMX_Flags.RDMNew = 1;
                     RxState = RX_WAIT_FOR_BREAK;
@@ -217,10 +264,11 @@ void DMX_interrput(void) {
             case RX_RDM_PD:
                 RxDat = RCREG;
                 PD[PDCount] = RxDat;
-                PDCount--;
                 if ((PD_LEN - RX_RDM_Data.PDL) == PDCount) {
                     RxState = RX_RDM_READ_DATA;
                     PD_Flag = 1;
+                }else{
+                    PDCount--;
                 }
                 break;
         }
@@ -245,3 +293,98 @@ void DMX_interrput(void) {
 //        GIE = 1; // End Atomic
 //    }
 //}
+
+
+
+
+
+//                    if (DMXStepConst[Addr] == 0) {
+//                        
+//                        DMXStepConst[Addr] = DMXStep[Addr];
+//                        RGBW[Addr]++;
+//                        //                        TXREG=RGBW[Addr];
+//                        //                        TXIE=1;
+//                    }
+//                    else if(DMXStepConst[Addr]==(DMXStep[Addr]>>1)){
+//                        InterPolationPWM.DC[Addr]=(PWM.DC[RGBW[Addr]]+PWM.DC[RGBW[Addr]+1])>>1;
+//                        DMXPeriodSign[Addr].Inter_New=1;
+//                    }
+//                    DMXStepConst[Addr]--;
+////                  
+//                    switch(PWM_Flag[Addr]){
+//                        case EmptyStep:
+//                            InterPolationPWM.DC[Addr]+=DMXInterPWMValue[Addr];
+//                            if (DMXStepConst[Addr] == 0) {
+//                                DMXStepConst[Addr] = DMXStep[Addr];
+//                                RGBW[Addr]++;
+//                                DMX_InterStep(Addr, RGBW[Addr]);
+//                                InterPolationPWM.DC[Addr]=PWM.DC[RGBW[Addr]];
+//                            }else if(DMXInterStepConst[Addr] == 0){
+//                                DMXInterStepConst[Addr]=DMXInterStep[Addr];
+//                                InterPolationPWM.DC[Addr]--;
+//                            }
+//                            DMXInterStepConst[Addr]--;
+//                            DMXStepConst[Addr]--;
+//                            break;
+//                        case FullStep:
+//                            InterPolationPWM.DC[Addr]+=DMXInterPWMValue[Addr];
+//                            if (DMXStepConst[Addr] == 0) {
+//                                DMXStepConst[Addr] = DMXStep[Addr];
+//                                RGBW[Addr]++;
+//                                DMX_InterStep(Addr, RGBW[Addr]);
+//                                InterPolationPWM.DC[Addr]=PWM.DC[RGBW[Addr]];
+//                            }else if(DMXInterStepConst[Addr] == 0){
+//                                DMXInterStepConst[Addr]=DMXInterStep[Addr];
+//                                InterPolationPWM.DC[Addr]--;
+//                            }
+//                            DMXInterStepConst[Addr]--;
+//                            DMXStepConst[Addr]--;
+//                            break;
+//                        case NoneStep:
+//                            if (DMXStepConst[Addr] == 0) {
+//                                DMXStepConst[Addr] = DMXStep[Addr];
+//                                RGBW[Addr]++;
+//                                DMX_InterStep(Addr, RGBW[Addr]);
+//                                InterPolationPWM.DC[Addr]=PWM.DC[RGBW[Addr]];
+//                            }
+//                            DMXStepConst[Addr]--;
+//                            break;
+//                        case MonsterStep:
+//                            RGBW[Addr]++;
+//                            break;
+//                    }
+
+//            InterPolationPWM.DC[Addr]-=DMXInterPWMValue[Addr];
+//            if (DMXStepConst[Addr] == 0) {
+//                DMXStepConst[Addr] = DMXStep[Addr];
+//                RGBW[Addr]--;
+//                DMX_InterStep(Addr, RGBW[Addr]);
+//                InterPolationPWM.DC[Addr]=PWM.DC[RGBW[Addr]];
+//            }else if(DMXInterStepConst[Addr] == 0){
+//                DMXInterStepConst[Addr]=DMXInterStep[Addr];
+//                InterPolationPWM.DC[Addr]--;
+//            }
+//            DMXInterStepConst[Addr]--;
+//            DMXStepConst[Addr]--;
+
+
+//            InterPolationPWM.DC[Addr]+=DMXInterPWMValue[Addr]*sign;
+//            if (DMXStepConst[Addr] == 0) {
+//                DMXStepConst[Addr] = DMXStep[Addr];
+//                RGBW[Addr]+=sign;
+//                DMX_InterStep(Addr, RGBW[Addr]);
+//                InterPolationPWM.DC[Addr]=PWM.DC[RGBW[Addr]];
+//            }else if(DMXInterStepConst[Addr] == 0){
+//                DMXInterStepConst[Addr]=DMXInterStep[Addr];
+//                InterPolationPWM.DC[Addr]-=sign;
+//            }
+//            DMXInterStepConst[Addr]--;
+//            DMXStepConst[Addr]--;
+
+
+//            if(DMXPeriodSign[Addr].New){
+//                DMXPeriodSign[Addr].New=0;
+//                *PWMDCHptr[Addr] = PWM.PWM[RGBW[Addr]].DCH;
+//                *PWMDCLptr[Addr] = PWM.PWM[RGBW[Addr]].DCL;
+//            }
+//            else{

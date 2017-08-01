@@ -14,7 +14,7 @@
 
 void timer1_init(void) {
     TMR1IE = 1;
-    T1CON = 0b00100001; // Fosc/4, 1:4 pre  // 16MHz / 4 / 4 =  1us
+    T1CON    = 0b00110001; // Fosc/4, 1:8 pre  // 32MHz / 4 / 8 =  1us
 }
 
 
@@ -25,7 +25,6 @@ void timer1_interrupt(void) {
             default:
                 TimerState = TIMER_500US;
             case TIMER_500US:
-                
 //                if (Timer.BREAK == 1 && DMX_Flags.TxRunning == 1) // Check if sending a new BREAK
 //                {
 //                    TMR1 = TMR_LOAD_BREAK; //=0xFF4B  Load Value for BREAK    (180us)
@@ -68,18 +67,19 @@ void timer1_interrupt(void) {
 //                }
                 break;
                 
-//            case TIMER_BREAK:
-//                TX_PIN = 1; // Set pin high for MAB
-//                TMR1 = TMR_LOAD_MAB; // Load the MAB time = 0xFFEB  // Load value for MAB      ( 20us)
-//                TimerState = TIMER_MAB; // Next state is MAB end
-//                break;
-
-            case TIMER_MAB:
-                TXEN = 1; // Re-enable EUSART control of pin
-                TXIE = 1; // Re-Enable EUSART Interrupt
-                TMR1 = TMR_LOAD_FILL; // Load the Filler time = 0xFCDF   // Load value to total 1ms (800us)
-                TimerState = TIMER_500US; // Next int is the 1ms
+            case TIMER_BREAK:
+                TX_PIN = 1; // Set pin high for MAB
+                TMR1 = TMR_LOAD_MAB; // Load the MAB time = 0xFFEB  // Load value for MAB      ( 20us)
+                TimerState = TX_TIMER_MAB; // Next state is MAB end
                 break;
+
+            case TX_TIMER_MAB:
+                TXEN = 1; // Re-enable EUSART control of pin    
+                TXIE = 1; // Re-Enable EUSART Interrupt     , it will send RDM_StartCode (0xCC)
+                TMR1 = TMR_LOAD_FILL; // Load the Filler time = 0xFCDF   // Load value to total 1ms (800us)
+                TimerState = TIMER_500US; // Next int is the 0.5ms
+                break;
+                
         }
     }
 }

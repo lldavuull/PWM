@@ -1,10 +1,16 @@
 Version 3.2 HI-TECH Software Intermediate Code
-"68 DMX.h
-[s S593 :2 `uc 1 ]
-[n S593 . X ]
-"88
-[s S594 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :2 `uc 1 :1 `uc 1 ]
-[n S594 . RxNew RxBreak RxStart RxTimeout TxRunning TxBREAK TxMAB RDMNew RDMcheck RDMmute ]
+"77 DMX.h
+[s S593 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :2 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S593 . RxNew RxBreak RxTimeout TxRunning TxBREAK TxMAB RDMNew RDMcheck RDMmute RDMidentify ]
+"145
+[s S595 :8 `uc 1 :8 `uc 1 ]
+[n S595 . DCL DCH ]
+"143
+[u S594 `ui -> 4 `i `S595 -> 4 `i ]
+[n S594 . DC PWM ]
+"181
+[s S596 :2 `uc 1 :1 `uc 1 ]
+[n S596 . SIGN InfiniteLoop ]
 "2452 C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16f1574.h
 [v _PMADR `Vus ~T0 @X0 0 e@401 ]
 "12632
@@ -4657,99 +4663,171 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;DMX.h: 13: extern void DMX_init(void);
 [; ;DMX.h: 19: extern void DMX_loop(void);
 [; ;DMX.h: 25: extern void DMX_interrupt(void);
-"39 DMX.h
-[v _RGBW `Vuc ~T0 @X0 -> 4 `i e ]
-[; ;DMX.h: 39: volatile unsigned char RGBW[4];
-"42
+[; ;DMX.h: 27: extern char DMX_Variety(char);
+[; ;DMX.h: 29: extern void DMX_InterStep(char,char);
+[; ;DMX.h: 31: extern void DMX_Step(char,char,char,char,uint16_t);
+[; ;DMX.h: 33: extern void PWMStep(char, signed char);
+[; ;DMX.h: 35: extern void InterPWM(char, signed char, signed char);
+"51 DMX.h
 [v _RxData `Vuc ~T0 @X0 -> 4 `i e ]
-[; ;DMX.h: 42: volatile unsigned char RxData[4];
-"44
-[v _DMX_Address `i ~T0 @X0 1 e ]
-[; ;DMX.h: 44: int DMX_Address;
-"46
+[; ;DMX.h: 51: volatile unsigned char RxData[4];
+"53
+[v _DMX_Address `ui ~T0 @X0 1 e ]
+[; ;DMX.h: 53: uint16_t DMX_Address;
+"55
 [v _DMX_StartCode `Cuc ~T0 @X0 1 e ]
 [i _DMX_StartCode
 -> -> 0 `i `uc
 ]
-[; ;DMX.h: 46: const char DMX_StartCode = 0;
-"48
+[; ;DMX.h: 55: const char DMX_StartCode = 0;
+"57
 [v _RxAddrCount `Vi ~T0 @X0 1 e ]
 [i _RxAddrCount
 -> 0 `i
 ]
-[; ;DMX.h: 48: volatile int RxAddrCount = 0;
-"50
+[; ;DMX.h: 57: volatile int RxAddrCount = 0;
+"59
 [v _RxDataPtr `*Vuc ~T0 @X0 1 e ]
-[; ;DMX.h: 50: volatile char *RxDataPtr;
-"52
+[; ;DMX.h: 59: volatile char *RxDataPtr;
+"61
 [v _RxState `Vuc ~T0 @X0 1 e ]
 [i _RxState
 -> -> 0 `i `uc
 ]
-[; ;DMX.h: 52: volatile char RxState = 0;
-"54
+[; ;DMX.h: 61: volatile char RxState = 0;
+"63
 [v _RxTimer `Vi ~T0 @X0 1 e ]
 [i _RxTimer
 -> 0 `i
 ]
-[; ;DMX.h: 54: volatile int RxTimer = 0;
-"58
+[; ;DMX.h: 63: volatile int RxTimer = 0;
+[; ;DMX.h: 67: enum {
+[; ;DMX.h: 68: RX_WAIT_FOR_BREAK,
+[; ;DMX.h: 69: WAIT_FOR_START,
+[; ;DMX.h: 70: RX_DMX_READ_DATA,
+[; ;DMX.h: 71: RX_RDM_READ_SubStartCode,
+[; ;DMX.h: 72: RX_RDM_READ_DATA,
+[; ;DMX.h: 73: RX_RDM_PD,
+[; ;DMX.h: 74: };
+[; ;DMX.h: 77: typedef struct {
+[; ;DMX.h: 80: unsigned int RxNew : 1;
+[; ;DMX.h: 82: unsigned int RxBreak : 1;
+[; ;DMX.h: 86: unsigned int RxTimeout : 1;
+[; ;DMX.h: 89: unsigned int TxRunning : 1;
+[; ;DMX.h: 91: unsigned int TxBREAK : 1;
+[; ;DMX.h: 93: unsigned int TxMAB : 1;
+[; ;DMX.h: 97: unsigned int RDMNew : 1;
+[; ;DMX.h: 99: unsigned int RDMcheck : 2;
+[; ;DMX.h: 101: unsigned int RDMmute : 1;
+[; ;DMX.h: 103: unsigned int RDMidentify : 1;
+[; ;DMX.h: 105: } DMX_FLAGS;
+"108
+[v _DMX_Flags `VS593 ~T0 @X0 1 e ]
+[; ;DMX.h: 108: volatile DMX_FLAGS DMX_Flags;
+"127
 [v _DMXPeriod `uc ~T0 @X0 1 e ]
 [i _DMXPeriod
 -> -> 100 `i `uc
 ]
-[; ;DMX.h: 58: char DMXPeriod = 100;
-"60
+[; ;DMX.h: 127: unsigned char DMXPeriod = 100;
+"129
 [v _DMXPeriodConst `Vuc ~T0 @X0 1 e ]
 [i _DMXPeriodConst
 -> -> 0 `i `uc
 ]
-[; ;DMX.h: 60: volatile char DMXPeriodConst =0;
-"62
-[v _DMXPeriodStep `uc ~T0 @X0 -> 4 `i e ]
-[i _DMXPeriodStep
+[; ;DMX.h: 129: volatile char DMXPeriodConst =0;
+"135
+[v _DMXStepConst `uc ~T0 @X0 1 e ]
+[i _DMXStepConst
+-> -> 0 `i `uc
+]
+[; ;DMX.h: 135: char DMXStepConst=0;
+[; ;DMX.h: 143: typedef union{
+[; ;DMX.h: 144: uint16_t DC[4];
+[; ;DMX.h: 145: struct{
+[; ;DMX.h: 146: unsigned DCL :8;
+[; ;DMX.h: 147: unsigned DCH :8;
+[; ;DMX.h: 148: }PWM[4];
+[; ;DMX.h: 149: }Inter_PWM_16;
+"150
+[v _CurrentPWM `S594 ~T0 @X0 1 e ]
+[i _CurrentPWM
+:U ..
+:U ..
+:U ..
+-> -> 0 `i `ui
+..
+..
+..
+]
+[; ;DMX.h: 150: Inter_PWM_16 CurrentPWM=0;
+[; ;DMX.h: 181: typedef struct {
+[; ;DMX.h: 186: unsigned int SIGN: 2;
+[; ;DMX.h: 187: unsigned int InfiniteLoop: 1;
+[; ;DMX.h: 188: } DMX_SIGN;
+"190
+[v _DMXSign `VS596 ~T0 @X0 -> 4 `i e ]
+[; ;DMX.h: 190: volatile DMX_SIGN DMXSign[4];
+"192
+[v _rxdata `uc ~T0 @X0 1 e ]
+[; ;DMX.h: 192: char rxdata;
+"194
+[v _DMX_difference `f ~T0 @X0 1 e ]
+[i _DMX_difference
+-> .0.0 `f
+]
+[; ;DMX.h: 194: float DMX_difference=0.0;
+"195
+[v _DMX_CurrentBright `f ~T0 @X0 -> 4 `i e ]
+[i _DMX_CurrentBright
+:U ..
+-> -> 0 `i `f
+..
+]
+[; ;DMX.h: 195: float DMX_CurrentBright[4]=0;
+"196
+[v _DMX_SpaceBright `f ~T0 @X0 -> 4 `i e ]
+[i _DMX_SpaceBright
+:U ..
+-> -> 0 `i `f
+..
+]
+[; ;DMX.h: 196: float DMX_SpaceBright[4]=0;
+"197
+[v _DMX_TargetBright `f ~T0 @X0 -> 4 `i e ]
+[i _DMX_TargetBright
+:U ..
+-> -> 0 `i `f
+..
+]
+[; ;DMX.h: 197: float DMX_TargetBright[4]=0;
+"198
+[v _DMX_sumRepeat `uc ~T0 @X0 -> 4 `i e ]
+[i _DMX_sumRepeat
+:U ..
+-> -> 2 `i `uc
+..
+]
+[; ;DMX.h: 198: char DMX_sumRepeat[4]=2;
+[v F4957 `uc ~T0 @X0 -> 2 `i t ]
+"199
+[v _DMX_Repeat `F4957 ~T0 @X0 -> 4 `i e ]
+[i _DMX_Repeat
+:U ..
 :U ..
 -> -> 1 `i `uc
 ..
+..
 ]
-[; ;DMX.h: 62: char DMXPeriodStep[4] =1;
-"64
-[v _DMXPeriodStepConst `uc ~T0 @X0 -> 4 `i e ]
-[i _DMXPeriodStepConst
+[; ;DMX.h: 199: char DMX_Repeat[4][2]=1;
+"200
+[v _preRxData `uc ~T0 @X0 -> 4 `i e ]
+[i _preRxData
 :U ..
 -> -> 0 `i `uc
 ..
 ]
-[; ;DMX.h: 64: char DMXPeriodStepConst[4] =0;
-[; ;DMX.h: 68: typedef struct {
-[; ;DMX.h: 71: unsigned int X: 2;
-[; ;DMX.h: 72: } DMX_PERIODSIGN;
-"74
-[v _DMXPeriodSign `VS593 ~T0 @X0 -> 4 `i e ]
-[; ;DMX.h: 74: volatile DMX_PERIODSIGN DMXPeriodSign[4];
-[; ;DMX.h: 78: enum {
-[; ;DMX.h: 79: RX_WAIT_FOR_BREAK,
-[; ;DMX.h: 80: WAIT_FOR_START,
-[; ;DMX.h: 81: RX_DMX_READ_DATA,
-[; ;DMX.h: 82: RX_RDM_READ_SubStartCode,
-[; ;DMX.h: 83: RX_RDM_READ_DATA,
-[; ;DMX.h: 84: RX_RDM_PD,
-[; ;DMX.h: 85: };
-[; ;DMX.h: 88: typedef struct {
-[; ;DMX.h: 91: unsigned int RxNew : 1;
-[; ;DMX.h: 93: unsigned int RxBreak : 1;
-[; ;DMX.h: 95: unsigned int RxStart : 1;
-[; ;DMX.h: 97: unsigned int RxTimeout : 1;
-[; ;DMX.h: 100: unsigned int TxRunning : 1;
-[; ;DMX.h: 102: unsigned int TxBREAK : 1;
-[; ;DMX.h: 104: unsigned int TxMAB : 1;
-[; ;DMX.h: 108: unsigned int RDMNew : 1;
-[; ;DMX.h: 110: unsigned int RDMcheck : 2;
-[; ;DMX.h: 112: unsigned int RDMmute : 1;
-[; ;DMX.h: 114: } DMX_FLAGS;
-"117
-[v _DMX_Flags `VS594 ~T0 @X0 1 e ]
-[; ;DMX.h: 117: volatile DMX_FLAGS DMX_Flags;
+[; ;DMX.h: 200: char preRxData[4]=0;
 "13 PFM.c
 [v _PFM_Read `(ui ~T0 @X0 1 ef1`ui ]
 {
@@ -4763,101 +4841,101 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;PFM.c: 17: RD=1;
 "17
 [e = _RD -> -> 1 `i `b ]
+[; ;PFM.c: 18: asm("nop");
+"18
+[; <" nop ;# ">
 [; ;PFM.c: 19: asm("nop");
 "19
 [; <" nop ;# ">
-[; ;PFM.c: 20: asm("nop");
+[; ;PFM.c: 20: return PMDAT;
 "20
-[; <" nop ;# ">
-[; ;PFM.c: 21: return PMDAT;
-"21
 [e ) -> _PMDAT `ui ]
-[e $UE 595  ]
-[; ;PFM.c: 22: }
-"22
-[e :UE 595 ]
+[e $UE 597  ]
+[; ;PFM.c: 21: }
+"21
+[e :UE 597 ]
 }
-"24
+"23
 [v _PFM_Write `(v ~T0 @X0 1 ef2`ui`ui ]
 {
-[; ;PFM.c: 24: void PFM_Write(uint16_t Addr,uint16_t Data){
+[; ;PFM.c: 23: void PFM_Write(uint16_t Addr,uint16_t Data){
 [e :U _PFM_Write ]
 [v _Addr `ui ~T0 @X0 1 r1 ]
 [v _Data `ui ~T0 @X0 1 r2 ]
 [f ]
-[; ;PFM.c: 25: do{
-"25
-[e :U 599 ]
+[; ;PFM.c: 24: do{
+"24
+[e :U 601 ]
 {
-[; ;PFM.c: 26: GIE=0;
-"26
+[; ;PFM.c: 25: GIE=0;
+"25
 [e = _GIE -> -> 0 `i `b ]
-[; ;PFM.c: 27: CFGS=0;
-"27
+[; ;PFM.c: 26: CFGS=0;
+"26
 [e = _CFGS -> -> 0 `i `b ]
-[; ;PFM.c: 28: PMADR=Addr;
-"28
+[; ;PFM.c: 27: PMADR=Addr;
+"27
 [e = _PMADR -> _Addr `us ]
-[; ;PFM.c: 31: FREE = 1;
-"31
+[; ;PFM.c: 30: FREE = 1;
+"30
 [e = _FREE -> -> 1 `i `b ]
-[; ;PFM.c: 32: WREN = 1;
-"32
+[; ;PFM.c: 31: WREN = 1;
+"31
 [e = _WREN -> -> 1 `i `b ]
-[; ;PFM.c: 33: PMCON2=0x55;
-"33
+[; ;PFM.c: 32: PMCON2=0x55;
+"32
 [e = _PMCON2 -> -> 85 `i `uc ]
-[; ;PFM.c: 34: PMCON2=0xAA;
-"34
+[; ;PFM.c: 33: PMCON2=0xAA;
+"33
 [e = _PMCON2 -> -> 170 `i `uc ]
-[; ;PFM.c: 35: WR=1;
-"35
+[; ;PFM.c: 34: WR=1;
+"34
 [e = _WR -> -> 1 `i `b ]
+[; ;PFM.c: 35: asm("nop");
+"35
+[; <" nop ;# ">
 [; ;PFM.c: 36: asm("nop");
 "36
 [; <" nop ;# ">
-[; ;PFM.c: 37: asm("nop");
-"37
-[; <" nop ;# ">
-[; ;PFM.c: 40: FREE = 0;
-"40
+[; ;PFM.c: 39: FREE = 0;
+"39
 [e = _FREE -> -> 0 `i `b ]
-[; ;PFM.c: 41: LWLO = 1;
-"41
+[; ;PFM.c: 40: LWLO = 1;
+"40
 [e = _LWLO -> -> 1 `i `b ]
-[; ;PFM.c: 42: PMDAT=Data;
-"42
+[; ;PFM.c: 41: PMDAT=Data;
+"41
 [e = _PMDAT -> _Data `us ]
-[; ;PFM.c: 43: LWLO=0;
-"43
+[; ;PFM.c: 42: LWLO=0;
+"42
 [e = _LWLO -> -> 0 `i `b ]
-[; ;PFM.c: 44: PMCON2=0x55;
-"44
+[; ;PFM.c: 43: PMCON2=0x55;
+"43
 [e = _PMCON2 -> -> 85 `i `uc ]
-[; ;PFM.c: 45: PMCON2=0xAA;
-"45
+[; ;PFM.c: 44: PMCON2=0xAA;
+"44
 [e = _PMCON2 -> -> 170 `i `uc ]
-[; ;PFM.c: 46: WR=1;
-"46
+[; ;PFM.c: 45: WR=1;
+"45
 [e = _WR -> -> 1 `i `b ]
+[; ;PFM.c: 46: asm("nop");
+"46
+[; <" nop ;# ">
 [; ;PFM.c: 47: asm("nop");
 "47
 [; <" nop ;# ">
-[; ;PFM.c: 48: asm("nop");
 "48
-[; <" nop ;# ">
-"52
 }
-[; ;PFM.c: 52: }while(PFM_Read(Addr)!=Data);
-[e $ != ( _PFM_Read (1 _Addr _Data 599  ]
-[e :U 598 ]
-[; ;PFM.c: 54: WREN=0;
-"54
+[; ;PFM.c: 48: }while(PFM_Read(Addr)!=Data);
+[e $ != ( _PFM_Read (1 _Addr _Data 601  ]
+[e :U 600 ]
+[; ;PFM.c: 50: WREN=0;
+"50
 [e = _WREN -> -> 0 `i `b ]
-[; ;PFM.c: 55: GIE=1;
-"55
+[; ;PFM.c: 51: GIE=1;
+"51
 [e = _GIE -> -> 1 `i `b ]
-[; ;PFM.c: 57: }
-"57
-[e :UE 596 ]
+[; ;PFM.c: 52: }
+"52
+[e :UE 598 ]
 }

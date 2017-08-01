@@ -41,9 +41,7 @@ void ADC_loop(){
 }
 
 void ADC_interrupt() {
-    
     if (ADIF == 1) {
-        
         ADC_Data=ADRESH;
         ADC_Flags.New=1;
         ADIF = 0;

@@ -10,6 +10,7 @@
       <itemPath>RDM.h</itemPath>
       <itemPath>Timer.h</itemPath>
       <itemPath>PFM.h</itemPath>
+      <itemPath>rdm_define.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -25,6 +26,7 @@
       <itemPath>RDM.c</itemPath>
       <itemPath>Timer.c</itemPath>
       <itemPath>PFM.c</itemPath>
+      <itemPath>RDM_Read.c</itemPath>
     </logicalFolder>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -32,6 +34,9 @@
       <itemPath>Makefile</itemPath>
     </logicalFolder>
   </logicalFolder>
+  <sourceRootList>
+    <Elem>.</Elem>
+  </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
     <conf name="default" type="2">

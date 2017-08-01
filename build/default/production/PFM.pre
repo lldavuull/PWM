@@ -6274,13 +6274,20 @@ extern void DMX_loop(void);
 # 25
 extern void DMX_interrupt(void);
 
-# 39
-volatile unsigned char RGBW[4];
+extern char DMX_Variety(char);
 
+extern void DMX_InterStep(char,char);
 
+extern void DMX_Step(char,char,char,char,uint16_t);
+
+extern void PWMStep(char, signed char);
+
+extern void InterPWM(char, signed char, signed char);
+
+# 51
 volatile unsigned char RxData[4];
 
-int DMX_Address;
+uint16_t DMX_Address;
 
 const char DMX_StartCode = 0;
 
@@ -6291,26 +6298,6 @@ volatile char *RxDataPtr;
 volatile char RxState = 0;
 
 volatile int RxTimer = 0;
-
-
-
-char DMXPeriod = 100;
-
-volatile char DMXPeriodConst =0;
-
-char DMXPeriodStep[4] =1;
-
-char DMXPeriodStepConst[4] =0;
-
-
-
-typedef struct {
-
-
-unsigned int X: 2;
-} DMX_PERIODSIGN;
-
-volatile DMX_PERIODSIGN DMXPeriodSign[4];
 
 
 
@@ -6331,7 +6318,7 @@ unsigned int RxNew : 1;
 
 unsigned int RxBreak : 1;
 
-unsigned int RxStart : 1;
+
 
 unsigned int RxTimeout : 1;
 
@@ -6350,10 +6337,52 @@ unsigned int RDMcheck : 2;
 
 unsigned int RDMmute : 1;
 
+unsigned int RDMidentify : 1;
+
 } DMX_FLAGS;
 
 
 volatile DMX_FLAGS DMX_Flags;
+
+# 127
+unsigned char DMXPeriod = 100;
+
+volatile char DMXPeriodConst =0;
+
+# 135
+char DMXStepConst=0;
+
+# 143
+typedef union{
+uint16_t DC[4];
+struct{
+unsigned DCL :8;
+unsigned DCH :8;
+}PWM[4];
+}Inter_PWM_16;
+Inter_PWM_16 CurrentPWM=0;
+
+# 181
+typedef struct {
+
+
+
+
+unsigned int SIGN: 2;
+unsigned int InfiniteLoop: 1;
+} DMX_SIGN;
+
+volatile DMX_SIGN DMXSign[4];
+
+char rxdata;
+
+float DMX_difference=0.0;
+float DMX_CurrentBright[4]=0;
+float DMX_SpaceBright[4]=0;
+float DMX_TargetBright[4]=0;
+char DMX_sumRepeat[4]=2;
+char DMX_Repeat[4][2]=1;
+char preRxData[4]=0;
 
 # 13 "PFM.c"
 uint16_t PFM_Read(uint16_t Addr){
@@ -6361,7 +6390,6 @@ uint16_t PFM_Read(uint16_t Addr){
 
 PMADR=Addr;
 RD=1;
-
 asm("nop");
 asm("nop");
 return PMDAT;
@@ -6392,12 +6420,8 @@ PMCON2=0xAA;
 WR=1;
 asm("nop");
 asm("nop");
-
-
-
 }while(PFM_Read(Addr)!=Data);
 
 WREN=0;
 GIE=1;
-
 }
