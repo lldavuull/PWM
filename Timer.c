@@ -66,10 +66,15 @@ void timer1_interrupt(void) {
                     }
 //                }
                 break;
+//            case TIMER_WAIT_TO_BREAK:
+//                TX_PIN = 0; //set low ?SPACE? for BREAK
+//                RXTX_SWITCH_PIN = 1; //Set switch pin to TX mode
+//                TimerState = TX_TIMER_MAB; // Next state is MAB end
+//                break;
                 
             case TIMER_BREAK:
                 TX_PIN = 1; // Set pin high for MAB
-                TMR1 = TMR_LOAD_MAB; // Load the MAB time = 0xFFEB  // Load value for MAB      ( 20us)
+                TMR1 = TMR_LOAD_MAB; // Load the MAB time = 0xFFF5  // Load value for MAB      ( 10us)
                 TimerState = TX_TIMER_MAB; // Next state is MAB end
                 break;
 

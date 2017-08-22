@@ -66,8 +66,9 @@ extern void RDM_discovery_CC(void);
 extern void RDM_GET_CC(void);
 extern void RDM_SET_CC(void);
 extern void TX_RDM_Response_Set(void);
-
 extern void RDM_rx_loop(void);
+extern void RDM_TXSTART(void);
+
 /**
  *  Select the size of the transmit buffer
  *  This is the Maximum number of channels that will be sent.
@@ -102,7 +103,7 @@ volatile uint8_t TxState=0;
 //    TX_MAB,
     TX_DISCOVERY,
     TX_START,
-    TX_SART_DISCOVERY,
+//    TX_SART_DISCOVERY,
     TX_DATA,
     TX_RDM_PD
  };
@@ -154,14 +155,23 @@ volatile RDM_Data TX_RDM_Data;
 volatile RDM_Data DISCOVERY_RDM_Data;
 
 #define TX_PD_LEN      40   // Parameter Data Length
+#define TX_PD_u16      20   // Parameter Data Length
+#define TX_PD_u32      10   // Parameter Data Length
 
-#define PD_LEN      101   // Parameter Data Length
+#define PD_LEN      100   // Parameter Data Length
+#define PD_u16      50   // Parameter Data Length
+#define PD_u32      25   // Parameter Data Length
 #define PD1  PD_LEN-2
 #define PD5  PD_LEN-6
 #define PD7  PD_LEN-8
 #define PD11  PD_LEN-12
 //RDM Parameter Data
-char PD[PD_LEN];
+typedef union{
+    uint8_t u8[PD_LEN];
+    uint16_t u16[PD_u16];
+    uint32_t u32[PD_u32];
+}PD_call;
+PD_call PD;
 
 uint16_t *PD_Manu;
 uint32_t *PD_ID;
@@ -247,3 +257,4 @@ uint16_t checkSum;
 
 
 //extern void PWM_Level_interrupt(void);
+

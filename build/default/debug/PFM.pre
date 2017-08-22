@@ -6274,17 +6274,11 @@ extern void DMX_loop(void);
 # 25
 extern void DMX_interrupt(void);
 
-extern char DMX_Variety(char);
 
-extern void DMX_InterStep(char,char);
 
-extern void DMX_Step(char,char,char,char,uint16_t);
+extern void DMX_TargetNew(void);
 
-extern void PWMStep(char, signed char);
-
-extern void InterPWM(char, signed char, signed char);
-
-# 51
+# 46
 volatile unsigned char RxData[4];
 
 uint16_t DMX_Address;
@@ -6299,7 +6293,7 @@ volatile char RxState = 0;
 
 volatile int RxTimer = 0;
 
-
+char Addr = 0;
 
 enum {
 RX_WAIT_FOR_BREAK,
@@ -6344,15 +6338,15 @@ unsigned int RDMidentify : 1;
 
 volatile DMX_FLAGS DMX_Flags;
 
-# 127
+# 113
 unsigned char DMXPeriod = 100;
 
 volatile char DMXPeriodConst =0;
 
-# 135
+# 121
 char DMXStepConst=0;
 
-# 143
+# 129
 typedef union{
 uint16_t DC[4];
 struct{
@@ -6362,7 +6356,6 @@ unsigned DCH :8;
 }Inter_PWM_16;
 Inter_PWM_16 CurrentPWM=0;
 
-# 181
 typedef struct {
 
 
@@ -6370,6 +6363,7 @@ typedef struct {
 
 unsigned int SIGN: 2;
 unsigned int InfiniteLoop: 1;
+signed int direct : 2;
 } DMX_SIGN;
 
 volatile DMX_SIGN DMXSign[4];
@@ -6384,22 +6378,25 @@ char DMX_sumRepeat[4]=2;
 char DMX_Repeat[4][2]=1;
 char preRxData[4]=0;
 
+# 166
+char send=0;
+
 # 13 "PFM.c"
-uint16_t PFM_Read(uint16_t Addr){
+uint16_t PFM_Read(uint16_t AddrPFM){
 
 
-PMADR=Addr;
+PMADR=AddrPFM;
 RD=1;
 asm("nop");
 asm("nop");
 return PMDAT;
 }
 
-void PFM_Write(uint16_t Addr,uint16_t Data){
+void PFM_Write(uint16_t AddrPFM,uint16_t Data){
 do{
 GIE=0;
 CFGS=0;
-PMADR=Addr;
+PMADR=AddrPFM;
 
 
 FREE = 1;
@@ -6420,8 +6417,8 @@ PMCON2=0xAA;
 WR=1;
 asm("nop");
 asm("nop");
-}while(PFM_Read(Addr)!=Data);
 
+}while(PFM_Read(AddrPFM)!=Data);
 WREN=0;
 GIE=1;
 }

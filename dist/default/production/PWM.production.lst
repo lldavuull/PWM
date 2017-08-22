@@ -1,7 +1,7 @@
 
 
 Microchip Technology PIC PRO Macro Assembler V1.41 build -162212810 
-                                                                                               Tue Aug 01 09:13:07 2017
+                                                                                               Mon Aug 21 14:48:21 2017
 
 Microchip Technology Omniscient Code Generator v1.41 (PRO mode) build 201701250102
      1                           	processor	16F1574
@@ -9333,7 +9333,7 @@ SFR31                0      0       0      32        0.0%
 
 
 Microchip Technology PIC Macro Assembler V1.41 build -162212810 
-Symbol Table                                                                                   Tue Aug 01 09:13:07 2017
+Symbol Table                                                                                   Mon Aug 21 14:48:21 2017
 
                            _i 0158                             pc 0002                ___bmul@product 0020  
                  __CFG_CP$OFF 0000                            PL2 0DF1                            PL4 0E26  

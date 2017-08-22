@@ -3,8 +3,8 @@
 [d edition pro ]
 [d chip 16F1574 ]
 [d frameptr 6 ]
-"191 D:\DMX512A\PWM\DMX.c
-[e E4903 . `uc
+"193 D:\DMX512A\PWM\DMX.c
+[e E4888 . `uc
 RX_WAIT_FOR_BREAK 0
 WAIT_FOR_START 1
 RX_DMX_READ_DATA 2
@@ -12,16 +12,15 @@ RX_RDM_READ_SubStartCode 3
 RX_RDM_READ_DATA 4
 RX_RDM_PD 5
 ]
-"131 D:\DMX512A\PWM\RDM.c
-[e E4903 . `uc
+"145 D:\DMX512A\PWM\RDM.c
+[e E4905 . `uc
 TX_DISCOVERY 0
 TX_START 1
-TX_SART_DISCOVERY 2
-TX_DATA 3
-TX_RDM_PD 4
+TX_DATA 2
+TX_RDM_PD 3
 ]
-"183
-[e E5038 . `uc
+"199
+[e E5031 . `uc
 TIMER_500US 0
 TIMER_BREAK 1
 TX_TIMER_MAB 2
@@ -32,8 +31,8 @@ TIMER_500US 0
 TIMER_BREAK 1
 TX_TIMER_MAB 2
 ]
-"101
-[e E4933 . `uc
+"106
+[e E4918 . `uc
 RX_WAIT_FOR_BREAK 0
 WAIT_FOR_START 1
 RX_DMX_READ_DATA 2
@@ -41,13 +40,12 @@ RX_RDM_READ_SubStartCode 3
 RX_RDM_READ_DATA 4
 RX_RDM_PD 5
 ]
-"60 D:\DMX512A\PWM\RDM_Read.c
-[e E4903 . `uc
+"78 D:\DMX512A\PWM\RDM_Read.c
+[e E4905 . `uc
 TX_DISCOVERY 0
 TX_START 1
-TX_SART_DISCOVERY 2
-TX_DATA 3
-TX_RDM_PD 4
+TX_DATA 2
+TX_RDM_PD 3
 ]
 "14 D:\DMX512A\PWM\ADC.c
 [v _ADC_init ADC_init `(i  1 e 2 0 ]
@@ -79,33 +77,35 @@ TX_RDM_PD 4
 [v ___bmul __bmul `(uc  1 e 1 0 ]
 "17 D:\DMX512A\PWM\DMX.c
 [v _DMX_init DMX_init `(v  1 e 1 0 ]
-"61
+"59
 [v _DMX_loop DMX_loop `(v  1 e 1 0 ]
-"184
+"186
 [v _DMX_interrput DMX_interrput `(i  1 e 2 0 ]
 "24 D:\DMX512A\PWM\main.c
 [v _main main `(v  1 e 1 0 ]
-"80
+"78
 [v _isr isr `II(v  1 e 1 0 ]
 "13 D:\DMX512A\PWM\PFM.c
 [v _PFM_Read PFM_Read `(ui  1 e 2 0 ]
 "16 D:\DMX512A\PWM\RDM.c
 [v _RDM_init RDM_init `(i  1 e 2 0 ]
-"88
+"96
 [v _RDM_rx_loop RDM_rx_loop `(i  1 e 2 0 ]
-"120
+"125
 [v _RDM_tx_interrupt RDM_tx_interrupt `(i  1 e 2 0 ]
-"181
+"197
 [v _RDM_tx_TimerBreak RDM_tx_TimerBreak `(v  1 e 1 0 ]
 "15 D:\DMX512A\PWM\RDM_Read.c
 [v _RDM_GET_CC RDM_GET_CC `(v  1 e 1 0 ]
-"66
+"43
 [v _RDM_SET_CC RDM_SET_CC `(v  1 e 1 0 ]
-"83
+"56
 [v _RDM_discovery_CC RDM_discovery_CC `(v  1 e 1 0 ]
-"135
+"107
+[v _RDM_TXSTART RDM_TXSTART `(v  1 e 1 0 ]
+"115
 [v _TX_RDM_Response_Set TX_RDM_Response_Set `(v  1 e 1 0 ]
-"144
+"126
 [v _RDM_get_checkSum RDM_get_checkSum `(ui  1 e 2 0 ]
 "15 D:\DMX512A\PWM\Timer.c
 [v _timer1_init timer1_init `(i  1 e 2 0 ]
@@ -113,10 +113,10 @@ TX_RDM_PD 4
 [v _timer1_interrupt timer1_interrupt `(i  1 e 2 0 ]
 "21 D:\DMX512A\PWM\ADC.h
 [v _ADC_Data ADC_Data `VEuc  1 e 1 0 ]
-[s S482 . 1 `uc 1 New 1 0 :1:0 
+[s S498 . 1 `uc 1 New 1 0 :1:0 
 ]
 "30
-[v _ADC_Flags ADC_Flags `VES482  1 e 1 0 ]
+[v _ADC_Flags ADC_Flags `VES498  1 e 1 0 ]
 "335 C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16f1574.h
 [v _INTCON INTCON `VEuc  1 e 1 @11 ]
 "643
@@ -125,8 +125,6 @@ TX_RDM_PD 4
 [v _T1CON T1CON `VEuc  1 e 1 @24 ]
 "853
 [v _PR2 PR2 `VEuc  1 e 1 @27 ]
-"872
-[v _T2CON T2CON `VEuc  1 e 1 @28 ]
 "1350
 [v _OSCTUNE OSCTUNE `VEuc  1 e 1 @152 ]
 "1407
@@ -309,17 +307,17 @@ TX_RDM_PD 4
 [v _TXIE TXIE `VEb  1 e 0 @1164 ]
 "12854
 [v _TXIF TXIF `VEb  1 e 0 @140 ]
-"51 D:\DMX512A\PWM\DMX.h
+"46 D:\DMX512A\PWM\DMX.h
 [v _RxData RxData `VE[4]uc  1 e 4 0 ]
-"53
+"48
 [v _DMX_Address DMX_Address `ui  1 e 2 0 ]
-"57
+"52
 [v _RxAddrCount RxAddrCount `VEi  1 e 2 0 ]
-"59
-[v _RxDataPtr RxDataPtr `*.5VEuc  1 e 1 0 ]
-"61
+"54
+[v _RxDataPtr RxDataPtr `*.4VEuc  1 e 1 0 ]
+"56
 [v _RxState RxState `VEuc  1 e 1 0 ]
-"63
+"58
 [v _RxTimer RxTimer `VEi  1 e 2 0 ]
 [s S19 . 2 `uc 1 RxNew 1 0 :1:0 
 `uc 1 RxBreak 1 0 :1:1 
@@ -332,177 +330,184 @@ TX_RDM_PD 4
 `uc 1 RDMmute 1 1 :1:2 
 `uc 1 RDMidentify 1 1 :1:3 
 ]
-"108
+"103
 [v _DMX_Flags DMX_Flags `VES19  1 e 2 0 ]
-"127
+"113
 [v _DMXPeriod DMXPeriod `uc  1 e 1 0 ]
-"129
+"115
 [v _DMXPeriodConst DMXPeriodConst `VEuc  1 e 1 0 ]
-"135
+"121
 [v _DMXStepConst DMXStepConst `uc  1 e 1 0 ]
 [s S30 . 2 `uc 1 DCL 1 0 :8:0 
 `uc 1 DCH 1 1 :8:0 
 ]
-"150
+"136
 [u S33 . 8 `[4]ui 1 DC 8 0 `[4]S30 1 PWM 8 0 ]
 [v _CurrentPWM CurrentPWM `S33  1 e 8 0 ]
 [s S36 . 1 `uc 1 SIGN 1 0 :2:0 
 `uc 1 InfiniteLoop 1 0 :1:2 
+`uc 1 direct 1 0 :2:3 
 ]
-"190
+"148
 [v _DMXSign DMXSign `VE[4]S36  1 e 4 0 ]
-"192
+"150
 [v _rxdata rxdata `uc  1 e 1 0 ]
-"194
+"152
 [v _DMX_difference DMX_difference `f  1 e 3 0 ]
-"195
+"153
 [v _DMX_CurrentBright DMX_CurrentBright `[4]f  1 e 12 0 ]
-"196
+"154
 [v _DMX_SpaceBright DMX_SpaceBright `[4]f  1 e 12 0 ]
-"197
+"155
 [v _DMX_TargetBright DMX_TargetBright `[4]f  1 e 12 0 ]
-"198
+"156
 [v _DMX_sumRepeat DMX_sumRepeat `[4]uc  1 e 4 0 ]
-"199
+"157
 [v _DMX_Repeat DMX_Repeat `[4][2]uc  1 e 8 0 ]
-"200
+"158
 [v _preRxData preRxData `[4]uc  1 e 4 0 ]
+"166
+[v _send send `uc  1 e 1 0 ]
 "12 D:\DMX512A\PWM\PWM.h
 [v _i i `VEi  1 e 2 0 ]
 "22
-[u S42 . 512 `[256]ui 1 DC 512 0 `[256]S30 1 PWM 512 0 ]
-[v _PWM PWM `DCCS42  1 e 512 0 ]
-"55
+[u S43 . 512 `[256]ui 1 DC 512 0 `[256]S30 1 PWM 512 0 ]
+[v _PWM PWM `DCCS43  1 e 512 0 ]
+"52
 [v _PWMDCLptr PWMDCLptr `[4]*.39uc  1 e 8 0 ]
-"56
+"53
 [v _PWMDCHptr PWMDCHptr `[4]*.39uc  1 e 8 0 ]
-"57
+"54
 [v _PWMLDCONptr PWMLDCONptr `[4]*.39uc  1 e 8 0 ]
-"88 D:\DMX512A\PWM\RDM.h
+"89 D:\DMX512A\PWM\RDM.h
 [v _TxCount TxCount `ui  1 e 2 0 ]
-"92
-[v _TxByte TxByte `*.39VEuc  1 e 2 0 ]
-"94
+"93
+[v _TxByte TxByte `*.5VEuc  1 e 1 0 ]
+"95
 [v _TxState TxState `VEuc  1 e 1 0 ]
-"148
+"149
 [v _UID UID `DCC[6]uc  1 e 6 0 ]
-"150
-[v _DataPtr DataPtr `*.39VEuc  1 e 2 0 ]
-[s S211 . 2 `uc 1 CSL 1 0 :8:0 
+[s S214 . 2 `uc 1 CSL 1 0 :8:0 
 `uc 1 CSH 1 1 :8:0 
 ]
-"152
-[u S214 . 2 `ui 1 CS 2 0 `S211 1 . 2 0 ]
-[s S217 . 6 `ul 1 ID 4 0 `ui 1 M 2 4 ]
-[s S223 . 24 `S214 1 . 2 0 `uc 1 PDL 1 2 :8:0 
+"153
+[u S217 . 2 `ui 1 CS 2 0 `S214 1 . 2 0 ]
+[s S220 . 6 `ul 1 ID 4 0 `ui 1 M 2 4 ]
+[s S226 . 24 `S217 1 . 2 0 `uc 1 PDL 1 2 :8:0 
 `ui 1 PID 2 3 `uc 1 CC 1 5 :8:0 
 `ui 1 subDevice 2 6 `uc 1 message 1 8 :8:0 
 `uc 1 PORT 1 9 :8:0 
 `uc 1 TN 1 10 :8:0 
-`S217 1 SUID 6 11 `S217 1 DUID 6 17 `uc 1 ML 1 23 :8:0 
+`S220 1 SUID 6 11 `S220 1 DUID 6 17 `uc 1 ML 1 23 :8:0 
 ]
-[u S235 . 24 `[24]uc 1 value 24 0 `S223 1 . 24 0 ]
-[v _RX_RDM_Data RX_RDM_Data `VES235  1 e 24 0 ]
-"153
-[v _TX_RDM_Data TX_RDM_Data `VES235  1 e 24 0 ]
+[u S238 . 24 `[24]uc 1 value 24 0 `S226 1 . 24 0 ]
+[v _RX_RDM_Data RX_RDM_Data `VES238  1 e 24 0 ]
 "154
-[v _DISCOVERY_RDM_Data DISCOVERY_RDM_Data `VES235  1 e 24 0 ]
-"164
-[v _PD PD `[101]uc  1 e 101 @8587 ]
-"166
-[v _PD_Manu PD_Manu `*.39ui  1 e 2 0 ]
-"167
-[v _PD_ID PD_ID `*.39ul  1 e 2 0 ]
-"169
-[v _PDCount PDCount `uc  1 e 1 0 ]
-"170
-[v _TX_PDCount TX_PDCount `uc  1 e 1 0 ]
-"172
-[v _PackCount PackCount `VEuc  1 e 1 0 ]
-"173
-[v _PD_Flag PD_Flag `VEui  1 e 2 0 ]
+[v _TX_RDM_Data TX_RDM_Data `VES238  1 e 24 0 ]
+"155
+[v _DISCOVERY_RDM_Data DISCOVERY_RDM_Data `VES238  1 e 24 0 ]
+[u S241 . 100 `[100]uc 1 u8 100 0 `[50]ui 1 u16 100 0 `[25]ul 1 u32 100 0 ]
 "174
+[v _PD PD `S241  1 e 100 @8588 ]
+"176
+[v _PD_Manu PD_Manu `*.39ui  1 e 2 0 ]
+"177
+[v _PD_ID PD_ID `*.39ul  1 e 2 0 ]
+"179
+[v _PDCount PDCount `uc  1 e 1 0 ]
+"180
+[v _TX_PDCount TX_PDCount `uc  1 e 1 0 ]
+"182
+[v _PackCount PackCount `VEuc  1 e 1 0 ]
+"183
+[v _PD_Flag PD_Flag `VEui  1 e 2 0 ]
+"184
 [v _TX_PD_Flag TX_PD_Flag `VEui  1 e 2 0 ]
-"243
+"253
 [v _checkSum checkSum `ui  1 e 2 0 ]
-"25 D:\DMX512A\PWM\Timer.h
+"26 D:\DMX512A\PWM\Timer.h
 [v _TimerState TimerState `VEuc  1 e 1 0 ]
-[s S238 . 1 `uc 1 MS 1 0 :1:0 
+[s S245 . 1 `uc 1 MS 1 0 :1:0 
 `uc 1 SEC 1 0 :1:1 
 `uc 1 MIN 1 0 :1:2 
 `uc 1 HR 1 0 :1:3 
 `uc 1 MAB 1 0 :1:4 
 `uc 1 spare 1 0 :2:5 
 ]
-"47
-[u S245 . 1 `S238 1 . 1 0 `uc 1 flags 1 0 ]
-[s S248 . 7 `S245 1 . 1 0 `i 1 MS_Count 2 1 `uc 1 SEC_Count 1 3 `uc 1 MIN_Count 1 4 `uc 1 HR_Count 1 5 `uc 1 Switch 1 6 :1:0 
+"48
+[u S252 . 1 `S245 1 . 1 0 `uc 1 flags 1 0 ]
+[s S255 . 7 `S252 1 . 1 0 `i 1 MS_Count 2 1 `uc 1 SEC_Count 1 3 `uc 1 MIN_Count 1 4 `uc 1 HR_Count 1 5 `uc 1 Switch 1 6 :1:0 
 ]
-[v _Timer Timer `VES248  1 e 7 0 ]
+[v _Timer Timer `VES255  1 e 7 0 ]
 "24 D:\DMX512A\PWM\main.c
 [v _main main `(v  1 e 1 0 ]
 {
-"78
+"76
 } 0
 "15 D:\DMX512A\PWM\Timer.c
 [v _timer1_init timer1_init `(i  1 e 2 0 ]
 {
 "18
 } 0
-"88 D:\DMX512A\PWM\RDM.c
+"96 D:\DMX512A\PWM\RDM.c
 [v _RDM_rx_loop RDM_rx_loop `(i  1 e 2 0 ]
 {
-"118
+"123
 } 0
-"83 D:\DMX512A\PWM\RDM_Read.c
+"56 D:\DMX512A\PWM\RDM_Read.c
 [v _RDM_discovery_CC RDM_discovery_CC `(v  1 e 1 0 ]
 {
-"132
+"105
 } 0
-"66
+"43
 [v _RDM_SET_CC RDM_SET_CC `(v  1 e 1 0 ]
 {
-"81
+"54
 } 0
 "15
 [v _RDM_GET_CC RDM_GET_CC `(v  1 e 1 0 ]
 {
-"63
+"41
 } 0
-"135
+"107
+[v _RDM_TXSTART RDM_TXSTART `(v  1 e 1 0 ]
+{
+"113
+} 0
+"115
 [v _TX_RDM_Response_Set TX_RDM_Response_Set `(v  1 e 1 0 ]
 {
-"141
+"123
 } 0
-"181 D:\DMX512A\PWM\RDM.c
+"197 D:\DMX512A\PWM\RDM.c
 [v _RDM_tx_TimerBreak RDM_tx_TimerBreak `(v  1 e 1 0 ]
 {
-"187
+"204
 } 0
-"144 D:\DMX512A\PWM\RDM_Read.c
+"126 D:\DMX512A\PWM\RDM_Read.c
 [v _RDM_get_checkSum RDM_get_checkSum `(ui  1 e 2 0 ]
 {
-[s S211 . 2 `uc 1 CSL 1 0 :8:0 
+[s S214 . 2 `uc 1 CSL 1 0 :8:0 
 `uc 1 CSH 1 1 :8:0 
 ]
-[u S214 . 2 `ui 1 CS 2 0 `S211 1 . 2 0 ]
-[s S217 . 6 `ul 1 ID 4 0 `ui 1 M 2 4 ]
-[s S223 . 24 `S214 1 . 2 0 `uc 1 PDL 1 2 :8:0 
+[u S217 . 2 `ui 1 CS 2 0 `S214 1 . 2 0 ]
+[s S220 . 6 `ul 1 ID 4 0 `ui 1 M 2 4 ]
+[s S226 . 24 `S217 1 . 2 0 `uc 1 PDL 1 2 :8:0 
 `ui 1 PID 2 3 `uc 1 CC 1 5 :8:0 
 `ui 1 subDevice 2 6 `uc 1 message 1 8 :8:0 
 `uc 1 PORT 1 9 :8:0 
 `uc 1 TN 1 10 :8:0 
-`S217 1 SUID 6 11 `S217 1 DUID 6 17 `uc 1 ML 1 23 :8:0 
+`S220 1 SUID 6 11 `S220 1 DUID 6 17 `uc 1 ML 1 23 :8:0 
 ]
-[u S235 . 24 `[24]uc 1 value 24 0 `S223 1 . 24 0 ]
-[v RDM_get_checkSum@Data Data `S235  1 p 24 0 ]
+[u S238 . 24 `[24]uc 1 value 24 0 `S226 1 . 24 0 ]
+[v RDM_get_checkSum@Data Data `S238  1 p 24 0 ]
 [v RDM_get_checkSum@len len `uc  1 p 1 24 ]
-"158
+"140
 } 0
 "16 D:\DMX512A\PWM\RDM.c
 [v _RDM_init RDM_init `(i  1 e 2 0 ]
 {
-"86
+"94
 } 0
 "4 C:\Program Files (x86)\Microchip\xc8\v1.41\sources\common\Umul8.c
 [v ___bmul __bmul `(uc  1 e 1 0 ]
@@ -517,12 +522,11 @@ TX_RDM_PD 4
 [v ___bmul@multiplier multiplier `uc  1 a 1 1 ]
 "51
 } 0
-"61 D:\DMX512A\PWM\DMX.c
+"59 D:\DMX512A\PWM\DMX.c
 [v _DMX_loop DMX_loop `(v  1 e 1 0 ]
 {
-"62
 [v DMX_loop@Addr Addr `uc  1 a 1 76 ]
-"182
+"184
 } 0
 "28 C:\Program Files (x86)\Microchip\xc8\v1.41\sources\common\lwtoft.c
 [v ___lwtoft __lwtoft `(f  1 e 3 0 ]
@@ -625,9 +629,9 @@ TX_RDM_PD 4
 "17 D:\DMX512A\PWM\DMX.c
 [v _DMX_init DMX_init `(v  1 e 1 0 ]
 {
-"50
+"46
 [v DMX_init@Addr Addr `uc  1 a 1 4 ]
-"60
+"58
 } 0
 "32 D:\DMX512A\PWM\ADC.c
 [v _ADC_loop ADC_loop `(i  1 e 2 0 ]
@@ -639,27 +643,27 @@ TX_RDM_PD 4
 {
 "30
 } 0
-"80 D:\DMX512A\PWM\main.c
+"78 D:\DMX512A\PWM\main.c
 [v _isr isr `II(v  1 e 1 0 ]
 {
-"87
+"85
 } 0
 "21 D:\DMX512A\PWM\Timer.c
 [v _timer1_interrupt timer1_interrupt `(i  1 e 2 0 ]
 {
-"85
+"90
 } 0
-"120 D:\DMX512A\PWM\RDM.c
+"125 D:\DMX512A\PWM\RDM.c
 [v _RDM_tx_interrupt RDM_tx_interrupt `(i  1 e 2 0 ]
 {
-"179
+"195
 } 0
-"184 D:\DMX512A\PWM\DMX.c
+"186 D:\DMX512A\PWM\DMX.c
 [v _DMX_interrput DMX_interrput `(i  1 e 2 0 ]
 {
-"186
+"188
 [v DMX_interrput@RxDat RxDat `VEuc  1 a 1 2 ]
-"280
+"283
 } 0
 "43 D:\DMX512A\PWM\ADC.c
 [v _ADC_interrupt ADC_interrupt `(i  1 e 2 0 ]

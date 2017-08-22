@@ -38,11 +38,11 @@ void RDM_init(void) {
     TxByte = &TX_RDM_Data.value[0];
     TX9 = TX9D = 1;
 
-    TxCount = 0;
+//    TxCount = 0;
 
     DMX_Flags.RDMmute = 0;
     DMX_Flags.RDMidentify = 0;
-    DataPtr = &PD[0];
+//    DataPtr = &PD[0];
     //    PD[230]=0xFF;
     //    PD[229]=0xCA;
     //    PD_Manu=&PD[229];
@@ -51,7 +51,15 @@ void RDM_init(void) {
     //    PD[226]=0x56;
     //    PD[225]=0x78;
     //    PD_ID=&PD[225];
-
+//    PFM_Write(Flash_DMXAddress,0x0021);
+    
+//    DMX_Address=PFM_Read(Flash_DMXAddress);
+    
+//    if(DMX_Address==0 || DMX_Address>512){
+        DMX_Address=1;
+//    }
+    
+    
     //DISCOVERY Response Init
     PDCount = 23;
     while (PDCount >= 17) { //value[23~17]]=0xFE
@@ -89,17 +97,14 @@ void RDM_rx_loop(void) {
     if (DMX_Flags.RDMNew == 1) {
         DMX_Flags.RDMNew = 0;
         DMX_Flags.RDMcheck = 0;
-
         //1. check UID
         if ((RX_RDM_Data.DUID.M == METEOR || RX_RDM_Data.DUID.M == 0xFFFF)&& (RX_RDM_Data.DUID.ID == DriverID || RX_RDM_Data.DUID.ID == 0xFFFFFFFF)) {
             DMX_Flags.RDMcheck = 1;
         }
-
         //        2. checksum
         if (DMX_Flags.RDMcheck == 1 && RDM_get_checkSum(RX_RDM_Data,PD_LEN) == RX_RDM_Data.CS) {
             DMX_Flags.RDMcheck = 2;
         }
-
         //        3. check CC and do
         if (DMX_Flags.RDMcheck == 2) {
             switch (RX_RDM_Data.CC) {
@@ -131,10 +136,10 @@ void RDM_tx_interrupt(void) {
                     TxState = TX_DATA;
                 }
                 break;
-            case TX_SART_DISCOVERY:
-                TxState = TX_DISCOVERY;
-                TXREG = E120_SC_RDM;
-                break;
+//            case TX_SART_DISCOVERY:
+//                TxState = TX_DISCOVERY;
+//                TXREG = 0xFE;
+//                break;
             case TX_DISCOVERY: // Send start and set up for data stream
                 if (TxCount <= TX_SIZE) {  //TX_SIZE=24
 //                    TX_RDM_Data.value[1]=0x11;
@@ -142,6 +147,7 @@ void RDM_tx_interrupt(void) {
                     TxByte--; // Point to next byte
                     TxCount++; // Count the addresses
                 }else{
+                    RCIE = 1; //Enable RC interrupt
                     TX_PIN = 1; // Ensure PIN = RC4 will be high
                     TXEN = 0; // Disable the EUSART's control of the TX pin
                     TXIE = 0; // Disable the EUSART Interrupt 
@@ -159,6 +165,7 @@ void RDM_tx_interrupt(void) {
                         TX_PDCount = TX_PD_LEN-1;
                     }
                 }else{
+                    RCIE = 1; //Enable RC interrupt
                     TX_PIN = 1; // Ensure PIN = RC4 will be high
                     TXEN = 0; // Disable the EUSART's control of the TX pin
                     TXIE = 0; // Disable the EUSART Interrupt 
@@ -166,7 +173,7 @@ void RDM_tx_interrupt(void) {
                 }
                 break;
             case TX_RDM_PD:
-                TXREG = PD[TX_PDCount];
+                TXREG = PD.u8[TX_PDCount];
                 if (TX_PDCount == TX_PD_LEN-TX_RDM_Data.PDL) {
                     TxState = TX_DATA;
                     TX_PD_Flag = 1;
@@ -179,11 +186,12 @@ void RDM_tx_interrupt(void) {
 }
 
 void RDM_tx_TimerBreak() {
-    TMR1 = TMR_LOAD_BREAK; //=0xFF4B  Load Value for BREAK    (180us)
+    TMR1 = TMR_LOAD_BREAK; //=0xFF9B  Load Value for BREAK    (100us)
     TimerState = TIMER_BREAK;
     TX_PIN = 0; //set low ?SPACE? for BREAK
     RXTX_SWITCH_PIN = 1; //Set switch pin to TX mode
     TX_PD_Flag=1;
+    RCIE = 0; //Enable RC interrupt
 }
 
 //

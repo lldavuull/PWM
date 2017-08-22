@@ -10,21 +10,21 @@
 #include "PFM.h"
 #include "DMX.h"
 
-uint16_t PFM_Read(uint16_t Addr){
+uint16_t PFM_Read(uint16_t AddrPFM){
     
 //    CFGS=0;         //Not configuration space
-    PMADR=Addr;
+    PMADR=AddrPFM;
     RD=1;
     asm("nop");
     asm("nop");
     return  PMDAT;
 }
 
-void PFM_Write(uint16_t Addr,uint16_t Data){
+void PFM_Write(uint16_t AddrPFM,uint16_t Data){
     do{
         GIE=0;          //Disable interrupts so required sequences will execute properly
         CFGS=0;         //Not configuration space
-        PMADR=Addr;
+        PMADR=AddrPFM;
         
         //
         FREE = 1;       //Program Flash Erase Operation
@@ -45,8 +45,8 @@ void PFM_Write(uint16_t Addr,uint16_t Data){
         WR=1;
         asm("nop");//NOP instructions are forced as processor
         asm("nop");
-    }while(PFM_Read(Addr)!=Data);       //Write Verify
-    
+
+    }while(PFM_Read(AddrPFM)!=Data);       //Write Verify
     WREN=0;
     GIE=1;
 }

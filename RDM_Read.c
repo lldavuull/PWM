@@ -15,69 +15,42 @@
 void RDM_GET_CC(void){
     switch (RX_RDM_Data.PID){
         case E120_IDENTIFY_DEVICE:  //0x1000
-            TX_RDM_Response_Set();
-            TX_RDM_Data.ML=26;  // include Control Field (2 slot)  24+2=26 slot
-            TX_RDM_Data.PORT=E120_RESPONSE_TYPE_ACK; //0x00
             TX_RDM_Data.PDL=1;//Control Field (2 slot)
-            PD[TX_PD_LEN-1] =DMX_Flags.RDMidentify;
+            PD.u8[TX_PD_LEN-1] =DMX_Flags.RDMidentify;
             break;
-            
         case E120_DEVICE_INFO:
             TX_RDM_Data.PDL=0x13;//Control Field (19 slot)
-            TX_RDM_Response_Set();
-            TX_RDM_Data.PORT=E120_RESPONSE_TYPE_ACK; //0x00
-            PD_Manu=&PD[TX_PD_LEN-2]; //RDM Protocol Version PD[0~1]
-            *PD_Manu=E120_PROTOCOL_VERSION;
-            PD_Manu=&PD[TX_PD_LEN-4]; //Device Model ID PD[2~3]
-            *PD_Manu=E120_DEVICE_MODEL_DESCRIPTION;
-            PD_Manu=&PD[TX_PD_LEN-6]; //Product Category
-            *PD_Manu=E120_PRODUCT_DETAIL_LED;
-            PD_ID=&PD[TX_PD_LEN-10]; //SoftWareVersion PD[6~9]
+            PD.u16[TX_PD_u16-1]=E120_PROTOCOL_VERSION;          //RDM Protocol Version  //uint16_t 
+            PD.u16[TX_PD_u16-2]=E120_DEVICE_MODEL_DESCRIPTION;  //Device Model ID
+            PD.u16[TX_PD_u16-3]=E120_PRODUCT_DETAIL_LED;        //Product Category
+            PD_ID=&PD.u8[TX_PD_LEN-10]; //SoftWareVersion  //uint32_t
             *PD_ID=1;
-            PD_Manu=&PD[TX_PD_LEN-12]; //FootPrint  PD[10~11]
-            *PD_Manu=0x04;
-            PD_Manu=&PD[TX_PD_LEN-14]; //Personality
-            *PD_Manu=0x01;
-            PD_Manu=&PD[TX_PD_LEN-16]; //StartAddress
-            *PD_Manu=DMX_Address;
-            PD_Manu=&PD[TX_PD_LEN-18]; //Sub-Device Count
-            *PD_Manu=0;
-            PD[TX_PD_LEN-19]=0; //Sensor Count
-//            TX_RDM_Data.CS=RDM_get_checkSum(TX_RDM_Data,TX_RDM_Data.PDL);
-//            TxState = TX_START;
-//            RDM_tx_TimerBreak(); //180ua Break... and Start to Response Discovery Signal
+            PD.u16[TX_PD_u16-6]=0x04;//FootPrint
+            PD.u16[TX_PD_u16-7]=0x01;//Personality
+            PD.u16[TX_PD_u16-8]=DMX_Address;//StartAddress
+            PD.u16[TX_PD_u16-9]=0;//Sub-Device Count
+            PD.u8[TX_PD_LEN-19]=0; //Sensor Count
             break;
         case E120_DMX_START_ADDRESS:
-            PD_Manu=&PD[TX_PD_LEN-2]; //StartAddress
-            *PD_Manu=DMX_Address;
-            TX_RDM_Response_Set();
-            TX_RDM_Data.ML=26;  // include Control Field (2 slot)  24+2=26 slot
-            TX_RDM_Data.PORT=E120_RESPONSE_TYPE_ACK; //0x00
             TX_RDM_Data.PDL=2;//Control Field (2 slot)
+//            PD_Manu=&PD.u16[TX_PD_LEN-2]; //StartAddress
+            PD.u16[TX_PD_u16-1]=DMX_Address;
             break;
     }
-    TX_RDM_Data.CS=RDM_get_checkSum(TX_RDM_Data,TX_PD_LEN);
-    TxState = TX_START;
-    TXREG = E120_SC_RDM;
-    RDM_tx_TimerBreak(); //180ua Break... and Start to Response Discovery Signal
+    RDM_TXSTART();
 }
-
 
 void RDM_SET_CC(void){
     switch (RX_RDM_Data.PID){
         case E120_DMX_START_ADDRESS:
-            PD_Manu=&PD[PD_LEN-2]; //StartAddress
-            DMX_Address=*PD_Manu;
-            TX_RDM_Response_Set();
-            TX_RDM_Data.ML=24;  // include Control Field (2 slot)  24+2=26 slot
-            TX_RDM_Data.PORT=E120_RESPONSE_TYPE_ACK; //0x00
+//            PD_Manu=&PD[PD_LEN-2]; 
+            DMX_Address=PD.u16[PD_u16-1]; //StartAddress
+//            PFM_Write(Flash_DMXAddress,DMX_Address);
             TX_RDM_Data.PDL=0;//Control Field (2 slot)
+//            DMX_Address=PFM_Read(Flash_DMXAddress);
             break;
     }
-    TX_RDM_Data.CS=RDM_get_checkSum(TX_RDM_Data,TX_PD_LEN);
-    TxState = TX_START;
-    TXREG = E120_SC_RDM;
-    RDM_tx_TimerBreak(); //180ua Break... and Start to Response Discovery Signal
+    RDM_TXSTART();
 }
 
 void RDM_discovery_CC(void){
@@ -85,16 +58,16 @@ void RDM_discovery_CC(void){
         case E120_DISC_UNIQUE_BRANCH: //0x0001
             if (!DMX_Flags.RDMmute) {
                 DMX_Flags.RDMcheck = 1;
-                PD_Manu = &PD[PD1]; //PD 0~1
-                PD_ID = &PD[PD5]; //PD 2~5
+                PD_Manu = &PD.u8[PD1]; //PD 0~1
+                PD_ID = &PD.u8[PD5]; //PD 2~5
                 if (*PD_Manu <= METEOR) { // Lower Bound UID
                     DMX_Flags.RDMcheck++;
                     if (*PD_Manu == METEOR && *PD_ID > DriverID) {
                         DMX_Flags.RDMcheck = 0;
                     }
                 }
-                PD_Manu = &PD[PD7]; //PD    6~7
-                PD_ID = &PD[PD11]; //PD    8~11
+                PD_Manu = &PD.u8[PD7]; //PD    6~7
+                PD_ID = &PD.u8[PD11]; //PD    8~11
                 if (*PD_Manu >= METEOR) { // Upper Bound UID
                     DMX_Flags.RDMcheck++;
                     if (*PD_Manu == METEOR && *PD_ID < DriverID) {
@@ -102,35 +75,42 @@ void RDM_discovery_CC(void){
                     }
                 }
                 if (DMX_Flags.RDMcheck == 3) { //if is in range...
-                    TxState = TX_SART_DISCOVERY;
-                    TXREG = 0xCC;
+                    TxState = TX_DISCOVERY;
+                    TXREG = 0xFE;
                     TxByte= &DISCOVERY_RDM_Data.value[23];   // Point to Last byte
                     TxCount = 0; // Clear the address counter
-                    RDM_tx_TimerBreak(); //180ua Break... and Start to Response Discovery Signal
+                    RXTX_SWITCH_PIN = 1; //Set switch pin to TX mode
+                    RCIE = 0; //Enable RC interrupt
+                    TXEN = 1; // Re-enable EUSART control of pin    
+                    TXIE = 1; // Re-Enable EUSART Interrupt     , it will send RDM_StartCode (0xCC)
                 }
             }
             break;
 
         case E120_DISC_MUTE: //0x0002
             DMX_Flags.RDMmute = 1;
-            TX_RDM_Response_Set();
-            TX_RDM_Data.ML=26;  // include Control Field (2 slot)  24+2=26 slot
-            TX_RDM_Data.PORT=E120_RESPONSE_TYPE_ACK; //0x00
             TX_RDM_Data.PDL=2;//Control Field (2 slot)
-            PD[TX_PD_LEN-1] = PD[TX_PD_LEN-2] = 0;
-            TX_RDM_Data.CS=RDM_get_checkSum(TX_RDM_Data,TX_PD_LEN);
-            TxState = TX_START;
-            TXREG = E120_SC_RDM;
-            RDM_tx_TimerBreak(); //180ua Break... and Start to Response Discovery Signal
+            PD.u16[TX_PD_u16-1] = 0;
+            RDM_TXSTART();
             break;
         case E120_DISC_UN_MUTE: //0x0003
             DMX_Flags.RDMmute = 0;
+            TX_RDM_Data.PDL=2;//Control Field (2 slot)
+            PD.u16[TX_PD_u16-1] = 0;
+            RDM_TXSTART();
             break;
         default:
             break;
     }
 }
 
+void RDM_TXSTART(void){
+    TXREG = E120_SC_RDM;
+    TX_RDM_Response_Set();
+    TX_RDM_Data.CS=RDM_get_checkSum(TX_RDM_Data,TX_PD_LEN);
+    TxState = TX_START;
+    RDM_tx_TimerBreak(); //180ua Break... and Start to Response Discovery Signal
+}
 
 void TX_RDM_Response_Set(){
     TX_RDM_Data.DUID.ID=RX_RDM_Data.SUID.ID;
@@ -138,6 +118,8 @@ void TX_RDM_Response_Set(){
     TX_RDM_Data.TN=RX_RDM_Data.TN;
     TX_RDM_Data.CC=RX_RDM_Data.CC+1;
     TX_RDM_Data.PID=RX_RDM_Data.PID;
+    TX_RDM_Data.ML=24+TX_RDM_Data.PDL;  
+    TX_RDM_Data.PORT=E120_RESPONSE_TYPE_ACK; //0x00
 }
 
 
@@ -151,7 +133,7 @@ uint16_t RDM_get_checkSum(RDM_Data Data, char len) {
     PackCount = len-1;
     PDCount = len - Data.PDL;
     while (PackCount >= PDCount) {
-        checkSum += PD[PDCount];
+        checkSum += PD.u8[PDCount];
         PDCount++;
     }
     return checkSum;

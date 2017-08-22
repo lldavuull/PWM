@@ -34,7 +34,7 @@ dataBANK1 BANK1 1 EE EE 1 1
 dataBANK2 BANK2 1 15E 15E C 1
 clrtext CODE 0 7AA 7AA C 2
 bssCOMMON COMMON 1 76 76 4 1
-$C:\Users\METEOR\AppData\Local\Temp\sce4.obj
+$C:\Users\METEOR\AppData\Local\Temp\s1jg.obj
 reset_vec CODE 0 0 0 2 2
 end_init CODE 0 13 13 2 2
 config CONFIG 0 8007 8007 2 2
@@ -114,66 +114,66 @@ STRING 7D6-862 2
 # All other numeric values are in decimal.
 %LINETAB
 $dist/default/production\PWM.production.obj
-15 cinit CODE >4709:C:\Users\METEOR\AppData\Local\Temp\sce4.
-15 cinit CODE >4712:C:\Users\METEOR\AppData\Local\Temp\sce4.
-15 cinit CODE >4870:C:\Users\METEOR\AppData\Local\Temp\sce4.
+15 cinit CODE >4709:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+15 cinit CODE >4712:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+15 cinit CODE >4870:C:\Users\METEOR\AppData\Local\Temp\s1jg.
 16 cinit CODE >127:D:\DMX512A\PWM\DMX.h
-17 cinit CODE >4872:C:\Users\METEOR\AppData\Local\Temp\sce4.
-18 cinit CODE >4876:C:\Users\METEOR\AppData\Local\Temp\sce4.
+17 cinit CODE >4872:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+18 cinit CODE >4876:C:\Users\METEOR\AppData\Local\Temp\s1jg.
 19 cinit CODE >199:D:\DMX512A\PWM\DMX.h
-1A cinit CODE >4878:C:\Users\METEOR\AppData\Local\Temp\sce4.
+1A cinit CODE >4878:C:\Users\METEOR\AppData\Local\Temp\s1jg.
 1B cinit CODE >198:D:\DMX512A\PWM\DMX.h
-1C cinit CODE >4880:C:\Users\METEOR\AppData\Local\Temp\sce4.
-1D cinit CODE >4882:C:\Users\METEOR\AppData\Local\Temp\sce4.
-1E cinit CODE >4884:C:\Users\METEOR\AppData\Local\Temp\sce4.
-1F cinit CODE >4886:C:\Users\METEOR\AppData\Local\Temp\sce4.
-20 cinit CODE >4888:C:\Users\METEOR\AppData\Local\Temp\sce4.
-21 cinit CODE >4890:C:\Users\METEOR\AppData\Local\Temp\sce4.
-22 cinit CODE >4892:C:\Users\METEOR\AppData\Local\Temp\sce4.
-23 cinit CODE >4894:C:\Users\METEOR\AppData\Local\Temp\sce4.
-24 cinit CODE >4923:C:\Users\METEOR\AppData\Local\Temp\sce4.
-25 cinit CODE >4896:C:\Users\METEOR\AppData\Local\Temp\sce4.
-26 cinit CODE >4898:C:\Users\METEOR\AppData\Local\Temp\sce4.
-27 cinit CODE >4900:C:\Users\METEOR\AppData\Local\Temp\sce4.
-28 cinit CODE >4924:C:\Users\METEOR\AppData\Local\Temp\sce4.
-29 cinit CODE >4925:C:\Users\METEOR\AppData\Local\Temp\sce4.
-2A cinit CODE >4926:C:\Users\METEOR\AppData\Local\Temp\sce4.
-2B cinit CODE >4927:C:\Users\METEOR\AppData\Local\Temp\sce4.
-2C cinit CODE >4928:C:\Users\METEOR\AppData\Local\Temp\sce4.
-2D cinit CODE >4930:C:\Users\METEOR\AppData\Local\Temp\sce4.
-2E cinit CODE >4931:C:\Users\METEOR\AppData\Local\Temp\sce4.
-31 cinit CODE >4942:C:\Users\METEOR\AppData\Local\Temp\sce4.
-32 cinit CODE >4935:C:\Users\METEOR\AppData\Local\Temp\sce4.
-33 cinit CODE >4936:C:\Users\METEOR\AppData\Local\Temp\sce4.
-34 cinit CODE >4937:C:\Users\METEOR\AppData\Local\Temp\sce4.
-35 cinit CODE >4938:C:\Users\METEOR\AppData\Local\Temp\sce4.
-36 cinit CODE >4943:C:\Users\METEOR\AppData\Local\Temp\sce4.
-37 cinit CODE >4944:C:\Users\METEOR\AppData\Local\Temp\sce4.
-38 cinit CODE >4945:C:\Users\METEOR\AppData\Local\Temp\sce4.
-39 cinit CODE >4946:C:\Users\METEOR\AppData\Local\Temp\sce4.
-3A cinit CODE >4947:C:\Users\METEOR\AppData\Local\Temp\sce4.
-3B cinit CODE >4949:C:\Users\METEOR\AppData\Local\Temp\sce4.
-3C cinit CODE >4950:C:\Users\METEOR\AppData\Local\Temp\sce4.
-3F cinit CODE >4954:C:\Users\METEOR\AppData\Local\Temp\sce4.
-40 cinit CODE >4955:C:\Users\METEOR\AppData\Local\Temp\sce4.
-41 cinit CODE >4956:C:\Users\METEOR\AppData\Local\Temp\sce4.
-42 cinit CODE >4957:C:\Users\METEOR\AppData\Local\Temp\sce4.
-43 cinit CODE >4958:C:\Users\METEOR\AppData\Local\Temp\sce4.
-44 cinit CODE >4959:C:\Users\METEOR\AppData\Local\Temp\sce4.
-45 cinit CODE >4961:C:\Users\METEOR\AppData\Local\Temp\sce4.
-46 cinit CODE >4962:C:\Users\METEOR\AppData\Local\Temp\sce4.
-49 cinit CODE >4966:C:\Users\METEOR\AppData\Local\Temp\sce4.
-4A cinit CODE >4967:C:\Users\METEOR\AppData\Local\Temp\sce4.
-4B cinit CODE >4968:C:\Users\METEOR\AppData\Local\Temp\sce4.
-4C cinit CODE >4969:C:\Users\METEOR\AppData\Local\Temp\sce4.
-4D cinit CODE >4970:C:\Users\METEOR\AppData\Local\Temp\sce4.
-4E cinit CODE >4971:C:\Users\METEOR\AppData\Local\Temp\sce4.
-4F cinit CODE >4973:C:\Users\METEOR\AppData\Local\Temp\sce4.
-50 cinit CODE >4974:C:\Users\METEOR\AppData\Local\Temp\sce4.
-53 cinit CODE >4980:C:\Users\METEOR\AppData\Local\Temp\sce4.
-53 cinit CODE >4982:C:\Users\METEOR\AppData\Local\Temp\sce4.
-54 cinit CODE >4983:C:\Users\METEOR\AppData\Local\Temp\sce4.
-55 cinit CODE >4984:C:\Users\METEOR\AppData\Local\Temp\sce4.
+1C cinit CODE >4880:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+1D cinit CODE >4882:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+1E cinit CODE >4884:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+1F cinit CODE >4886:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+20 cinit CODE >4888:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+21 cinit CODE >4890:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+22 cinit CODE >4892:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+23 cinit CODE >4894:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+24 cinit CODE >4923:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+25 cinit CODE >4896:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+26 cinit CODE >4898:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+27 cinit CODE >4900:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+28 cinit CODE >4924:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+29 cinit CODE >4925:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+2A cinit CODE >4926:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+2B cinit CODE >4927:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+2C cinit CODE >4928:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+2D cinit CODE >4930:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+2E cinit CODE >4931:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+31 cinit CODE >4942:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+32 cinit CODE >4935:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+33 cinit CODE >4936:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+34 cinit CODE >4937:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+35 cinit CODE >4938:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+36 cinit CODE >4943:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+37 cinit CODE >4944:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+38 cinit CODE >4945:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+39 cinit CODE >4946:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+3A cinit CODE >4947:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+3B cinit CODE >4949:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+3C cinit CODE >4950:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+3F cinit CODE >4954:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+40 cinit CODE >4955:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+41 cinit CODE >4956:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+42 cinit CODE >4957:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+43 cinit CODE >4958:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+44 cinit CODE >4959:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+45 cinit CODE >4961:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+46 cinit CODE >4962:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+49 cinit CODE >4966:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+4A cinit CODE >4967:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+4B cinit CODE >4968:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+4C cinit CODE >4969:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+4D cinit CODE >4970:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+4E cinit CODE >4971:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+4F cinit CODE >4973:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+50 cinit CODE >4974:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+53 cinit CODE >4980:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+53 cinit CODE >4982:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+54 cinit CODE >4983:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+55 cinit CODE >4984:C:\Users\METEOR\AppData\Local\Temp\s1jg.
 56 cinit CODE >24:D:\DMX512A\PWM\main.c
 56 cinit CODE >25:D:\DMX512A\PWM\main.c
 5C cinit CODE >26:D:\DMX512A\PWM\main.c
@@ -839,20 +839,20 @@ FFF text11 CODE >86:C:\Program Files (x86)\Microchip\xc8\v1.41\sources\common\fl
 75D text3 CODE >128:D:\DMX512A\PWM\RDM_Read.c
 75E text3 CODE >84:D:\DMX512A\PWM\RDM_Read.c
 76F text3 CODE >132:D:\DMX512A\PWM\RDM_Read.c
-7AA clrtext CODE >4906:C:\Users\METEOR\AppData\Local\Temp\sce4.
-7AA clrtext CODE >4907:C:\Users\METEOR\AppData\Local\Temp\sce4.
-7AB clrtext CODE >4908:C:\Users\METEOR\AppData\Local\Temp\sce4.
-7AB clrtext CODE >4911:C:\Users\METEOR\AppData\Local\Temp\sce4.
-7AC clrtext CODE >4909:C:\Users\METEOR\AppData\Local\Temp\sce4.
-7AD clrtext CODE >4910:C:\Users\METEOR\AppData\Local\Temp\sce4.
-7AE clrtext CODE >4912:C:\Users\METEOR\AppData\Local\Temp\sce4.
-7AF clrtext CODE >4913:C:\Users\METEOR\AppData\Local\Temp\sce4.
-7B0 clrtext CODE >4914:C:\Users\METEOR\AppData\Local\Temp\sce4.
-7B1 clrtext CODE >4915:C:\Users\METEOR\AppData\Local\Temp\sce4.
-7B2 clrtext CODE >4916:C:\Users\METEOR\AppData\Local\Temp\sce4.
-7B3 clrtext CODE >4917:C:\Users\METEOR\AppData\Local\Temp\sce4.
-7B4 clrtext CODE >4919:C:\Users\METEOR\AppData\Local\Temp\sce4.
-7B5 clrtext CODE >4918:C:\Users\METEOR\AppData\Local\Temp\sce4.
+7AA clrtext CODE >4906:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+7AA clrtext CODE >4907:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+7AB clrtext CODE >4908:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+7AB clrtext CODE >4911:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+7AC clrtext CODE >4909:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+7AD clrtext CODE >4910:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+7AE clrtext CODE >4912:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+7AF clrtext CODE >4913:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+7B0 clrtext CODE >4914:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+7B1 clrtext CODE >4915:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+7B2 clrtext CODE >4916:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+7B3 clrtext CODE >4917:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+7B4 clrtext CODE >4919:C:\Users\METEOR\AppData\Local\Temp\s1jg.
+7B5 clrtext CODE >4918:C:\Users\METEOR\AppData\Local\Temp\s1jg.
 # %SYMTAB Section
 # An enumeration of all symbols in the program.
 # The beginning of the section is indicated by %SYMTAB.
@@ -953,13 +953,13 @@ _TX9D CF0 0 ABS 0 - dist/default/production\PWM.production.obj
 _TXEN CF5 0 ABS 0 - dist/default/production\PWM.production.obj
 _TXIE 48C 0 ABS 0 - dist/default/production\PWM.production.obj
 _TXIF 8C 0 ABS 0 - dist/default/production\PWM.production.obj
-___sp 0 0 STACK 2 stack C:\Users\METEOR\AppData\Local\Temp\sce4.obj
+___sp 0 0 STACK 2 stack C:\Users\METEOR\AppData\Local\Temp\s1jg.obj
 _main AC 0 CODE 0 cinit dist/default/production\PWM.production.obj
 btemp 7E 0 ABS 0 - dist/default/production\PWM.production.obj
 _DMX_Flags 76 0 COMMON 1 bssCOMMON dist/default/production\PWM.production.obj
 ___ftadd@f1 4A 0 BANK0 1 cstackBANK0 dist/default/production\PWM.production.obj
 ___ftadd@f2 4D 0 BANK0 1 cstackBANK0 dist/default/production\PWM.production.obj
-start 26 0 CODE 0 init C:\Users\METEOR\AppData\Local\Temp\sce4.obj
+start 26 0 CODE 0 init C:\Users\METEOR\AppData\Local\Temp\s1jg.obj
 __size_of___ftadd 0 0 ABS 0 - dist/default/production\PWM.production.obj
 __size_of___ftdiv 0 0 ABS 0 - dist/default/production\PWM.production.obj
 __size_of___ftmul 0 0 ABS 0 - dist/default/production\PWM.production.obj
@@ -988,12 +988,12 @@ __size_of_ADC_loop 0 0 ABS 0 - dist/default/production\PWM.production.obj
 _DMX_TargetBright 138 0 BANK2 1 bssBANK2 dist/default/production\PWM.production.obj
 _RxDataPtr D3 0 BANK1 1 bssBANK1 dist/default/production\PWM.production.obj
 __end_of_timer1_interrupt 11A0 0 CODE 0 text26 dist/default/production\PWM.production.obj
-intlevel0 0 0 CODE 0 functab C:\Users\METEOR\AppData\Local\Temp\sce4.obj
-intlevel1 0 0 CODE 0 functab C:\Users\METEOR\AppData\Local\Temp\sce4.obj
-intlevel2 0 0 CODE 0 functab C:\Users\METEOR\AppData\Local\Temp\sce4.obj
-intlevel3 0 0 CODE 0 functab C:\Users\METEOR\AppData\Local\Temp\sce4.obj
-intlevel4 0 0 CODE 0 functab C:\Users\METEOR\AppData\Local\Temp\sce4.obj
-intlevel5 0 0 CODE 0 functab C:\Users\METEOR\AppData\Local\Temp\sce4.obj
+intlevel0 0 0 CODE 0 functab C:\Users\METEOR\AppData\Local\Temp\s1jg.obj
+intlevel1 0 0 CODE 0 functab C:\Users\METEOR\AppData\Local\Temp\s1jg.obj
+intlevel2 0 0 CODE 0 functab C:\Users\METEOR\AppData\Local\Temp\s1jg.obj
+intlevel3 0 0 CODE 0 functab C:\Users\METEOR\AppData\Local\Temp\s1jg.obj
+intlevel4 0 0 CODE 0 functab C:\Users\METEOR\AppData\Local\Temp\s1jg.obj
+intlevel5 0 0 CODE 0 functab C:\Users\METEOR\AppData\Local\Temp\s1jg.obj
 __LbssCOMMON 0 0 ABS 0 bssCOMMON -
 ___bmul@multiplicand 74 0 COMMON 1 cstackCOMMON dist/default/production\PWM.production.obj
 _CurrentPWM 14C 0 BANK2 1 bssBANK2 dist/default/production\PWM.production.obj
@@ -1093,7 +1093,7 @@ __size_of_RDM_GET_CC 0 0 ABS 0 - dist/default/production\PWM.production.obj
 ___ftpack@arg 20 0 BANK0 1 cstackBANK0 dist/default/production\PWM.production.obj
 ___ftpack@exp 23 0 BANK0 1 cstackBANK0 dist/default/production\PWM.production.obj
 _PackCount CD 0 BANK1 1 bssBANK1 dist/default/production\PWM.production.obj
-___int_sp 0 0 STACK 2 stack C:\Users\METEOR\AppData\Local\Temp\sce4.obj
+___int_sp 0 0 STACK 2 stack C:\Users\METEOR\AppData\Local\Temp\s1jg.obj
 __end_of___ftpack 2000 0 CODE 0 text11 dist/default/production\PWM.production.obj
 __Hbank0 0 0 ABS 0 bank0 -
 __Hbank1 0 0 ABS 0 bank1 -
@@ -1352,7 +1352,7 @@ __end_of_isr 26 0 CODE 0 intentry dist/default/production\PWM.production.obj
 __HnvBANK1 0 0 ABS 0 nvBANK1 -
 __Lintentry 8 0 CODE 0 intentry -
 __end_of_timer1_init 55E 0 CODE 0 cinit dist/default/production\PWM.production.obj
-reset_vec 0 0 CODE 0 reset_vec C:\Users\METEOR\AppData\Local\Temp\sce4.obj
+reset_vec 0 0 CODE 0 reset_vec C:\Users\METEOR\AppData\Local\Temp\s1jg.obj
 DMX_loop@Addr 6C 0 BANK0 1 cstackBANK0 dist/default/production\PWM.production.obj
 __pdataBANK1 EE 0 BANK1 1 dataBANK1 dist/default/production\PWM.production.obj
 __pdataBANK2 15E 0 BANK2 1 dataBANK2 dist/default/production\PWM.production.obj
@@ -1424,8 +1424,8 @@ __end_of_RDM_get_checkSum 552 0 CODE 0 cinit dist/default/production\PWM.product
 _rxdata 79 0 COMMON 1 bssCOMMON dist/default/production\PWM.production.obj
 __size_of_RDM_get_checkSum 0 0 ABS 0 - dist/default/production\PWM.production.obj
 ___lwtoft@c 28 0 BANK0 1 cstackBANK0 dist/default/production\PWM.production.obj
-stackhi 218A 0 ABS 0 - C:\Users\METEOR\AppData\Local\Temp\sce4.obj
-stacklo 2130 0 ABS 0 - C:\Users\METEOR\AppData\Local\Temp\sce4.obj
+stackhi 218A 0 ABS 0 - C:\Users\METEOR\AppData\Local\Temp\s1jg.obj
+stacklo 2130 0 ABS 0 - C:\Users\METEOR\AppData\Local\Temp\s1jg.obj
 ?___lbtoft 28 0 BANK0 1 cstackBANK0 dist/default/production\PWM.production.obj
 _OSCTUNE 98 0 ABS 0 - dist/default/production\PWM.production.obj
 _PWM1CLKCON D9E 0 ABS 0 - dist/default/production\PWM.production.obj

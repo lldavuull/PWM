@@ -24,15 +24,10 @@ extern void DMX_loop(void);
 */
 extern void DMX_interrupt(void);
 
-extern char DMX_Variety(char);
+//extern void DMX_PWM(void);
 
-extern void DMX_InterStep(char,char);
+extern void DMX_TargetNew(void);
 
-extern void DMX_Step(char,char,char,char,uint16_t);
-
-extern void PWMStep(char, signed char);
-
-extern void InterPWM(char, signed char, signed char);
 
 /** Select the size of the receive buffer.
     This is the number of DMX512 Channels you will recieve
@@ -62,7 +57,7 @@ volatile char RxState = 0;
 /** RxTimer Counts 0.5ms since last overflow - used for 1 second timeout */
 volatile int RxTimer = 0;
 
-
+char Addr = 0;
 //char DMXhistoryCount;
 enum {
     RX_WAIT_FOR_BREAK,
@@ -109,15 +104,6 @@ volatile DMX_FLAGS DMX_Flags;
 //DMX set end
 
 
-//typedef struct {
-//    char m14[3];
-//}t;
-//t ptrc;
-
-
-
-
-
 
 //???= ??????????? 200?212????6????????2
 //???= ??DC???????? 200?201????6???????? (PWM[201].DC-PWM[200].DC/6)
@@ -148,43 +134,15 @@ typedef union{
     }PWM[RX_BUFFER_SIZE];
 }Inter_PWM_16;
 Inter_PWM_16 CurrentPWM=0;  //InterPolation PWM
-//?????
-//unsigned char DMXInterStep[RX_BUFFER_SIZE] =1;
-////????????
-//unsigned char DMXInterStepConst[RX_BUFFER_SIZE] =0;
-//char DMXInOrder[RX_BUFFER_SIZE];
-//char DMXInOrderConst[RX_BUFFER_SIZE];
-//char DMXInBright[RX_BUFFER_SIZE];
-
-//char pre[RX_BUFFER_SIZE][2]=0;
-//char repeat[RX_BUFFER_SIZE][2]=1;
-//PWM SMOOTH END//
-
-
-//uint16_t DMXBigPeriod;
-
-//char PWM_Flag[RX_BUFFER_SIZE]=0;
-//enum{
-//    NoneStep,
-//    PositiveStep,
-//    PositiveBigStep,
-//    PositiveCompensateStep,
-//    NegativeStep,
-//    NegativeBigStep,
-//    NegativeCompensateStep,
-//    
-////    PositiveFullStep,
-////    MonsterStep,
-////    BigPeriodStep,
-//};
 
 typedef struct {
     // Update PWM per 500us
     /**  00 =unchange  01 = Increment   10=Decrement */
 //        unsigned int ctu: 1;
 //        unsigned int rp: 1;
-        unsigned int SIGN: 2;
-        unsigned int InfiniteLoop: 1;
+    unsigned int SIGN: 2;
+    unsigned int InfiniteLoop: 1;
+    signed int direct : 2;
 } DMX_SIGN;
 /** SMOOTH_Pwm Set in the ISR to indicate to helper functions etc */
 volatile DMX_SIGN DMXSign[RX_BUFFER_SIZE]; /**  00 =unchange  01 = Increment   10=Decrement */

@@ -17,8 +17,9 @@ extern void timer1_switch(void);
 
 enum {
     TIMER_500US,  //(500us)
-    TIMER_BREAK,  //(180us)
+    TIMER_BREAK,  //(90us)
     TX_TIMER_MAB,  //(20us)
+//    TIMER_WAIT_TO_BREAK, //(180us)
 //    TIMER_FILL  //(800us)
 };
 
@@ -48,15 +49,18 @@ volatile TIMER_DATA Timer;
 
 // 1ms = 0xFFFF - 1000 = 0xFC17
 // 500us = 0xFFFF - 500 = 0xFE0B
-#define TMR1_LOAD_500US     0xFE0B  // Load value for 1ms   
+#define TMR1_LOAD_500US     0xFE0B  // Load value for 0.5ms   
 
 //1MS     0xFc17
 
-// 20us = 0xFFFF - 20 = 0xFFEB
-#define TMR_LOAD_MAB     0xFFEB  // Load value for MAB      ( 20us)
+// 10us = 0xFFFF - 10 = 0xFFF5
+#define TMR_LOAD_MAB     0xFFF5  // Load value for MAB      ( 10us)
 
 // 180us = 0xFFFF - 180 = 0xFF4B
-#define TMR_LOAD_BREAK   0xFF4B  // Load Value for BREAK    (180us)
+//#define TMR_LOAD_WAIT_TO_BREAK   0xFF4B  // Load Value for BREAK    (180us)
+
+// 100us = 0xFFFF - 90 = 0xFFA5
+#define TMR_LOAD_BREAK   0xFFA5  // Load Value for BREAK    (90us)
 
 // 800us = 0xFFFF - 800 = 0xFCDF  - Adjust to fine tune the 1ms total
 #define TMR_LOAD_FILL   0xFCDF   // Load value to total 1ms (800us)
