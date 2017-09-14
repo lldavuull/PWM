@@ -6278,10 +6278,10 @@ extern void RDM_discovery_CC(void);
 extern void RDM_GET_CC(void);
 extern void RDM_SET_CC(void);
 extern void TX_RDM_Response_Set(void);
-
 extern void RDM_rx_loop(void);
+extern void RDM_TXSTART(void);
 
-# 88
+# 89
 uint16_t TxCount=0;
 
 
@@ -6299,7 +6299,7 @@ enum
 
 TX_DISCOVERY,
 TX_START,
-TX_SART_DISCOVERY,
+
 TX_DATA,
 TX_RDM_PD
 };
@@ -6350,8 +6350,13 @@ volatile RDM_Data RX_RDM_Data;
 volatile RDM_Data TX_RDM_Data;
 volatile RDM_Data DISCOVERY_RDM_Data;
 
-# 164
-char PD[101];
+# 169
+typedef union{
+uint8_t u8[100];
+uint16_t u16[50];
+uint32_t u32[25];
+}PD_call;
+PD_call PD;
 
 uint16_t *PD_Manu;
 uint32_t *PD_ID;
@@ -6363,7 +6368,7 @@ volatile char PackCount;
 volatile unsigned PD_Flag;
 volatile unsigned TX_PD_Flag;
 
-# 243
+# 253
 uint16_t checkSum;
 
 # 13 "DMX.h"
@@ -6375,17 +6380,11 @@ extern void DMX_loop(void);
 # 25
 extern void DMX_interrupt(void);
 
-extern char DMX_Variety(char);
 
-extern void DMX_InterStep(char,char);
 
-extern void DMX_Step(char,char,char,char,uint16_t);
+extern void DMX_TargetNew(void);
 
-extern void PWMStep(char, signed char);
-
-extern void InterPWM(char, signed char, signed char);
-
-# 51
+# 50
 volatile unsigned char RxData[4];
 
 uint16_t DMX_Address;
@@ -6400,7 +6399,7 @@ volatile char RxState = 0;
 
 volatile int RxTimer = 0;
 
-
+char Addr = 0;
 
 enum {
 RX_WAIT_FOR_BREAK,
@@ -6445,15 +6444,19 @@ unsigned int RDMidentify : 1;
 
 volatile DMX_FLAGS DMX_Flags;
 
-# 127
+# 117
 unsigned char DMXPeriod = 100;
 
 volatile char DMXPeriodConst =0;
 
-# 135
+volatile char DMXPeriodDimming = 0;
+
+
+
+
 char DMXStepConst=0;
 
-# 143
+# 134
 typedef union{
 uint16_t DC[4];
 struct{
@@ -6463,7 +6466,6 @@ unsigned DCH :8;
 }Inter_PWM_16;
 Inter_PWM_16 CurrentPWM=0;
 
-# 181
 typedef struct {
 
 
@@ -6471,6 +6473,7 @@ typedef struct {
 
 unsigned int SIGN: 2;
 unsigned int InfiniteLoop: 1;
+signed int direct : 2;
 } DMX_SIGN;
 
 volatile DMX_SIGN DMXSign[4];
@@ -6495,9 +6498,12 @@ TIMER_500US,
 TIMER_BREAK,
 TX_TIMER_MAB,
 
-};
 
+TIMER_StartUpDelay,
+};
 volatile char TimerState = 0;
+
+volatile char Timer_DelayCount = 0;
 
 typedef struct {
 union {
@@ -6563,13 +6569,17 @@ RC4PPS = 0b1001;
 TxByte = &TX_RDM_Data.value[0];
 TX9 = TX9D = 1;
 
-TxCount = 0;
+
 
 DMX_Flags.RDMmute = 0;
 DMX_Flags.RDMidentify = 0;
-DataPtr = &PD[0];
 
-# 56
+# 59
+DMX_Address=1;
+
+
+
+
 PDCount = 23;
 while (PDCount >= 17) {
 DISCOVERY_RDM_Data.value[PDCount] = 0xFE;
@@ -6607,16 +6617,13 @@ if (DMX_Flags.RDMNew == 1) {
 DMX_Flags.RDMNew = 0;
 DMX_Flags.RDMcheck = 0;
 
-
 if ((RX_RDM_Data.DUID.M == 0x4D52 || RX_RDM_Data.DUID.M == 0xFFFF)&& (RX_RDM_Data.DUID.ID == 0x17C31092 || RX_RDM_Data.DUID.ID == 0xFFFFFFFF)) {
 DMX_Flags.RDMcheck = 1;
 }
 
-
-if (DMX_Flags.RDMcheck == 1 && RDM_get_checkSum(RX_RDM_Data,101) == RX_RDM_Data.CS) {
+if (DMX_Flags.RDMcheck == 1 && RDM_get_checkSum(RX_RDM_Data,100) == RX_RDM_Data.CS) {
 DMX_Flags.RDMcheck = 2;
 }
-
 
 if (DMX_Flags.RDMcheck == 2) {
 switch (RX_RDM_Data.CC) {
@@ -6648,10 +6655,10 @@ TxCount = 0;
 TxState = TX_DATA;
 }
 break;
-case TX_SART_DISCOVERY:
-TxState = TX_DISCOVERY;
-TXREG = 0xCC;
-break;
+
+
+
+
 case TX_DISCOVERY:
 if (TxCount <= 24) {
 
@@ -6659,6 +6666,7 @@ TXREG = *TxByte;
 TxByte--;
 TxCount++;
 }else{
+RCIE = 1;
 LATC4 = 1;
 TXEN = 0;
 TXIE = 0;
@@ -6676,6 +6684,7 @@ TxState = TX_RDM_PD;
 TX_PDCount = 40-1;
 }
 }else{
+RCIE = 1;
 LATC4 = 1;
 TXEN = 0;
 TXIE = 0;
@@ -6683,7 +6692,7 @@ LATC3=0;
 }
 break;
 case TX_RDM_PD:
-TXREG = PD[TX_PDCount];
+TXREG = PD.u8[TX_PDCount];
 if (TX_PDCount == 40-TX_RDM_Data.PDL) {
 TxState = TX_DATA;
 TX_PD_Flag = 1;
@@ -6696,10 +6705,11 @@ break;
 }
 
 void RDM_tx_TimerBreak() {
-TMR1 = 0xFF4B;
+TMR1 = 0xFFA5;
 TimerState = TIMER_BREAK;
 LATC4 = 0;
 LATC3 = 1;
 TX_PD_Flag=1;
+RCIE = 0;
 }
 

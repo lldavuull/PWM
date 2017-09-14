@@ -21,9 +21,11 @@ enum {
     TX_TIMER_MAB,  //(20us)
 //    TIMER_WAIT_TO_BREAK, //(180us)
 //    TIMER_FILL  //(800us)
+    TIMER_StartUpDelay, // (65.535*0x10=1048.56ms)
 };
-
 volatile char TimerState = 0;
+
+volatile char Timer_DelayCount = 0; // 0x0~ 0x10 
 
 typedef struct {
     union {

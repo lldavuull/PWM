@@ -6384,7 +6384,7 @@ extern void DMX_interrupt(void);
 
 extern void DMX_TargetNew(void);
 
-# 46
+# 50
 volatile unsigned char RxData[4];
 
 uint16_t DMX_Address;
@@ -6444,15 +6444,19 @@ unsigned int RDMidentify : 1;
 
 volatile DMX_FLAGS DMX_Flags;
 
-# 113
+# 117
 unsigned char DMXPeriod = 100;
 
 volatile char DMXPeriodConst =0;
 
-# 121
+volatile char DMXPeriodDimming = 0;
+
+
+
+
 char DMXStepConst=0;
 
-# 129
+# 134
 typedef union{
 uint16_t DC[4];
 struct{
@@ -6483,9 +6487,6 @@ float DMX_TargetBright[4]=0;
 char DMX_sumRepeat[4]=2;
 char DMX_Repeat[4][2]=1;
 char preRxData[4]=0;
-
-# 166
-char send=0;
 
 # 13 "PFM.h"
 extern uint16_t PFM_Read(uint16_t);

@@ -6278,10 +6278,10 @@ extern void RDM_discovery_CC(void);
 extern void RDM_GET_CC(void);
 extern void RDM_SET_CC(void);
 extern void TX_RDM_Response_Set(void);
-
 extern void RDM_rx_loop(void);
+extern void RDM_TXSTART(void);
 
-# 88
+# 89
 uint16_t TxCount=0;
 
 
@@ -6299,7 +6299,7 @@ enum
 
 TX_DISCOVERY,
 TX_START,
-TX_SART_DISCOVERY,
+
 TX_DATA,
 TX_RDM_PD
 };
@@ -6350,8 +6350,13 @@ volatile RDM_Data RX_RDM_Data;
 volatile RDM_Data TX_RDM_Data;
 volatile RDM_Data DISCOVERY_RDM_Data;
 
-# 164
-char PD[101];
+# 169
+typedef union{
+uint8_t u8[100];
+uint16_t u16[50];
+uint32_t u32[25];
+}PD_call;
+PD_call PD;
 
 uint16_t *PD_Manu;
 uint32_t *PD_ID;
@@ -6363,7 +6368,7 @@ volatile char PackCount;
 volatile unsigned PD_Flag;
 volatile unsigned TX_PD_Flag;
 
-# 243
+# 253
 uint16_t checkSum;
 
 # 13 "DMX.h"
@@ -6375,17 +6380,11 @@ extern void DMX_loop(void);
 # 25
 extern void DMX_interrupt(void);
 
-extern char DMX_Variety(char);
 
-extern void DMX_InterStep(char,char);
 
-extern void DMX_Step(char,char,char,char,uint16_t);
+extern void DMX_TargetNew(void);
 
-extern void PWMStep(char, signed char);
-
-extern void InterPWM(char, signed char, signed char);
-
-# 51
+# 50
 volatile unsigned char RxData[4];
 
 uint16_t DMX_Address;
@@ -6400,7 +6399,7 @@ volatile char RxState = 0;
 
 volatile int RxTimer = 0;
 
-
+char Addr = 0;
 
 enum {
 RX_WAIT_FOR_BREAK,
@@ -6445,15 +6444,19 @@ unsigned int RDMidentify : 1;
 
 volatile DMX_FLAGS DMX_Flags;
 
-# 127
+# 117
 unsigned char DMXPeriod = 100;
 
 volatile char DMXPeriodConst =0;
 
-# 135
+volatile char DMXPeriodDimming = 0;
+
+
+
+
 char DMXStepConst=0;
 
-# 143
+# 134
 typedef union{
 uint16_t DC[4];
 struct{
@@ -6463,7 +6466,6 @@ unsigned DCH :8;
 }Inter_PWM_16;
 Inter_PWM_16 CurrentPWM=0;
 
-# 181
 typedef struct {
 
 
@@ -6471,6 +6473,7 @@ typedef struct {
 
 unsigned int SIGN: 2;
 unsigned int InfiniteLoop: 1;
+signed int direct : 2;
 } DMX_SIGN;
 
 volatile DMX_SIGN DMXSign[4];
@@ -6505,69 +6508,42 @@ Flash_UID4=0x0FA3,
 void RDM_GET_CC(void){
 switch (RX_RDM_Data.PID){
 case 0x1000:
-TX_RDM_Response_Set();
-TX_RDM_Data.ML=26;
-TX_RDM_Data.PORT=0x00;
 TX_RDM_Data.PDL=1;
-PD[40-1] =DMX_Flags.RDMidentify;
+PD.u8[40-1] =DMX_Flags.RDMidentify;
 break;
-
 case 0x0060:
 TX_RDM_Data.PDL=0x13;
-TX_RDM_Response_Set();
-TX_RDM_Data.PORT=0x00;
-PD_Manu=&PD[40-2];
-*PD_Manu=0x0100;
-PD_Manu=&PD[40-4];
-*PD_Manu=0x0080;
-PD_Manu=&PD[40-6];
-*PD_Manu=0x0004;
-PD_ID=&PD[40-10];
+PD.u16[20-1]=0x0100;
+PD.u16[20-2]=0x0080;
+PD.u16[20-3]=0x0004;
+PD_ID=&PD.u8[40-10];
 *PD_ID=1;
-PD_Manu=&PD[40-12];
-*PD_Manu=0x04;
-PD_Manu=&PD[40-14];
-*PD_Manu=0x01;
-PD_Manu=&PD[40-16];
-*PD_Manu=DMX_Address;
-PD_Manu=&PD[40-18];
-*PD_Manu=0;
-PD[40-19]=0;
-
-
-
+PD.u16[20-6]=0x04;
+PD.u16[20-7]=0x01;
+PD.u16[20-8]=DMX_Address;
+PD.u16[20-9]=0;
+PD.u8[40-19]=0;
 break;
 case 0x00F0:
-PD_Manu=&PD[40-2];
-*PD_Manu=DMX_Address;
-TX_RDM_Response_Set();
-TX_RDM_Data.ML=26;
-TX_RDM_Data.PORT=0x00;
 TX_RDM_Data.PDL=2;
+
+PD.u16[20-1]=DMX_Address;
 break;
 }
-TX_RDM_Data.CS=RDM_get_checkSum(TX_RDM_Data,40);
-TxState = TX_START;
-TXREG = 0xCC;
-RDM_tx_TimerBreak();
+RDM_TXSTART();
 }
-
 
 void RDM_SET_CC(void){
 switch (RX_RDM_Data.PID){
 case 0x00F0:
-PD_Manu=&PD[101-2];
-DMX_Address=*PD_Manu;
-TX_RDM_Response_Set();
-TX_RDM_Data.ML=24;
-TX_RDM_Data.PORT=0x00;
+
+DMX_Address=PD.u16[50-1];
+
 TX_RDM_Data.PDL=0;
+
 break;
 }
-TX_RDM_Data.CS=RDM_get_checkSum(TX_RDM_Data,40);
-TxState = TX_START;
-TXREG = 0xCC;
-RDM_tx_TimerBreak();
+RDM_TXSTART();
 }
 
 void RDM_discovery_CC(void){
@@ -6575,16 +6551,16 @@ switch (RX_RDM_Data.PID) {
 case 0x0001:
 if (!DMX_Flags.RDMmute) {
 DMX_Flags.RDMcheck = 1;
-PD_Manu = &PD[101-2];
-PD_ID = &PD[101-6];
+PD_Manu = &PD.u8[100-2];
+PD_ID = &PD.u8[100-6];
 if (*PD_Manu <= 0x4D52) {
 DMX_Flags.RDMcheck++;
 if (*PD_Manu == 0x4D52 && *PD_ID > 0x17C31092) {
 DMX_Flags.RDMcheck = 0;
 }
 }
-PD_Manu = &PD[101-8];
-PD_ID = &PD[101-12];
+PD_Manu = &PD.u8[100-8];
+PD_ID = &PD.u8[100-12];
 if (*PD_Manu >= 0x4D52) {
 DMX_Flags.RDMcheck++;
 if (*PD_Manu == 0x4D52 && *PD_ID < 0x17C31092) {
@@ -6592,35 +6568,42 @@ DMX_Flags.RDMcheck = 0;
 }
 }
 if (DMX_Flags.RDMcheck == 3) {
-TxState = TX_SART_DISCOVERY;
-TXREG = 0xCC;
+TxState = TX_DISCOVERY;
+TXREG = 0xFE;
 TxByte= &DISCOVERY_RDM_Data.value[23];
 TxCount = 0;
-RDM_tx_TimerBreak();
+LATC3 = 1;
+RCIE = 0;
+TXEN = 1;
+TXIE = 1;
 }
 }
 break;
 
 case 0x0002:
 DMX_Flags.RDMmute = 1;
-TX_RDM_Response_Set();
-TX_RDM_Data.ML=26;
-TX_RDM_Data.PORT=0x00;
 TX_RDM_Data.PDL=2;
-PD[40-1] = PD[40-2] = 0;
-TX_RDM_Data.CS=RDM_get_checkSum(TX_RDM_Data,40);
-TxState = TX_START;
-TXREG = 0xCC;
-RDM_tx_TimerBreak();
+PD.u16[20-1] = 0;
+RDM_TXSTART();
 break;
 case 0x0003:
 DMX_Flags.RDMmute = 0;
+TX_RDM_Data.PDL=2;
+PD.u16[20-1] = 0;
+RDM_TXSTART();
 break;
 default:
 break;
 }
 }
 
+void RDM_TXSTART(void){
+TXREG = 0xCC;
+TX_RDM_Response_Set();
+TX_RDM_Data.CS=RDM_get_checkSum(TX_RDM_Data,40);
+TxState = TX_START;
+RDM_tx_TimerBreak();
+}
 
 void TX_RDM_Response_Set(){
 TX_RDM_Data.DUID.ID=RX_RDM_Data.SUID.ID;
@@ -6628,6 +6611,8 @@ TX_RDM_Data.DUID.M=RX_RDM_Data.SUID.M;
 TX_RDM_Data.TN=RX_RDM_Data.TN;
 TX_RDM_Data.CC=RX_RDM_Data.CC+1;
 TX_RDM_Data.PID=RX_RDM_Data.PID;
+TX_RDM_Data.ML=24+TX_RDM_Data.PDL;
+TX_RDM_Data.PORT=0x00;
 }
 
 
@@ -6641,7 +6626,7 @@ PackCount--;
 PackCount = len-1;
 PDCount = len - Data.PDL;
 while (PackCount >= PDCount) {
-checkSum += PD[PDCount];
+checkSum += PD.u8[PDCount];
 PDCount++;
 }
 return checkSum;

@@ -1,14 +1,14 @@
 Version 3.2 HI-TECH Software Intermediate Code
-"72 DMX.h
+"76 DMX.h
 [s S593 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :2 `uc 1 :1 `uc 1 :1 `uc 1 ]
 [n S593 . RxNew RxBreak RxTimeout TxRunning TxBREAK TxMAB RDMNew RDMcheck RDMmute RDMidentify ]
-"131
+"136
 [s S595 :8 `uc 1 :8 `uc 1 ]
 [n S595 . DCL DCH ]
-"129
+"134
 [u S594 `ui -> 4 `i `S595 -> 4 `i ]
 [n S594 . DC PWM ]
-"138
+"143
 [s S596 :2 `uc 1 :1 `uc 1 :2 `uc 1 ]
 [n S596 . SIGN InfiniteLoop direct ]
 "2452 C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16f1574.h
@@ -4664,94 +4664,100 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;DMX.h: 19: extern void DMX_loop(void);
 [; ;DMX.h: 25: extern void DMX_interrupt(void);
 [; ;DMX.h: 29: extern void DMX_TargetNew(void);
-"46 DMX.h
+"50 DMX.h
 [v _RxData `Vuc ~T0 @X0 -> 4 `i e ]
-[; ;DMX.h: 46: volatile unsigned char RxData[4];
-"48
+[; ;DMX.h: 50: volatile unsigned char RxData[4];
+"52
 [v _DMX_Address `ui ~T0 @X0 1 e ]
-[; ;DMX.h: 48: uint16_t DMX_Address;
-"50
+[; ;DMX.h: 52: uint16_t DMX_Address;
+"54
 [v _DMX_StartCode `Cuc ~T0 @X0 1 e ]
 [i _DMX_StartCode
 -> -> 0 `i `uc
 ]
-[; ;DMX.h: 50: const char DMX_StartCode = 0;
-"52
+[; ;DMX.h: 54: const char DMX_StartCode = 0;
+"56
 [v _RxAddrCount `Vi ~T0 @X0 1 e ]
 [i _RxAddrCount
 -> 0 `i
 ]
-[; ;DMX.h: 52: volatile int RxAddrCount = 0;
-"54
+[; ;DMX.h: 56: volatile int RxAddrCount = 0;
+"58
 [v _RxDataPtr `*Vuc ~T0 @X0 1 e ]
-[; ;DMX.h: 54: volatile char *RxDataPtr;
-"56
+[; ;DMX.h: 58: volatile char *RxDataPtr;
+"60
 [v _RxState `Vuc ~T0 @X0 1 e ]
 [i _RxState
 -> -> 0 `i `uc
 ]
-[; ;DMX.h: 56: volatile char RxState = 0;
-"58
+[; ;DMX.h: 60: volatile char RxState = 0;
+"62
 [v _RxTimer `Vi ~T0 @X0 1 e ]
 [i _RxTimer
 -> 0 `i
 ]
-[; ;DMX.h: 58: volatile int RxTimer = 0;
-"60
+[; ;DMX.h: 62: volatile int RxTimer = 0;
+"64
 [v _Addr `uc ~T0 @X0 1 e ]
 [i _Addr
 -> -> 0 `i `uc
 ]
-[; ;DMX.h: 60: char Addr = 0;
-[; ;DMX.h: 62: enum {
-[; ;DMX.h: 63: RX_WAIT_FOR_BREAK,
-[; ;DMX.h: 64: WAIT_FOR_START,
-[; ;DMX.h: 65: RX_DMX_READ_DATA,
-[; ;DMX.h: 66: RX_RDM_READ_SubStartCode,
-[; ;DMX.h: 67: RX_RDM_READ_DATA,
-[; ;DMX.h: 68: RX_RDM_PD,
-[; ;DMX.h: 69: };
-[; ;DMX.h: 72: typedef struct {
-[; ;DMX.h: 75: unsigned int RxNew : 1;
-[; ;DMX.h: 77: unsigned int RxBreak : 1;
-[; ;DMX.h: 81: unsigned int RxTimeout : 1;
-[; ;DMX.h: 84: unsigned int TxRunning : 1;
-[; ;DMX.h: 86: unsigned int TxBREAK : 1;
-[; ;DMX.h: 88: unsigned int TxMAB : 1;
-[; ;DMX.h: 92: unsigned int RDMNew : 1;
-[; ;DMX.h: 94: unsigned int RDMcheck : 2;
-[; ;DMX.h: 96: unsigned int RDMmute : 1;
-[; ;DMX.h: 98: unsigned int RDMidentify : 1;
-[; ;DMX.h: 100: } DMX_FLAGS;
-"103
+[; ;DMX.h: 64: char Addr = 0;
+[; ;DMX.h: 66: enum {
+[; ;DMX.h: 67: RX_WAIT_FOR_BREAK,
+[; ;DMX.h: 68: WAIT_FOR_START,
+[; ;DMX.h: 69: RX_DMX_READ_DATA,
+[; ;DMX.h: 70: RX_RDM_READ_SubStartCode,
+[; ;DMX.h: 71: RX_RDM_READ_DATA,
+[; ;DMX.h: 72: RX_RDM_PD,
+[; ;DMX.h: 73: };
+[; ;DMX.h: 76: typedef struct {
+[; ;DMX.h: 79: unsigned int RxNew : 1;
+[; ;DMX.h: 81: unsigned int RxBreak : 1;
+[; ;DMX.h: 85: unsigned int RxTimeout : 1;
+[; ;DMX.h: 88: unsigned int TxRunning : 1;
+[; ;DMX.h: 90: unsigned int TxBREAK : 1;
+[; ;DMX.h: 92: unsigned int TxMAB : 1;
+[; ;DMX.h: 96: unsigned int RDMNew : 1;
+[; ;DMX.h: 98: unsigned int RDMcheck : 2;
+[; ;DMX.h: 100: unsigned int RDMmute : 1;
+[; ;DMX.h: 102: unsigned int RDMidentify : 1;
+[; ;DMX.h: 104: } DMX_FLAGS;
+"107
 [v _DMX_Flags `VS593 ~T0 @X0 1 e ]
-[; ;DMX.h: 103: volatile DMX_FLAGS DMX_Flags;
-"113
+[; ;DMX.h: 107: volatile DMX_FLAGS DMX_Flags;
+"117
 [v _DMXPeriod `uc ~T0 @X0 1 e ]
 [i _DMXPeriod
 -> -> 100 `i `uc
 ]
-[; ;DMX.h: 113: unsigned char DMXPeriod = 100;
-"115
+[; ;DMX.h: 117: unsigned char DMXPeriod = 100;
+"119
 [v _DMXPeriodConst `Vuc ~T0 @X0 1 e ]
 [i _DMXPeriodConst
 -> -> 0 `i `uc
 ]
-[; ;DMX.h: 115: volatile char DMXPeriodConst =0;
+[; ;DMX.h: 119: volatile char DMXPeriodConst =0;
 "121
+[v _DMXPeriodDimming `Vuc ~T0 @X0 1 e ]
+[i _DMXPeriodDimming
+-> -> 0 `i `uc
+]
+[; ;DMX.h: 121: volatile char DMXPeriodDimming = 0;
+"126
 [v _DMXStepConst `uc ~T0 @X0 1 e ]
 [i _DMXStepConst
 -> -> 0 `i `uc
 ]
-[; ;DMX.h: 121: char DMXStepConst=0;
-[; ;DMX.h: 129: typedef union{
-[; ;DMX.h: 130: uint16_t DC[4];
-[; ;DMX.h: 131: struct{
-[; ;DMX.h: 132: unsigned DCL :8;
-[; ;DMX.h: 133: unsigned DCH :8;
-[; ;DMX.h: 134: }PWM[4];
-[; ;DMX.h: 135: }Inter_PWM_16;
-"136
+[; ;DMX.h: 126: char DMXStepConst=0;
+[; ;DMX.h: 134: typedef union{
+[; ;DMX.h: 135: uint16_t DC[4];
+[; ;DMX.h: 136: struct{
+[; ;DMX.h: 137: unsigned DCL :8;
+[; ;DMX.h: 138: unsigned DCH :8;
+[; ;DMX.h: 139: }PWM[4];
+[; ;DMX.h: 140: }Inter_PWM_16;
+"141
 [v _CurrentPWM `S594 ~T0 @X0 1 e ]
 [i _CurrentPWM
 :U ..
@@ -4762,59 +4768,59 @@ Version 3.2 HI-TECH Software Intermediate Code
 ..
 ..
 ]
-[; ;DMX.h: 136: Inter_PWM_16 CurrentPWM=0;
-[; ;DMX.h: 138: typedef struct {
-[; ;DMX.h: 143: unsigned int SIGN: 2;
-[; ;DMX.h: 144: unsigned int InfiniteLoop: 1;
-[; ;DMX.h: 145: signed int direct : 2;
-[; ;DMX.h: 146: } DMX_SIGN;
-"148
+[; ;DMX.h: 141: Inter_PWM_16 CurrentPWM=0;
+[; ;DMX.h: 143: typedef struct {
+[; ;DMX.h: 148: unsigned int SIGN: 2;
+[; ;DMX.h: 149: unsigned int InfiniteLoop: 1;
+[; ;DMX.h: 150: signed int direct : 2;
+[; ;DMX.h: 151: } DMX_SIGN;
+"153
 [v _DMXSign `VS596 ~T0 @X0 -> 4 `i e ]
-[; ;DMX.h: 148: volatile DMX_SIGN DMXSign[4];
-"150
+[; ;DMX.h: 153: volatile DMX_SIGN DMXSign[4];
+"155
 [v _rxdata `uc ~T0 @X0 1 e ]
-[; ;DMX.h: 150: char rxdata;
-"152
+[; ;DMX.h: 155: char rxdata;
+"157
 [v _DMX_difference `f ~T0 @X0 1 e ]
 [i _DMX_difference
 -> .0.0 `f
 ]
-[; ;DMX.h: 152: float DMX_difference=0.0;
-"153
+[; ;DMX.h: 157: float DMX_difference=0.0;
+"158
 [v _DMX_CurrentBright `f ~T0 @X0 -> 4 `i e ]
 [i _DMX_CurrentBright
 :U ..
 -> -> 0 `i `f
 ..
 ]
-[; ;DMX.h: 153: float DMX_CurrentBright[4]=0;
-"154
+[; ;DMX.h: 158: float DMX_CurrentBright[4]=0;
+"159
 [v _DMX_SpaceBright `f ~T0 @X0 -> 4 `i e ]
 [i _DMX_SpaceBright
 :U ..
 -> -> 0 `i `f
 ..
 ]
-[; ;DMX.h: 154: float DMX_SpaceBright[4]=0;
-"155
+[; ;DMX.h: 159: float DMX_SpaceBright[4]=0;
+"160
 [v _DMX_TargetBright `f ~T0 @X0 -> 4 `i e ]
 [i _DMX_TargetBright
 :U ..
 -> -> 0 `i `f
 ..
 ]
-[; ;DMX.h: 155: float DMX_TargetBright[4]=0;
-"156
+[; ;DMX.h: 160: float DMX_TargetBright[4]=0;
+"161
 [v _DMX_sumRepeat `uc ~T0 @X0 -> 4 `i e ]
 [i _DMX_sumRepeat
 :U ..
 -> -> 2 `i `uc
 ..
 ]
-[; ;DMX.h: 156: char DMX_sumRepeat[4]=2;
-[v F4943 `uc ~T0 @X0 -> 2 `i t ]
-"157
-[v _DMX_Repeat `F4943 ~T0 @X0 -> 4 `i e ]
+[; ;DMX.h: 161: char DMX_sumRepeat[4]=2;
+[v F4944 `uc ~T0 @X0 -> 2 `i t ]
+"162
+[v _DMX_Repeat `F4944 ~T0 @X0 -> 4 `i e ]
 [i _DMX_Repeat
 :U ..
 :U ..
@@ -4822,21 +4828,15 @@ Version 3.2 HI-TECH Software Intermediate Code
 ..
 ..
 ]
-[; ;DMX.h: 157: char DMX_Repeat[4][2]=1;
-"158
+[; ;DMX.h: 162: char DMX_Repeat[4][2]=1;
+"163
 [v _preRxData `uc ~T0 @X0 -> 4 `i e ]
 [i _preRxData
 :U ..
 -> -> 0 `i `uc
 ..
 ]
-[; ;DMX.h: 158: char preRxData[4]=0;
-"166
-[v _send `uc ~T0 @X0 1 e ]
-[i _send
--> -> 0 `i `uc
-]
-[; ;DMX.h: 166: char send=0;
+[; ;DMX.h: 163: char preRxData[4]=0;
 "13 PFM.c
 [v _PFM_Read `(ui ~T0 @X0 1 ef1`ui ]
 {

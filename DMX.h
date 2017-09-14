@@ -40,6 +40,10 @@ extern void DMX_TargetNew(void);
 #define DMX_RX_TIMEOUT_MS 2400  //1200ms
 
 
+#define DMX_Shift_bits 2
+
+#define DMXStep 3
+
 ///** RGBW Receive Data Buffer  */
 //volatile unsigned char RGBW[RX_BUFFER_SIZE];
 /** RxData Receive Data Buffer  */
@@ -114,15 +118,16 @@ unsigned char DMXPeriod = 100;
 /** DMXperiodConst incerease per 500us, Return to zero when RX recieve DMX_StartCode */
 volatile char DMXPeriodConst =0;
 
+volatile char DMXPeriodDimming = 0;
 //?????
 /** DMXPeriodStep will change PWM at 500us Timer per DMXPeriodStep period */
 //char DMXStep[RX_BUFFER_SIZE] =1; //0 is unchange , 1 is always change per 0.5ms Timer up, 2 is 1ms, 3 is 1.5ms, ....
 /** DMXPeriodStepconst decerease per 500us, when DMXPeriodStepconst decrease to zero, DMXPeriodStepconst will set to DMXPeriodStep and PWM will be changed */
 char DMXStepConst=0;
 
-//char DMXOrder[RX_BUFFER_SIZE];
-//char DMXOrderConst[RX_BUFFER_SIZE];
-//char DMXBright[RX_BUFFER_SIZE];
+
+
+
 
 
 //??????14bit

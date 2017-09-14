@@ -6384,7 +6384,7 @@ extern void DMX_interrupt(void);
 
 extern void DMX_TargetNew(void);
 
-# 46
+# 50
 volatile unsigned char RxData[4];
 
 uint16_t DMX_Address;
@@ -6444,15 +6444,19 @@ unsigned int RDMidentify : 1;
 
 volatile DMX_FLAGS DMX_Flags;
 
-# 113
+# 117
 unsigned char DMXPeriod = 100;
 
 volatile char DMXPeriodConst =0;
 
-# 121
+volatile char DMXPeriodDimming = 0;
+
+
+
+
 char DMXStepConst=0;
 
-# 129
+# 134
 typedef union{
 uint16_t DC[4];
 struct{
@@ -6484,9 +6488,6 @@ char DMX_sumRepeat[4]=2;
 char DMX_Repeat[4][2]=1;
 char preRxData[4]=0;
 
-# 166
-char send=0;
-
 # 14 "Timer.h"
 extern void timer1_interrupt(void);
 extern void timer1_init(void);
@@ -6498,9 +6499,11 @@ TIMER_BREAK,
 TX_TIMER_MAB,
 
 
+TIMER_StartUpDelay,
 };
-
 volatile char TimerState = 0;
+
+volatile char Timer_DelayCount = 0;
 
 typedef struct {
 union {
@@ -6640,15 +6643,6 @@ break;
 
 void RDM_tx_interrupt(void) {
 if (TXIE && TXIF) {
-
-if(send!=0){
-TXREG = send;
-send=0;
-}else{
-
-TXIE = 0;
-}
-
 switch (TxState) {
 case TX_START:
 if(TX_PD_Flag==1){
