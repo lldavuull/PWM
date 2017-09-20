@@ -63,13 +63,17 @@ void main(void) {
     
     
 //    Sweep_PWM_init();
-    
     timer1_init();
     
 //    DMX_Address=PFM_Read(Flash_DMXAddress);
 //    PFM_Write(Flash_DMXAddress,0x0100);
 //    DMX_Address=PFM_Read(0x0F80);
     
+    
+    ADC_init();
+    DMX_init();
+    RDM_init();
+    PWM1CON = PWM2CON = PWM3CON = PWM4CON = PWMxCON_SET;
     
     while (1) {
         DMX_loop();

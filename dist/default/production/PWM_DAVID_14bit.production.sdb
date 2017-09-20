@@ -3,7 +3,7 @@
 [d edition pro ]
 [d chip 16F1574 ]
 [d frameptr 6 ]
-"174 D:\DMX512A\PWM_DAVID_14bit\DMX.c
+"189 D:\DMX512A\PWM_DAVID_14bit\DMX.c
 [e E4888 . `uc
 RX_WAIT_FOR_BREAK 0
 WAIT_FOR_START 1
@@ -12,21 +12,21 @@ RX_RDM_READ_SubStartCode 3
 RX_RDM_READ_DATA 4
 RX_RDM_PD 5
 ]
-"136 D:\DMX512A\PWM_DAVID_14bit\RDM.c
+"142 D:\DMX512A\PWM_DAVID_14bit\RDM.c
 [e E4905 . `uc
 TX_DISCOVERY 0
 TX_START 1
 TX_DATA 2
 TX_RDM_PD 3
 ]
-"190
-[e E5031 . `uc
+"196
+[e E5032 . `uc
 TIMER_500US 0
 TIMER_BREAK 1
 TX_TIMER_MAB 2
 TIMER_StartUpDelay 3
 ]
-"18 D:\DMX512A\PWM_DAVID_14bit\Timer.c
+"29 D:\DMX512A\PWM_DAVID_14bit\Timer.c
 [e E4878 . `uc
 TIMER_500US 0
 TIMER_BREAK 1
@@ -50,7 +50,7 @@ TX_DATA 2
 TX_RDM_PD 3
 ]
 "14 D:\DMX512A\PWM_DAVID_14bit\ADC.c
-[v _ADC_init ADC_init `(v  1 e 1 0 ]
+[v _ADC_init ADC_init `(i  1 e 2 0 ]
 "32
 [v _ADC_loop ADC_loop `(i  1 e 2 0 ]
 "43
@@ -79,23 +79,23 @@ TX_RDM_PD 3
 [v ___bmul __bmul `(uc  1 e 1 0 ]
 "17 D:\DMX512A\PWM_DAVID_14bit\DMX.c
 [v _DMX_init DMX_init `(v  1 e 1 0 ]
-"59
+"62
 [v _DMX_loop DMX_loop `(v  1 e 1 0 ]
-"167
+"182
 [v _DMX_interrput DMX_interrput `(i  1 e 2 0 ]
 "24 D:\DMX512A\PWM_DAVID_14bit\main.c
 [v _main main `(v  1 e 1 0 ]
-"82
+"86
 [v _isr isr `II(v  1 e 1 0 ]
 "13 D:\DMX512A\PWM_DAVID_14bit\PFM.c
 [v _PFM_Read PFM_Read `(ui  1 e 2 0 ]
 "16 D:\DMX512A\PWM_DAVID_14bit\RDM.c
-[v _RDM_init RDM_init `(v  1 e 1 0 ]
+[v _RDM_init RDM_init `(i  1 e 2 0 ]
 "96
 [v _RDM_rx_loop RDM_rx_loop `(i  1 e 2 0 ]
 "125
 [v _RDM_tx_interrupt RDM_tx_interrupt `(i  1 e 2 0 ]
-"188
+"194
 [v _RDM_tx_TimerBreak RDM_tx_TimerBreak `(v  1 e 1 0 ]
 "15 D:\DMX512A\PWM_DAVID_14bit\RDM_Read.c
 [v _RDM_GET_CC RDM_GET_CC `(v  1 e 1 0 ]
@@ -115,10 +115,10 @@ TX_RDM_PD 3
 [v _timer1_interrupt timer1_interrupt `(i  1 e 2 0 ]
 "21 D:\DMX512A\PWM_DAVID_14bit\ADC.h
 [v _ADC_Data ADC_Data `VEuc  1 e 1 0 ]
-[s S485 . 1 `uc 1 New 1 0 :1:0 
+[s S507 . 1 `uc 1 New 1 0 :1:0 
 ]
 "30
-[v _ADC_Flags ADC_Flags `VES485  1 e 1 0 ]
+[v _ADC_Flags ADC_Flags `VES507  1 e 1 0 ]
 "335 C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16f1574.h
 [v _INTCON INTCON `VEuc  1 e 1 @11 ]
 "643
@@ -349,7 +349,7 @@ TX_RDM_PD 3
 ]
 "141
 [u S33 . 8 `[4]ui 1 DC 8 0 `[4]S30 1 PWM 8 0 ]
-[v _CurrentPWM CurrentPWM `S33  1 e 8 0 ]
+[v _CurrentPWM CurrentPWM `VES33  1 e 8 0 ]
 [s S36 . 1 `uc 1 SIGN 1 0 :2:0 
 `uc 1 InfiniteLoop 1 0 :1:2 
 `uc 1 direct 1 0 :2:3 
@@ -359,19 +359,21 @@ TX_RDM_PD 3
 "155
 [v _rxdata rxdata `uc  1 e 1 0 ]
 "157
-[v _DMX_difference DMX_difference `f  1 e 3 0 ]
+[v _DMX_difference DMX_difference `VEf  1 e 3 0 ]
 "158
-[v _DMX_CurrentBright DMX_CurrentBright `[4]f  1 e 12 0 ]
+[v _DMX_CurrentBright DMX_CurrentBright `VE[4]f  1 e 12 0 ]
 "159
-[v _DMX_SpaceBright DMX_SpaceBright `[4]f  1 e 12 0 ]
+[v _DMX_SpaceBright DMX_SpaceBright `VE[4]f  1 e 12 0 ]
 "160
-[v _DMX_TargetBright DMX_TargetBright `[4]f  1 e 12 0 ]
+[v _DMX_TargetBright DMX_TargetBright `VE[4]f  1 e 12 0 ]
 "161
 [v _DMX_sumRepeat DMX_sumRepeat `[4]uc  1 e 4 0 ]
 "162
 [v _DMX_Repeat DMX_Repeat `[4][2]uc  1 e 8 0 ]
 "163
 [v _preRxData preRxData `[4]uc  1 e 4 0 ]
+"170
+[v _PWM_Pin PWM_Pin `VE[4]uc  1 e 4 0 ]
 "12 D:\DMX512A\PWM_DAVID_14bit\PWM.h
 [v _i i `VEi  1 e 2 0 ]
 "22
@@ -391,28 +393,28 @@ TX_RDM_PD 3
 [v _TxState TxState `VEuc  1 e 1 0 ]
 "149
 [v _UID UID `DCC[6]uc  1 e 6 0 ]
-[s S207 . 2 `uc 1 CSL 1 0 :8:0 
+[s S224 . 2 `uc 1 CSL 1 0 :8:0 
 `uc 1 CSH 1 1 :8:0 
 ]
 "153
-[u S210 . 2 `ui 1 CS 2 0 `S207 1 . 2 0 ]
-[s S213 . 6 `ul 1 ID 4 0 `ui 1 M 2 4 ]
-[s S219 . 24 `S210 1 . 2 0 `uc 1 PDL 1 2 :8:0 
+[u S227 . 2 `ui 1 CS 2 0 `S224 1 . 2 0 ]
+[s S230 . 6 `ul 1 ID 4 0 `ui 1 M 2 4 ]
+[s S236 . 24 `S227 1 . 2 0 `uc 1 PDL 1 2 :8:0 
 `ui 1 PID 2 3 `uc 1 CC 1 5 :8:0 
 `ui 1 subDevice 2 6 `uc 1 message 1 8 :8:0 
 `uc 1 PORT 1 9 :8:0 
 `uc 1 TN 1 10 :8:0 
-`S213 1 SUID 6 11 `S213 1 DUID 6 17 `uc 1 ML 1 23 :8:0 
+`S230 1 SUID 6 11 `S230 1 DUID 6 17 `uc 1 ML 1 23 :8:0 
 ]
-[u S231 . 24 `[24]uc 1 value 24 0 `S219 1 . 24 0 ]
-[v _RX_RDM_Data RX_RDM_Data `VES231  1 e 24 0 ]
+[u S248 . 24 `[24]uc 1 value 24 0 `S236 1 . 24 0 ]
+[v _RX_RDM_Data RX_RDM_Data `VES248  1 e 24 0 ]
 "154
-[v _TX_RDM_Data TX_RDM_Data `VES231  1 e 24 0 ]
+[v _TX_RDM_Data TX_RDM_Data `VES248  1 e 24 0 ]
 "155
-[v _DISCOVERY_RDM_Data DISCOVERY_RDM_Data `VES231  1 e 24 0 ]
-[u S234 . 100 `[100]uc 1 u8 100 0 `[50]ui 1 u16 100 0 `[25]ul 1 u32 100 0 ]
+[v _DISCOVERY_RDM_Data DISCOVERY_RDM_Data `VES248  1 e 24 0 ]
+[u S251 . 100 `[100]uc 1 u8 100 0 `[50]ui 1 u16 100 0 `[25]ul 1 u32 100 0 ]
 "174
-[v _PD PD `S234  1 e 100 @8588 ]
+[v _PD PD `S251  1 e 100 @8588 ]
 "176
 [v _PD_Manu PD_Manu `*.39ui  1 e 2 0 ]
 "177
@@ -433,7 +435,7 @@ TX_RDM_PD 3
 [v _TimerState TimerState `VEuc  1 e 1 0 ]
 "28
 [v _Timer_DelayCount Timer_DelayCount `VEuc  1 e 1 0 ]
-[s S238 . 1 `uc 1 MS 1 0 :1:0 
+[s S255 . 1 `uc 1 MS 1 0 :1:0 
 `uc 1 SEC 1 0 :1:1 
 `uc 1 MIN 1 0 :1:2 
 `uc 1 HR 1 0 :1:3 
@@ -441,14 +443,14 @@ TX_RDM_PD 3
 `uc 1 spare 1 0 :2:5 
 ]
 "50
-[u S245 . 1 `S238 1 . 1 0 `uc 1 flags 1 0 ]
-[s S248 . 7 `S245 1 . 1 0 `i 1 MS_Count 2 1 `uc 1 SEC_Count 1 3 `uc 1 MIN_Count 1 4 `uc 1 HR_Count 1 5 `uc 1 Switch 1 6 :1:0 
+[u S262 . 1 `S255 1 . 1 0 `uc 1 flags 1 0 ]
+[s S265 . 7 `S262 1 . 1 0 `i 1 MS_Count 2 1 `uc 1 SEC_Count 1 3 `uc 1 MIN_Count 1 4 `uc 1 HR_Count 1 5 `uc 1 Switch 1 6 :1:0 
 ]
-[v _Timer Timer `VES248  1 e 7 0 ]
+[v _Timer Timer `VES265  1 e 7 0 ]
 "24 D:\DMX512A\PWM_DAVID_14bit\main.c
 [v _main main `(v  1 e 1 0 ]
 {
-"80
+"84
 } 0
 "15 D:\DMX512A\PWM_DAVID_14bit\Timer.c
 [v _timer1_init timer1_init `(i  1 e 2 0 ]
@@ -485,36 +487,54 @@ TX_RDM_PD 3
 {
 "123
 } 0
-"188 D:\DMX512A\PWM_DAVID_14bit\RDM.c
+"194 D:\DMX512A\PWM_DAVID_14bit\RDM.c
 [v _RDM_tx_TimerBreak RDM_tx_TimerBreak `(v  1 e 1 0 ]
 {
-"195
+"201
 } 0
 "126 D:\DMX512A\PWM_DAVID_14bit\RDM_Read.c
 [v _RDM_get_checkSum RDM_get_checkSum `(ui  1 e 2 0 ]
 {
-[s S207 . 2 `uc 1 CSL 1 0 :8:0 
+[s S224 . 2 `uc 1 CSL 1 0 :8:0 
 `uc 1 CSH 1 1 :8:0 
 ]
-[u S210 . 2 `ui 1 CS 2 0 `S207 1 . 2 0 ]
-[s S213 . 6 `ul 1 ID 4 0 `ui 1 M 2 4 ]
-[s S219 . 24 `S210 1 . 2 0 `uc 1 PDL 1 2 :8:0 
+[u S227 . 2 `ui 1 CS 2 0 `S224 1 . 2 0 ]
+[s S230 . 6 `ul 1 ID 4 0 `ui 1 M 2 4 ]
+[s S236 . 24 `S227 1 . 2 0 `uc 1 PDL 1 2 :8:0 
 `ui 1 PID 2 3 `uc 1 CC 1 5 :8:0 
 `ui 1 subDevice 2 6 `uc 1 message 1 8 :8:0 
 `uc 1 PORT 1 9 :8:0 
 `uc 1 TN 1 10 :8:0 
-`S213 1 SUID 6 11 `S213 1 DUID 6 17 `uc 1 ML 1 23 :8:0 
+`S230 1 SUID 6 11 `S230 1 DUID 6 17 `uc 1 ML 1 23 :8:0 
 ]
-[u S231 . 24 `[24]uc 1 value 24 0 `S219 1 . 24 0 ]
-[v RDM_get_checkSum@Data Data `S231  1 p 24 0 ]
+[u S248 . 24 `[24]uc 1 value 24 0 `S236 1 . 24 0 ]
+[v RDM_get_checkSum@Data Data `S248  1 p 24 0 ]
 [v RDM_get_checkSum@len len `uc  1 p 1 24 ]
 "140
 } 0
-"59 D:\DMX512A\PWM_DAVID_14bit\DMX.c
+"16 D:\DMX512A\PWM_DAVID_14bit\RDM.c
+[v _RDM_init RDM_init `(i  1 e 2 0 ]
+{
+"94
+} 0
+"4 C:\Program Files (x86)\Microchip\xc8\v1.41\sources\common\Umul8.c
+[v ___bmul __bmul `(uc  1 e 1 0 ]
+{
+[v ___bmul@multiplier multiplier `uc  1 a 1 wreg ]
+"6
+[v ___bmul@product product `uc  1 a 1 0 ]
+"4
+[v ___bmul@multiplier multiplier `uc  1 a 1 wreg ]
+[v ___bmul@multiplicand multiplicand `uc  1 p 1 4 ]
+"6
+[v ___bmul@multiplier multiplier `uc  1 a 1 1 ]
+"51
+} 0
+"62 D:\DMX512A\PWM_DAVID_14bit\DMX.c
 [v _DMX_loop DMX_loop `(v  1 e 1 0 ]
 {
-[v DMX_loop@Addr Addr `uc  1 a 1 3 ]
-"165
+[v DMX_loop@Addr Addr `uc  1 a 1 76 ]
+"180
 } 0
 "28 C:\Program Files (x86)\Microchip\xc8\v1.41\sources\common\lwtoft.c
 [v ___lwtoft __lwtoft `(f  1 e 3 0 ]
@@ -528,80 +548,80 @@ TX_RDM_PD 3
 [v ___lbtoft@c c `uc  1 a 1 wreg ]
 [v ___lbtoft@c c `uc  1 a 1 wreg ]
 "29
-[v ___lbtoft@c c `uc  1 a 1 12 ]
+[v ___lbtoft@c c `uc  1 a 1 4 ]
 "30
 } 0
 "44 C:\Program Files (x86)\Microchip\xc8\v1.41\sources\common\fttol.c
 [v ___fttol __fttol `(l  1 e 4 0 ]
 {
 "47
-[v ___fttol@lval lval `ul  1 a 4 69 ]
+[v ___fttol@lval lval `ul  1 a 4 68 ]
 "46
-[v ___fttol@exp1 exp1 `uc  1 a 1 73 ]
-[v ___fttol@sign1 sign1 `uc  1 a 1 68 ]
+[v ___fttol@exp1 exp1 `uc  1 a 1 72 ]
+[v ___fttol@sign1 sign1 `uc  1 a 1 67 ]
 "44
-[v ___fttol@f1 f1 `f  1 p 3 61 ]
+[v ___fttol@f1 f1 `f  1 p 3 60 ]
 "73
 } 0
 "18 C:\Program Files (x86)\Microchip\xc8\v1.41\sources\common\ftsub.c
 [v ___ftsub __ftsub `(f  1 e 3 0 ]
 {
-[v ___ftsub@f2 f2 `f  1 p 3 55 ]
-[v ___ftsub@f1 f1 `f  1 p 3 58 ]
+[v ___ftsub@f2 f2 `f  1 p 3 54 ]
+[v ___ftsub@f1 f1 `f  1 p 3 57 ]
 "27
 } 0
 "86 C:\Program Files (x86)\Microchip\xc8\v1.41\sources\common\ftadd.c
 [v ___ftadd __ftadd `(f  1 e 3 0 ]
 {
 "88
-[v ___ftadd@exp1 exp1 `uc  1 a 1 54 ]
-[v ___ftadd@exp2 exp2 `uc  1 a 1 53 ]
-[v ___ftadd@sign sign `uc  1 a 1 52 ]
+[v ___ftadd@exp1 exp1 `uc  1 a 1 53 ]
+[v ___ftadd@exp2 exp2 `uc  1 a 1 52 ]
+[v ___ftadd@sign sign `uc  1 a 1 51 ]
 "86
-[v ___ftadd@f1 f1 `f  1 p 3 43 ]
-[v ___ftadd@f2 f2 `f  1 p 3 46 ]
+[v ___ftadd@f1 f1 `f  1 p 3 42 ]
+[v ___ftadd@f2 f2 `f  1 p 3 45 ]
 "148
 } 0
 "62 C:\Program Files (x86)\Microchip\xc8\v1.41\sources\common\ftmul.c
 [v ___ftmul __ftmul `(f  1 e 3 0 ]
 {
 "65
-[v ___ftmul@f3_as_product f3_as_product `um  1 a 3 23 ]
+[v ___ftmul@f3_as_product f3_as_product `um  1 a 3 22 ]
 "64
-[v ___ftmul@sign sign `uc  1 a 1 27 ]
-[v ___ftmul@cntr cntr `uc  1 a 1 26 ]
-[v ___ftmul@exp exp `uc  1 a 1 22 ]
+[v ___ftmul@sign sign `uc  1 a 1 26 ]
+[v ___ftmul@cntr cntr `uc  1 a 1 25 ]
+[v ___ftmul@exp exp `uc  1 a 1 21 ]
 "62
-[v ___ftmul@f1 f1 `f  1 p 3 13 ]
-[v ___ftmul@f2 f2 `f  1 p 3 16 ]
+[v ___ftmul@f1 f1 `f  1 p 3 12 ]
+[v ___ftmul@f2 f2 `f  1 p 3 15 ]
 "157
 } 0
 "4 C:\Program Files (x86)\Microchip\xc8\v1.41\sources\common\ftge.c
 [v ___ftge __ftge `(b  1 e 0 0 ]
 {
-[v ___ftge@ff1 ff1 `f  1 p 3 13 ]
-[v ___ftge@ff2 ff2 `f  1 p 3 16 ]
+[v ___ftge@ff1 ff1 `f  1 p 3 12 ]
+[v ___ftge@ff2 ff2 `f  1 p 3 15 ]
 "13
 } 0
 "56 C:\Program Files (x86)\Microchip\xc8\v1.41\sources\common\ftdiv.c
 [v ___ftdiv __ftdiv `(f  1 e 3 0 ]
 {
 "60
-[v ___ftdiv@f3 f3 `f  1 a 3 38 ]
+[v ___ftdiv@f3 f3 `f  1 a 3 37 ]
 "59
-[v ___ftdiv@sign sign `uc  1 a 1 42 ]
-[v ___ftdiv@exp exp `uc  1 a 1 41 ]
-[v ___ftdiv@cntr cntr `uc  1 a 1 37 ]
+[v ___ftdiv@sign sign `uc  1 a 1 41 ]
+[v ___ftdiv@exp exp `uc  1 a 1 40 ]
+[v ___ftdiv@cntr cntr `uc  1 a 1 36 ]
 "56
-[v ___ftdiv@f2 f2 `f  1 p 3 28 ]
-[v ___ftdiv@f1 f1 `f  1 p 3 31 ]
+[v ___ftdiv@f2 f2 `f  1 p 3 27 ]
+[v ___ftdiv@f1 f1 `f  1 p 3 30 ]
 "86
 } 0
 "32 C:\Program Files (x86)\Microchip\xc8\v1.41\sources\common\awtoft.c
 [v ___awtoft __awtoft `(f  1 e 3 0 ]
 {
 "34
-[v ___awtoft@sign sign `uc  1 a 1 11 ]
+[v ___awtoft@sign sign `uc  1 a 1 4 ]
 "32
 [v ___awtoft@c c `i  1 p 2 8 ]
 "42
@@ -614,62 +634,44 @@ TX_RDM_PD 3
 [v ___ftpack@sign sign `uc  1 p 1 4 ]
 "86
 } 0
+"17 D:\DMX512A\PWM_DAVID_14bit\DMX.c
+[v _DMX_init DMX_init `(v  1 e 1 0 ]
+{
+"51
+[v DMX_init@Addr Addr `uc  1 a 1 4 ]
+"61
+} 0
 "32 D:\DMX512A\PWM_DAVID_14bit\ADC.c
 [v _ADC_loop ADC_loop `(i  1 e 2 0 ]
 {
 "41
 } 0
-"82 D:\DMX512A\PWM_DAVID_14bit\main.c
+"14
+[v _ADC_init ADC_init `(i  1 e 2 0 ]
+{
+"30
+} 0
+"86 D:\DMX512A\PWM_DAVID_14bit\main.c
 [v _isr isr `II(v  1 e 1 0 ]
 {
-"89
+"93
 } 0
 "24 D:\DMX512A\PWM_DAVID_14bit\Timer.c
 [v _timer1_interrupt timer1_interrupt `(i  1 e 2 0 ]
 {
 "104
 } 0
-"16 D:\DMX512A\PWM_DAVID_14bit\RDM.c
-[v _RDM_init RDM_init `(v  1 e 1 0 ]
-{
-"94
-} 0
-"4 C:\Program Files (x86)\Microchip\xc8\v1.41\sources\common\Umul8.c
-[v ___bmul __bmul `(uc  1 e 1 0 ]
-{
-[v ___bmul@multiplier multiplier `uc  1 a 1 wreg ]
-"6
-[v ___bmul@product product `uc  1 a 1 1 ]
-"4
-[v ___bmul@multiplier multiplier `uc  1 a 1 wreg ]
-[v ___bmul@multiplicand multiplicand `uc  1 p 1 0 ]
-"6
-[v ___bmul@multiplier multiplier `uc  1 a 1 2 ]
-"51
-} 0
-"17 D:\DMX512A\PWM_DAVID_14bit\DMX.c
-[v _DMX_init DMX_init `(v  1 e 1 0 ]
-{
-"46
-[v DMX_init@Addr Addr `uc  1 a 1 3 ]
-"58
-} 0
-"14 D:\DMX512A\PWM_DAVID_14bit\ADC.c
-[v _ADC_init ADC_init `(v  1 e 1 0 ]
-{
-"30
-} 0
 "125 D:\DMX512A\PWM_DAVID_14bit\RDM.c
 [v _RDM_tx_interrupt RDM_tx_interrupt `(i  1 e 2 0 ]
 {
-"186
+"192
 } 0
-"167 D:\DMX512A\PWM_DAVID_14bit\DMX.c
+"182 D:\DMX512A\PWM_DAVID_14bit\DMX.c
 [v _DMX_interrput DMX_interrput `(i  1 e 2 0 ]
 {
-"169
+"184
 [v DMX_interrput@RxDat RxDat `VEuc  1 a 1 2 ]
-"264
+"279
 } 0
 "43 D:\DMX512A\PWM_DAVID_14bit\ADC.c
 [v _ADC_interrupt ADC_interrupt `(i  1 e 2 0 ]

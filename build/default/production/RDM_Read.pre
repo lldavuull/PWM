@@ -6464,7 +6464,7 @@ unsigned DCL :8;
 unsigned DCH :8;
 }PWM[4];
 }Inter_PWM_16;
-Inter_PWM_16 CurrentPWM=0;
+volatile Inter_PWM_16 CurrentPWM=0;
 
 typedef struct {
 
@@ -6480,13 +6480,16 @@ volatile DMX_SIGN DMXSign[4];
 
 char rxdata;
 
-float DMX_difference=0.0;
-float DMX_CurrentBright[4]=0;
-float DMX_SpaceBright[4]=0;
-float DMX_TargetBright[4]=0;
+volatile float DMX_difference=0.0;
+volatile float DMX_CurrentBright[4]=0;
+volatile float DMX_SpaceBright[4]=0;
+volatile float DMX_TargetBright[4]=0;
 char DMX_sumRepeat[4]=2;
 char DMX_Repeat[4][2]=1;
 char preRxData[4]=0;
+
+# 170
+volatile char PWM_Pin[4];
 
 # 13 "PFM.h"
 extern uint16_t PFM_Read(uint16_t);

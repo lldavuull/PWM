@@ -45,7 +45,10 @@ void DMX_init(void) {
     PWMLDCONptr[2] = &PWM3LDCON;
     PWMLDCONptr[3] = &PWM4LDCON;
     
-
+    PWM_Pin[0]=RA2;
+    PWM_Pin[1]=RC0;
+    PWM_Pin[2]=RC1;
+    PWM_Pin[3]=RC2;
     
     char Addr=0;
     while(Addr<4){
@@ -66,6 +69,7 @@ void DMX_loop(void) {
         DMXStepConst=DMXStep;
         while (Addr < 4) {
             rxdata=RxData[Addr];  //avoid violatile to acculate.
+            
             if (DMX_TargetBright[Addr] < rxdata) {
                 DMX_difference=rxdata-DMX_TargetBright[Addr];
                 if(DMX_difference<0.05){
@@ -89,7 +93,7 @@ void DMX_loop(void) {
                     DMX_TargetBright[Addr]=DMX_TargetBright[Addr]-(DMX_difference*2/DMX_sumRepeat[Addr]);
                     DMX_SpaceBright[Addr]=(DMX_CurrentBright[Addr]-DMX_TargetBright[Addr])/(DMXPeriod>>DMX_Shift_bits);
                 }
-            } else {    //unchage
+            } else {    //unchange
                 DMX_CurrentBright[Addr]=DMX_TargetBright[Addr]=rxdata;
                 DMXSign[Addr].SIGN = 0b00;
             }
@@ -125,23 +129,32 @@ void DMX_loop(void) {
                 switch (DMXSign[Addr].SIGN) {
                     case 0b01:
                         DMX_CurrentBright[Addr]=DMX_CurrentBright[Addr]+DMX_SpaceBright[Addr];
+                        if(DMX_CurrentBright[Addr]>255){
+                            DMX_CurrentBright[Addr]=255;
+                        }
                         break;
                     case 0b10:
                         DMX_CurrentBright[Addr]=DMX_CurrentBright[Addr]-DMX_SpaceBright[Addr];
+                        if(DMX_CurrentBright[Addr]<0){
+                            DMX_CurrentBright[Addr]=0;
+                        }
                         break;
                     case 0b00:
                         break;
                 }
                 rxdata=DMX_CurrentBright[Addr];
+                
                 CurrentPWM.DC[Addr]=PWM.DC[rxdata]+(PWM.DC[rxdata+1]-PWM.DC[rxdata])*(DMX_CurrentBright[Addr]-rxdata); //interpolation
-                if(rxdata==0 | CurrentPWM.PWM[Addr].DCH>0x6F){
-                    CurrentPWM.DC[Addr]=0;
-                }
                 *PWMDCHptr[Addr] = CurrentPWM.PWM[Addr].DCH;
                 *PWMDCLptr[Addr] = CurrentPWM.PWM[Addr].DCL;
                 *PWMLDCONptr[Addr] = 0b10000000;
+                
                 Addr++;
             }
+//        TXREG=CurrentPWM.PWM[3].DCH;
+//        TXEN = 1; 
+//        TXIE = 1;
+        
         }else{
             DMXStepConst--;
         }

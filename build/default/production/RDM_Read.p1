@@ -4903,7 +4903,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;DMX.h: 139: }PWM[4];
 [; ;DMX.h: 140: }Inter_PWM_16;
 "141
-[v _CurrentPWM `S601 ~T0 @X0 1 e ]
+[v _CurrentPWM `VS601 ~T0 @X0 1 e ]
 [i _CurrentPWM
 :U ..
 :U ..
@@ -4913,7 +4913,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 ..
 ..
 ]
-[; ;DMX.h: 141: Inter_PWM_16 CurrentPWM=0;
+[; ;DMX.h: 141: volatile Inter_PWM_16 CurrentPWM=0;
 [; ;DMX.h: 143: typedef struct {
 [; ;DMX.h: 148: unsigned int SIGN: 2;
 [; ;DMX.h: 149: unsigned int InfiniteLoop: 1;
@@ -4926,35 +4926,35 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _rxdata `uc ~T0 @X0 1 e ]
 [; ;DMX.h: 155: char rxdata;
 "157
-[v _DMX_difference `f ~T0 @X0 1 e ]
+[v _DMX_difference `Vf ~T0 @X0 1 e ]
 [i _DMX_difference
 -> .0.0 `f
 ]
-[; ;DMX.h: 157: float DMX_difference=0.0;
+[; ;DMX.h: 157: volatile float DMX_difference=0.0;
 "158
-[v _DMX_CurrentBright `f ~T0 @X0 -> 4 `i e ]
+[v _DMX_CurrentBright `Vf ~T0 @X0 -> 4 `i e ]
 [i _DMX_CurrentBright
 :U ..
 -> -> 0 `i `f
 ..
 ]
-[; ;DMX.h: 158: float DMX_CurrentBright[4]=0;
+[; ;DMX.h: 158: volatile float DMX_CurrentBright[4]=0;
 "159
-[v _DMX_SpaceBright `f ~T0 @X0 -> 4 `i e ]
+[v _DMX_SpaceBright `Vf ~T0 @X0 -> 4 `i e ]
 [i _DMX_SpaceBright
 :U ..
 -> -> 0 `i `f
 ..
 ]
-[; ;DMX.h: 159: float DMX_SpaceBright[4]=0;
+[; ;DMX.h: 159: volatile float DMX_SpaceBright[4]=0;
 "160
-[v _DMX_TargetBright `f ~T0 @X0 -> 4 `i e ]
+[v _DMX_TargetBright `Vf ~T0 @X0 -> 4 `i e ]
 [i _DMX_TargetBright
 :U ..
 -> -> 0 `i `f
 ..
 ]
-[; ;DMX.h: 160: float DMX_TargetBright[4]=0;
+[; ;DMX.h: 160: volatile float DMX_TargetBright[4]=0;
 "161
 [v _DMX_sumRepeat `uc ~T0 @X0 -> 4 `i e ]
 [i _DMX_sumRepeat
@@ -4982,6 +4982,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 ..
 ]
 [; ;DMX.h: 163: char preRxData[4]=0;
+"170
+[v _PWM_Pin `Vuc ~T0 @X0 -> 4 `i e ]
+[; ;DMX.h: 170: volatile char PWM_Pin[4];
 [; ;PFM.h: 13: extern uint16_t PFM_Read(uint16_t);
 [; ;PFM.h: 15: extern void PFM_Write(uint16_t ,uint16_t);
 [; ;PFM.h: 20: enum{

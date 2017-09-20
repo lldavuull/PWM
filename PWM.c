@@ -10,16 +10,6 @@
 #include "PWM.h"
 
 
-
-
-
-
-
-
-
-
-
-
 char led = 253; //pwm number
 char bright = 1; //1=brighter  0=darker
 const int delay = 2; // delay*1.024ms

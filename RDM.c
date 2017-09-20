@@ -124,6 +124,12 @@ void RDM_rx_loop(void) {
 
 void RDM_tx_interrupt(void) {
     if (TXIE && TXIF) {
+        
+        
+//        TXREG=1;
+//        TXEN = 0; // Disable the EUSART's control of the TX pin
+//        TXIE = 0; // Disable the EUSART Interrupt 
+        
         switch (TxState) {
             case TX_START:
                 if(TX_PD_Flag==1){

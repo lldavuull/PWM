@@ -15,9 +15,9 @@
 void timer1_init(void) {
     TMR1IE = 1;
     T1CON    = 0b00110001; // Fosc/4, 1:8 pre  // 32MHz / 4 / 8 =  1us
-    TimerState = TIMER_StartUpDelay;
-    TMR1=0;
-    Timer_DelayCount=0;
+//    TimerState = TIMER_StartUpDelay;
+//    TMR1=0;
+//    Timer_DelayCount=0;
 }
 #define PWMxCON_SET  0b10000000        // Enhanced features off
 
@@ -31,11 +31,11 @@ void timer1_interrupt(void) {
                 TMR1=0;
                 Timer_DelayCount++;
                 if(Timer_DelayCount>=0x10){
-                    TimerState = TIMER_500US;
-                    ADC_init();
-                    DMX_init();
-                    RDM_init();
-                    PWM1CON = PWM2CON = PWM3CON = PWM4CON = PWMxCON_SET;
+//                    TimerState = TIMER_500US;
+//                    ADC_init();
+//                    DMX_init();
+//                    RDM_init();
+//                    PWM1CON = PWM2CON = PWM3CON = PWM4CON = PWMxCON_SET;
                 }
                 break;
             case TIMER_500US:

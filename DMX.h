@@ -138,7 +138,7 @@ typedef union{
     unsigned DCH :8;
     }PWM[RX_BUFFER_SIZE];
 }Inter_PWM_16;
-Inter_PWM_16 CurrentPWM=0;  //InterPolation PWM
+volatile Inter_PWM_16 CurrentPWM=0;  //InterPolation PWM
 
 typedef struct {
     // Update PWM per 500us
@@ -154,10 +154,10 @@ volatile DMX_SIGN DMXSign[RX_BUFFER_SIZE]; /**  00 =unchange  01 = Increment   1
 //char DCdifference;
 char rxdata;//avoid violatile to acculate.
 //char rgbw;//avoid violatile to acculate.
-float DMX_difference=0.0;
-float DMX_CurrentBright[RX_BUFFER_SIZE]=0;
-float DMX_SpaceBright[RX_BUFFER_SIZE]=0; 
-float DMX_TargetBright[RX_BUFFER_SIZE]=0; 
+volatile float DMX_difference=0.0;
+volatile float DMX_CurrentBright[RX_BUFFER_SIZE]=0;
+volatile float DMX_SpaceBright[RX_BUFFER_SIZE]=0; 
+volatile float DMX_TargetBright[RX_BUFFER_SIZE]=0; 
 char DMX_sumRepeat[RX_BUFFER_SIZE]=2;
 char DMX_Repeat[RX_BUFFER_SIZE][2]=1;
 char preRxData[RX_BUFFER_SIZE]=0;
@@ -165,3 +165,6 @@ char preRxData[RX_BUFFER_SIZE]=0;
 
 //char send=0;
 
+
+/** SMOOTH_Pwm Set in the ISR to indicate to helper functions etc */
+volatile char PWM_Pin[RX_BUFFER_SIZE];

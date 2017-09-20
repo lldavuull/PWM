@@ -5,15 +5,13 @@
         <group>
             <file>file:/D:/DMX512A/PWM_DAVID_14bit/DMX.h</file>
             <file>file:/D:/DMX512A/PWM_DAVID_14bit/Timer.h</file>
+            <file>file:/D:/DMX512A/PWM_DAVID_14bit/RDM_Read.c</file>
             <file>file:/D:/DMX512A/PWM_DAVID_14bit/main.c</file>
-            <file>file:/D:/DMX512A/PWM_DAVID_14bit/PWM.c</file>
             <file>file:/D:/DMX512A/PWM_DAVID_14bit/RDM.c</file>
             <file>file:/D:/DMX512A/PWM_DAVID_14bit/PWM.h</file>
-            <file>file:/D:/DMX512A/PWM_DAVID_14bit/ADC.c</file>
-            <file>file:/D:/DMX512A/PWM_DAVID_14bit/RDM.h</file>
-            <file>file:/D:/DMX512A/PWM_DAVID_14bit/Timer.c</file>
             <file>file:/D:/DMX512A/PWM_DAVID_14bit/DMX.c</file>
-            <file>file:/D:/DMX512A/PWM_DAVID_14bit/PFM.c</file>
+            <file>file:/D:/DMX512A/PWM_DAVID_14bit/Timer.c</file>
+            <file>file:/D:/DMX512A/PWM_DAVID_14bit/RDM.h</file>
         </group>
     </open-files>
 </project-private>

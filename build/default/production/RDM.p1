@@ -79,16 +79,16 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _TXIF `Vb ~T0 @X0 0 e@140 ]
 "2653
 [v _TXREG `Vuc ~T0 @X0 0 e@410 ]
-"136 RDM.c
+"142 RDM.c
 [c E4905 0 1 2 3 .. ]
 [n E4905 . TX_DISCOVERY TX_START TX_DATA TX_RDM_PD  ]
 "12628 C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16f1574.h
 [v _RCIE `Vb ~T0 @X0 0 e@1165 ]
 "11542
 [v _LATC3 `Vb ~T0 @X0 0 e@2163 ]
-"190 RDM.c
-[c E5031 0 1 2 3 .. ]
-[n E5031 . TIMER_500US TIMER_BREAK TX_TIMER_MAB TIMER_StartUpDelay  ]
+"196 RDM.c
+[c E5032 0 1 2 3 .. ]
+[n E5032 . TIMER_500US TIMER_BREAK TX_TIMER_MAB TIMER_StartUpDelay  ]
 [; ;htc.h: 26: extern const char __xc8_OPTIM_SPEED;
 [; ;htc.h: 28: extern double __fpnormalize(double);
 [; ;xc8debug.h: 14: extern void __builtin_software_breakpoint(void);
@@ -4939,7 +4939,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;DMX.h: 139: }PWM[4];
 [; ;DMX.h: 140: }Inter_PWM_16;
 "141
-[v _CurrentPWM `S601 ~T0 @X0 1 e ]
+[v _CurrentPWM `VS601 ~T0 @X0 1 e ]
 [i _CurrentPWM
 :U ..
 :U ..
@@ -4949,7 +4949,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 ..
 ..
 ]
-[; ;DMX.h: 141: Inter_PWM_16 CurrentPWM=0;
+[; ;DMX.h: 141: volatile Inter_PWM_16 CurrentPWM=0;
 [; ;DMX.h: 143: typedef struct {
 [; ;DMX.h: 148: unsigned int SIGN: 2;
 [; ;DMX.h: 149: unsigned int InfiniteLoop: 1;
@@ -4962,35 +4962,35 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _rxdata `uc ~T0 @X0 1 e ]
 [; ;DMX.h: 155: char rxdata;
 "157
-[v _DMX_difference `f ~T0 @X0 1 e ]
+[v _DMX_difference `Vf ~T0 @X0 1 e ]
 [i _DMX_difference
 -> .0.0 `f
 ]
-[; ;DMX.h: 157: float DMX_difference=0.0;
+[; ;DMX.h: 157: volatile float DMX_difference=0.0;
 "158
-[v _DMX_CurrentBright `f ~T0 @X0 -> 4 `i e ]
+[v _DMX_CurrentBright `Vf ~T0 @X0 -> 4 `i e ]
 [i _DMX_CurrentBright
 :U ..
 -> -> 0 `i `f
 ..
 ]
-[; ;DMX.h: 158: float DMX_CurrentBright[4]=0;
+[; ;DMX.h: 158: volatile float DMX_CurrentBright[4]=0;
 "159
-[v _DMX_SpaceBright `f ~T0 @X0 -> 4 `i e ]
+[v _DMX_SpaceBright `Vf ~T0 @X0 -> 4 `i e ]
 [i _DMX_SpaceBright
 :U ..
 -> -> 0 `i `f
 ..
 ]
-[; ;DMX.h: 159: float DMX_SpaceBright[4]=0;
+[; ;DMX.h: 159: volatile float DMX_SpaceBright[4]=0;
 "160
-[v _DMX_TargetBright `f ~T0 @X0 -> 4 `i e ]
+[v _DMX_TargetBright `Vf ~T0 @X0 -> 4 `i e ]
 [i _DMX_TargetBright
 :U ..
 -> -> 0 `i `f
 ..
 ]
-[; ;DMX.h: 160: float DMX_TargetBright[4]=0;
+[; ;DMX.h: 160: volatile float DMX_TargetBright[4]=0;
 "161
 [v _DMX_sumRepeat `uc ~T0 @X0 -> 4 `i e ]
 [i _DMX_sumRepeat
@@ -5018,6 +5018,9 @@ Version 3.2 HI-TECH Software Intermediate Code
 ..
 ]
 [; ;DMX.h: 163: char preRxData[4]=0;
+"170
+[v _PWM_Pin `Vuc ~T0 @X0 -> 4 `i e ]
+[; ;DMX.h: 170: volatile char PWM_Pin[4];
 [; ;Timer.h: 14: extern void timer1_interrupt(void);
 [; ;Timer.h: 15: extern void timer1_init(void);
 [; ;Timer.h: 16: extern void timer1_switch(void);
@@ -5342,228 +5345,228 @@ Version 3.2 HI-TECH Software Intermediate Code
 "126
 [e $ ! && _TXIE _TXIF 628  ]
 {
-[; ;RDM.c: 127: switch (TxState) {
-"127
+[; ;RDM.c: 133: switch (TxState) {
+"133
 [e $U 630  ]
 {
-[; ;RDM.c: 128: case TX_START:
-"128
+[; ;RDM.c: 134: case TX_START:
+"134
 [e :U 631 ]
-[; ;RDM.c: 129: if(TX_PD_Flag==1){
-"129
+[; ;RDM.c: 135: if(TX_PD_Flag==1){
+"135
 [e $ ! == _TX_PD_Flag -> -> 1 `i `ui 632  ]
 {
-[; ;RDM.c: 130: TX_PD_Flag=0;
-"130
+[; ;RDM.c: 136: TX_PD_Flag=0;
+"136
 [e = _TX_PD_Flag -> -> 0 `i `ui ]
-[; ;RDM.c: 131: TXREG = 0xCC;
-"131
+[; ;RDM.c: 137: TXREG = 0xCC;
+"137
 [e = _TXREG -> -> 204 `i `uc ]
-"132
+"138
 }
-[; ;RDM.c: 132: }else{
+[; ;RDM.c: 138: }else{
 [e $U 633  ]
 [e :U 632 ]
 {
-[; ;RDM.c: 133: TXREG = 0x01;
-"133
+[; ;RDM.c: 139: TXREG = 0x01;
+"139
 [e = _TXREG -> -> 1 `i `uc ]
-[; ;RDM.c: 134: TxByte = &TX_RDM_Data.value[23];
-"134
+[; ;RDM.c: 140: TxByte = &TX_RDM_Data.value[23];
+"140
 [e = _TxByte &U *U + &U . _TX_RDM_Data 0 * -> -> -> 23 `i `ui `ux -> -> # *U &U . _TX_RDM_Data 0 `ui `ux ]
-[; ;RDM.c: 135: TxCount = 0;
-"135
+[; ;RDM.c: 141: TxCount = 0;
+"141
 [e = _TxCount -> -> 0 `i `ui ]
-[; ;RDM.c: 136: TxState = TX_DATA;
-"136
+[; ;RDM.c: 142: TxState = TX_DATA;
+"142
 [e = _TxState -> . `E4905 2 `uc ]
-"137
+"143
 }
 [e :U 633 ]
-[; ;RDM.c: 137: }
-[; ;RDM.c: 138: break;
-"138
-[e $U 629  ]
-[; ;RDM.c: 143: case TX_DISCOVERY:
-"143
-[e :U 634 ]
-[; ;RDM.c: 144: if (TxCount <= 24) {
+[; ;RDM.c: 143: }
+[; ;RDM.c: 144: break;
 "144
+[e $U 629  ]
+[; ;RDM.c: 149: case TX_DISCOVERY:
+"149
+[e :U 634 ]
+[; ;RDM.c: 150: if (TxCount <= 24) {
+"150
 [e $ ! <= _TxCount -> -> 24 `i `ui 635  ]
 {
-[; ;RDM.c: 146: TXREG = *TxByte;
-"146
+[; ;RDM.c: 152: TXREG = *TxByte;
+"152
 [e = _TXREG *U _TxByte ]
-[; ;RDM.c: 147: TxByte--;
-"147
+[; ;RDM.c: 153: TxByte--;
+"153
 [e -- _TxByte * -> -> 1 `i `x -> -> # *U _TxByte `i `x ]
-[; ;RDM.c: 148: TxCount++;
-"148
+[; ;RDM.c: 154: TxCount++;
+"154
 [e ++ _TxCount -> -> 1 `i `ui ]
-"149
+"155
 }
-[; ;RDM.c: 149: }else{
+[; ;RDM.c: 155: }else{
 [e $U 636  ]
 [e :U 635 ]
 {
-[; ;RDM.c: 150: RCIE = 1;
-"150
+[; ;RDM.c: 156: RCIE = 1;
+"156
 [e = _RCIE -> -> 1 `i `b ]
-[; ;RDM.c: 151: LATC4 = 1;
-"151
+[; ;RDM.c: 157: LATC4 = 1;
+"157
 [e = _LATC4 -> -> 1 `i `b ]
-[; ;RDM.c: 152: TXEN = 0;
-"152
+[; ;RDM.c: 158: TXEN = 0;
+"158
 [e = _TXEN -> -> 0 `i `b ]
-[; ;RDM.c: 153: TXIE = 0;
-"153
+[; ;RDM.c: 159: TXIE = 0;
+"159
 [e = _TXIE -> -> 0 `i `b ]
-[; ;RDM.c: 154: LATC3=0;
-"154
+[; ;RDM.c: 160: LATC3=0;
+"160
 [e = _LATC3 -> -> 0 `i `b ]
-"155
+"161
 }
 [e :U 636 ]
-[; ;RDM.c: 155: }
-[; ;RDM.c: 156: break;
-"156
+[; ;RDM.c: 161: }
+[; ;RDM.c: 162: break;
+"162
 [e $U 629  ]
-[; ;RDM.c: 157: case TX_DATA:
-"157
+[; ;RDM.c: 163: case TX_DATA:
+"163
 [e :U 637 ]
-[; ;RDM.c: 158: if (TxCount <= 24) {
-"158
+[; ;RDM.c: 164: if (TxCount <= 24) {
+"164
 [e $ ! <= _TxCount -> -> 24 `i `ui 638  ]
 {
-[; ;RDM.c: 160: TXREG = *TxByte;
-"160
+[; ;RDM.c: 166: TXREG = *TxByte;
+"166
 [e = _TXREG *U _TxByte ]
-[; ;RDM.c: 161: TxByte--;
-"161
+[; ;RDM.c: 167: TxByte--;
+"167
 [e -- _TxByte * -> -> 1 `i `x -> -> # *U _TxByte `i `x ]
-[; ;RDM.c: 162: TxCount++;
-"162
+[; ;RDM.c: 168: TxCount++;
+"168
 [e ++ _TxCount -> -> 1 `i `ui ]
-[; ;RDM.c: 163: if(TxCount == 22 & TX_RDM_Data.PDL > 0 & TX_PD_Flag == 0){
-"163
+[; ;RDM.c: 169: if(TxCount == 22 & TX_RDM_Data.PDL > 0 & TX_PD_Flag == 0){
+"169
 [e $ ! & & == _TxCount -> -> 22 `i `ui > -> . . _TX_RDM_Data 1 1 `i -> 0 `i == _TX_PD_Flag -> -> 0 `i `ui 639  ]
 {
-[; ;RDM.c: 164: TxState = TX_RDM_PD;
-"164
+[; ;RDM.c: 170: TxState = TX_RDM_PD;
+"170
 [e = _TxState -> . `E4905 3 `uc ]
-[; ;RDM.c: 165: TX_PDCount = 40-1;
-"165
+[; ;RDM.c: 171: TX_PDCount = 40-1;
+"171
 [e = _TX_PDCount -> - -> 40 `i -> 1 `i `uc ]
-"166
+"172
 }
 [e :U 639 ]
-"167
+"173
 }
-[; ;RDM.c: 166: }
-[; ;RDM.c: 167: }else{
+[; ;RDM.c: 172: }
+[; ;RDM.c: 173: }else{
 [e $U 640  ]
 [e :U 638 ]
 {
-[; ;RDM.c: 168: RCIE = 1;
-"168
+[; ;RDM.c: 174: RCIE = 1;
+"174
 [e = _RCIE -> -> 1 `i `b ]
-[; ;RDM.c: 169: LATC4 = 1;
-"169
+[; ;RDM.c: 175: LATC4 = 1;
+"175
 [e = _LATC4 -> -> 1 `i `b ]
-[; ;RDM.c: 170: TXEN = 0;
-"170
+[; ;RDM.c: 176: TXEN = 0;
+"176
 [e = _TXEN -> -> 0 `i `b ]
-[; ;RDM.c: 171: TXIE = 0;
-"171
+[; ;RDM.c: 177: TXIE = 0;
+"177
 [e = _TXIE -> -> 0 `i `b ]
-[; ;RDM.c: 172: LATC3=0;
-"172
+[; ;RDM.c: 178: LATC3=0;
+"178
 [e = _LATC3 -> -> 0 `i `b ]
-"173
+"179
 }
 [e :U 640 ]
-[; ;RDM.c: 173: }
-[; ;RDM.c: 174: break;
-"174
+[; ;RDM.c: 179: }
+[; ;RDM.c: 180: break;
+"180
 [e $U 629  ]
-[; ;RDM.c: 175: case TX_RDM_PD:
-"175
+[; ;RDM.c: 181: case TX_RDM_PD:
+"181
 [e :U 641 ]
-[; ;RDM.c: 176: TXREG = PD.u8[TX_PDCount];
-"176
+[; ;RDM.c: 182: TXREG = PD.u8[TX_PDCount];
+"182
 [e = _TXREG *U + &U . _PD 0 * -> _TX_PDCount `ux -> -> # *U &U . _PD 0 `ui `ux ]
-[; ;RDM.c: 177: if (TX_PDCount == 40-TX_RDM_Data.PDL) {
-"177
+[; ;RDM.c: 183: if (TX_PDCount == 40-TX_RDM_Data.PDL) {
+"183
 [e $ ! == -> _TX_PDCount `i - -> 40 `i -> . . _TX_RDM_Data 1 1 `i 642  ]
 {
-[; ;RDM.c: 178: TxState = TX_DATA;
-"178
+[; ;RDM.c: 184: TxState = TX_DATA;
+"184
 [e = _TxState -> . `E4905 2 `uc ]
-[; ;RDM.c: 179: TX_PD_Flag = 1;
-"179
+[; ;RDM.c: 185: TX_PD_Flag = 1;
+"185
 [e = _TX_PD_Flag -> -> 1 `i `ui ]
-"180
+"186
 }
-[; ;RDM.c: 180: }else{
+[; ;RDM.c: 186: }else{
 [e $U 643  ]
 [e :U 642 ]
 {
-[; ;RDM.c: 181: TX_PDCount--;
-"181
+[; ;RDM.c: 187: TX_PDCount--;
+"187
 [e -- _TX_PDCount -> -> 1 `i `uc ]
-"182
+"188
 }
 [e :U 643 ]
-[; ;RDM.c: 182: }
-[; ;RDM.c: 183: break;
-"183
+[; ;RDM.c: 188: }
+[; ;RDM.c: 189: break;
+"189
 [e $U 629  ]
-"184
+"190
 }
-[; ;RDM.c: 184: }
+[; ;RDM.c: 190: }
 [e $U 629  ]
-"127
+"133
 [e :U 630 ]
 [e [\ _TxState , $ -> . `E4905 1 `uc 631
  , $ -> . `E4905 0 `uc 634
  , $ -> . `E4905 2 `uc 637
  , $ -> . `E4905 3 `uc 641
  629 ]
-"184
+"190
 [e :U 629 ]
-"185
+"191
 }
 [e :U 628 ]
-[; ;RDM.c: 185: }
-[; ;RDM.c: 186: }
-"186
+[; ;RDM.c: 191: }
+[; ;RDM.c: 192: }
+"192
 [e :UE 627 ]
 }
-"188
+"194
 [v _RDM_tx_TimerBreak `(v ~T0 @X0 1 ef ]
 {
-[; ;RDM.c: 188: void RDM_tx_TimerBreak() {
+[; ;RDM.c: 194: void RDM_tx_TimerBreak() {
 [e :U _RDM_tx_TimerBreak ]
 [f ]
-[; ;RDM.c: 189: TMR1 = 0xFFA5;
-"189
-[e = _TMR1 -> -> 65445 `ui `us ]
-[; ;RDM.c: 190: TimerState = TIMER_BREAK;
-"190
-[e = _TimerState -> . `E5031 1 `uc ]
-[; ;RDM.c: 191: LATC4 = 0;
-"191
-[e = _LATC4 -> -> 0 `i `b ]
-[; ;RDM.c: 192: LATC3 = 1;
-"192
-[e = _LATC3 -> -> 1 `i `b ]
-[; ;RDM.c: 193: TX_PD_Flag=1;
-"193
-[e = _TX_PD_Flag -> -> 1 `i `ui ]
-[; ;RDM.c: 194: RCIE = 0;
-"194
-[e = _RCIE -> -> 0 `i `b ]
-[; ;RDM.c: 195: }
+[; ;RDM.c: 195: TMR1 = 0xFFA5;
 "195
+[e = _TMR1 -> -> 65445 `ui `us ]
+[; ;RDM.c: 196: TimerState = TIMER_BREAK;
+"196
+[e = _TimerState -> . `E5032 1 `uc ]
+[; ;RDM.c: 197: LATC4 = 0;
+"197
+[e = _LATC4 -> -> 0 `i `b ]
+[; ;RDM.c: 198: LATC3 = 1;
+"198
+[e = _LATC3 -> -> 1 `i `b ]
+[; ;RDM.c: 199: TX_PD_Flag=1;
+"199
+[e = _TX_PD_Flag -> -> 1 `i `ui ]
+[; ;RDM.c: 200: RCIE = 0;
+"200
+[e = _RCIE -> -> 0 `i `b ]
+[; ;RDM.c: 201: }
+"201
 [e :UE 644 ]
 }

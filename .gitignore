@@ -1,0 +1,17 @@
+*.cmf
+*.elf
+*.sym
+*.rlf
+*.obj
+*.map
+*.cmf
+*.p1
+*.pre
+*.lst
+*.rlf
+*.sdb
+*.mum
+*.map
+*.lst
+*.sdb
+*.sym
