@@ -51,17 +51,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=main.c DMX.c PWM.c ADC.c RDM.c Timer.c PFM.c RDM_Read.c
+SOURCEFILES_QUOTED_IF_SPACED=main.c DMX.c ADC.c RDM.c Timer.c PFM.c RDM_Read.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/main.p1 ${OBJECTDIR}/DMX.p1 ${OBJECTDIR}/PWM.p1 ${OBJECTDIR}/ADC.p1 ${OBJECTDIR}/RDM.p1 ${OBJECTDIR}/Timer.p1 ${OBJECTDIR}/PFM.p1 ${OBJECTDIR}/RDM_Read.p1
-POSSIBLE_DEPFILES=${OBJECTDIR}/main.p1.d ${OBJECTDIR}/DMX.p1.d ${OBJECTDIR}/PWM.p1.d ${OBJECTDIR}/ADC.p1.d ${OBJECTDIR}/RDM.p1.d ${OBJECTDIR}/Timer.p1.d ${OBJECTDIR}/PFM.p1.d ${OBJECTDIR}/RDM_Read.p1.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/main.p1 ${OBJECTDIR}/DMX.p1 ${OBJECTDIR}/ADC.p1 ${OBJECTDIR}/RDM.p1 ${OBJECTDIR}/Timer.p1 ${OBJECTDIR}/PFM.p1 ${OBJECTDIR}/RDM_Read.p1
+POSSIBLE_DEPFILES=${OBJECTDIR}/main.p1.d ${OBJECTDIR}/DMX.p1.d ${OBJECTDIR}/ADC.p1.d ${OBJECTDIR}/RDM.p1.d ${OBJECTDIR}/Timer.p1.d ${OBJECTDIR}/PFM.p1.d ${OBJECTDIR}/RDM_Read.p1.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/main.p1 ${OBJECTDIR}/DMX.p1 ${OBJECTDIR}/PWM.p1 ${OBJECTDIR}/ADC.p1 ${OBJECTDIR}/RDM.p1 ${OBJECTDIR}/Timer.p1 ${OBJECTDIR}/PFM.p1 ${OBJECTDIR}/RDM_Read.p1
+OBJECTFILES=${OBJECTDIR}/main.p1 ${OBJECTDIR}/DMX.p1 ${OBJECTDIR}/ADC.p1 ${OBJECTDIR}/RDM.p1 ${OBJECTDIR}/Timer.p1 ${OBJECTDIR}/PFM.p1 ${OBJECTDIR}/RDM_Read.p1
 
 # Source Files
-SOURCEFILES=main.c DMX.c PWM.c ADC.c RDM.c Timer.c PFM.c RDM_Read.c
+SOURCEFILES=main.c DMX.c ADC.c RDM.c Timer.c PFM.c RDM_Read.c
 
 
 CFLAGS=
@@ -83,7 +83,7 @@ ifneq ($(INFORMATION_MESSAGE), )
 endif
 	${MAKE}  -f nbproject/Makefile-default.mk dist/${CND_CONF}/${IMAGE_TYPE}/PWM_DAVID_14bit.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
 
-MP_PROCESSOR_OPTION=16F1574
+MP_PROCESSOR_OPTION=16F1575
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: compile
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
@@ -102,14 +102,6 @@ ${OBJECTDIR}/DMX.p1: DMX.c  nbproject/Makefile-${CND_CONF}.mk
 	${MP_CC} --pass1 $(MP_EXTRA_CC_PRE) --chip=$(MP_PROCESSOR_OPTION) -Q -G  -D__DEBUG=1 --debugger=pickit3  --double=24 --float=24 --opt=+asm,+asmfile,-speed,+space,-debug,-local --addrqual=ignore --mode=pro -P -N255 --warn=-3 --asmlist -DXPRJ_default=$(CND_CONF)  --summary=default,-psect,-class,+mem,-hex,-file --output=default,-inhx032 --runtime=default,+clear,+init,-keep,-no_startup,-osccal,-resetbits,-download,-stackcall,+clib $(COMPARISON_BUILD)  --output=-mcof,+elf:multilocs --stack=compiled:auto:auto "--errformat=%f:%l: error: (%n) %s" "--warnformat=%f:%l: warning: (%n) %s" "--msgformat=%f:%l: advisory: (%n) %s"    -o${OBJECTDIR}/DMX.p1  DMX.c 
 	@-${MV} ${OBJECTDIR}/DMX.d ${OBJECTDIR}/DMX.p1.d 
 	@${FIXDEPS} ${OBJECTDIR}/DMX.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
-	
-${OBJECTDIR}/PWM.p1: PWM.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/PWM.p1.d 
-	@${RM} ${OBJECTDIR}/PWM.p1 
-	${MP_CC} --pass1 $(MP_EXTRA_CC_PRE) --chip=$(MP_PROCESSOR_OPTION) -Q -G  -D__DEBUG=1 --debugger=pickit3  --double=24 --float=24 --opt=+asm,+asmfile,-speed,+space,-debug,-local --addrqual=ignore --mode=pro -P -N255 --warn=-3 --asmlist -DXPRJ_default=$(CND_CONF)  --summary=default,-psect,-class,+mem,-hex,-file --output=default,-inhx032 --runtime=default,+clear,+init,-keep,-no_startup,-osccal,-resetbits,-download,-stackcall,+clib $(COMPARISON_BUILD)  --output=-mcof,+elf:multilocs --stack=compiled:auto:auto "--errformat=%f:%l: error: (%n) %s" "--warnformat=%f:%l: warning: (%n) %s" "--msgformat=%f:%l: advisory: (%n) %s"    -o${OBJECTDIR}/PWM.p1  PWM.c 
-	@-${MV} ${OBJECTDIR}/PWM.d ${OBJECTDIR}/PWM.p1.d 
-	@${FIXDEPS} ${OBJECTDIR}/PWM.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
 	
 ${OBJECTDIR}/ADC.p1: ADC.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
@@ -167,14 +159,6 @@ ${OBJECTDIR}/DMX.p1: DMX.c  nbproject/Makefile-${CND_CONF}.mk
 	${MP_CC} --pass1 $(MP_EXTRA_CC_PRE) --chip=$(MP_PROCESSOR_OPTION) -Q -G  --double=24 --float=24 --opt=+asm,+asmfile,-speed,+space,-debug,-local --addrqual=ignore --mode=pro -P -N255 --warn=-3 --asmlist -DXPRJ_default=$(CND_CONF)  --summary=default,-psect,-class,+mem,-hex,-file --output=default,-inhx032 --runtime=default,+clear,+init,-keep,-no_startup,-osccal,-resetbits,-download,-stackcall,+clib $(COMPARISON_BUILD)  --output=-mcof,+elf:multilocs --stack=compiled:auto:auto "--errformat=%f:%l: error: (%n) %s" "--warnformat=%f:%l: warning: (%n) %s" "--msgformat=%f:%l: advisory: (%n) %s"    -o${OBJECTDIR}/DMX.p1  DMX.c 
 	@-${MV} ${OBJECTDIR}/DMX.d ${OBJECTDIR}/DMX.p1.d 
 	@${FIXDEPS} ${OBJECTDIR}/DMX.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
-	
-${OBJECTDIR}/PWM.p1: PWM.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/PWM.p1.d 
-	@${RM} ${OBJECTDIR}/PWM.p1 
-	${MP_CC} --pass1 $(MP_EXTRA_CC_PRE) --chip=$(MP_PROCESSOR_OPTION) -Q -G  --double=24 --float=24 --opt=+asm,+asmfile,-speed,+space,-debug,-local --addrqual=ignore --mode=pro -P -N255 --warn=-3 --asmlist -DXPRJ_default=$(CND_CONF)  --summary=default,-psect,-class,+mem,-hex,-file --output=default,-inhx032 --runtime=default,+clear,+init,-keep,-no_startup,-osccal,-resetbits,-download,-stackcall,+clib $(COMPARISON_BUILD)  --output=-mcof,+elf:multilocs --stack=compiled:auto:auto "--errformat=%f:%l: error: (%n) %s" "--warnformat=%f:%l: warning: (%n) %s" "--msgformat=%f:%l: advisory: (%n) %s"    -o${OBJECTDIR}/PWM.p1  PWM.c 
-	@-${MV} ${OBJECTDIR}/PWM.d ${OBJECTDIR}/PWM.p1.d 
-	@${FIXDEPS} ${OBJECTDIR}/PWM.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
 	
 ${OBJECTDIR}/ADC.p1: ADC.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 

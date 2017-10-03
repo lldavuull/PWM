@@ -27,17 +27,17 @@ void timer1_interrupt(void) {
         switch (TimerState) {
             default:
                 TimerState = TIMER_500US;
-            case TIMER_StartUpDelay:
-                TMR1=0;
-                Timer_DelayCount++;
-                if(Timer_DelayCount>=0x10){
-//                    TimerState = TIMER_500US;
-//                    ADC_init();
-//                    DMX_init();
-//                    RDM_init();
-//                    PWM1CON = PWM2CON = PWM3CON = PWM4CON = PWMxCON_SET;
-                }
-                break;
+//            case TIMER_StartUpDelay:
+//                TMR1=0;
+//                Timer_DelayCount++;
+//                if(Timer_DelayCount>=0x10){
+////                    TimerState = TIMER_500US;
+////                    ADC_init();
+////                    DMX_init();
+////                    RDM_init();
+////                    PWM1CON = PWM2CON = PWM3CON = PWM4CON = PWMxCON_SET;
+//                }
+//                break;
             case TIMER_500US:
 //                if (Timer.BREAK == 1 && DMX_Flags.TxRunning == 1) // Check if sending a new BREAK
 //                {
@@ -59,8 +59,24 @@ void timer1_interrupt(void) {
 
                     Timer.MS_Count++; // Inc the MS Counter
                     Timer.MS = 1; // Set the ms flag
-                    if (Timer.MS_Count == 1000) // Check for 1 second
+                    if (Timer.MS_Count == 1000) // Check for 0.5 second
                     {
+//                        if(DMX_Flags.RDM_Identify_Device){
+//                            DMX_Flags.RDM_Identify_Device_Switch=~DMX_Flags.RDM_Identify_Device_Switch;//1= On, 0=Off; Period = 1s
+//                            if(DMX_Flags.RDM_Identify_Device_Switch){
+//                                CurrentPWM.DC=0xffff;
+//                            }else{
+//                                CurrentPWM.DC=0;
+//                            }
+//                            while (Addr < 4) {
+////                                PWM_Set(CurrentPWM.DC,Addr);
+//                                Addr++;
+//                            }
+//                            
+//                        }else{
+//                            DMX_Flags.RDM_Identify_Device_Switch=1;
+//                        }
+
                         Timer.MS_Count = 0;
                         Timer.SEC_Count++;
                         Timer.SEC = 1;
@@ -98,7 +114,6 @@ void timer1_interrupt(void) {
                 TMR1 = TMR_LOAD_FILL; // Load the Filler time = 0xFCDF   // Load value to total 1ms (800us)
                 TimerState = TIMER_500US; // Next int is the 0.5ms
                 break;
-                
         }
     }
 }

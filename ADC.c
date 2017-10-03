@@ -20,7 +20,7 @@ void ADC_init(){
     ANSA4 = 1; //RA4 set to Analog input
     ADCON0 = 0b00001101; //SET RA4 (AN3) as ADC input and enable ADC
     ADCON1 = 0b01110000; // Left justified. FRC , VDD, VSS
-    //    ADCON2=0b0001;// set PWM1_interrupt
+//    ADCON2=0b0001;// set PWM1_interrupt
 //    GO_nDONE = 1; //Start to convert Analog to Digit
     ADIF = 0; // interrupt_flag clear
 

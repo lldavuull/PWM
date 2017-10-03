@@ -21,7 +21,6 @@
                    projectFiles="true">
       <itemPath>main.c</itemPath>
       <itemPath>DMX.c</itemPath>
-      <itemPath>PWM.c</itemPath>
       <itemPath>ADC.c</itemPath>
       <itemPath>RDM.c</itemPath>
       <itemPath>Timer.c</itemPath>
@@ -42,7 +41,7 @@
     <conf name="default" type="2">
       <toolsSet>
         <developmentServer>localhost</developmentServer>
-        <targetDevice>PIC16F1574</targetDevice>
+        <targetDevice>PIC16F1575</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
         <platformTool>PICkit3PlatformTool</platformTool>

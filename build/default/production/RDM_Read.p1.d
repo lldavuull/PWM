@@ -4,4 +4,5 @@
 RDM.h  \
 rdm_define.h  \
 DMX.h  \
+Timer.h  \
 PFM.h 

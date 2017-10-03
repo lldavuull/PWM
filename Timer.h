@@ -19,9 +19,10 @@ enum {
     TIMER_500US,  //(500us)
     TIMER_BREAK,  //(90us)
     TX_TIMER_MAB,  //(20us)
+//    TIMER_DISC_MARK,  //(10us)
 //    TIMER_WAIT_TO_BREAK, //(180us)
 //    TIMER_FILL  //(800us)
-    TIMER_StartUpDelay, // (65.535*0x10=1048.56ms)
+//    TIMER_StartUpDelay, // (65.535*0x10=1048.56ms)
 };
 volatile char TimerState = 0;
 
@@ -61,10 +62,19 @@ volatile TIMER_DATA Timer;
 // 180us = 0xFFFF - 180 = 0xFF4B
 //#define TMR_LOAD_WAIT_TO_BREAK   0xFF4B  // Load Value for BREAK    (180us)
 
-// 100us = 0xFFFF - 90 = 0xFFA5
-#define TMR_LOAD_BREAK   0xFFA5  // Load Value for BREAK    (90us)
+// 180us = 0xFFFF - 180 = 0xFF4B
+#define TMR_LOAD_BREAK   0xFF0B  // Load Value for BREAK    (180us)
 
 // 800us = 0xFFFF - 800 = 0xFCDF  - Adjust to fine tune the 1ms total
 #define TMR_LOAD_FILL   0xFCDF   // Load value to total 1ms (800us)
 
 //timer1 set end
+
+
+// 4us = 0xFFFF - 4 = 0xFFFB  - Adjust to fine tune the 1ms total
+
+// 3.2.5 Discovery Response MARK time
+// Responders may wish to drive a MARK on the line for at least 4?s prior to the first start bit of the discovery response.
+// This will ensure that all other devices on the line recognize the start bit.
+
+//#define TMR_DISC_MARK   0xFFF5   // Load value to total 10us

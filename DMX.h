@@ -95,11 +95,13 @@ typedef struct {
     /** DMX_FLAGS Used to pass information from the ISR */
     unsigned int RDMNew : 1;
     
-    unsigned int RDMcheck : 2;
+    unsigned int RDMcheckUID_flag : 2;
     
     unsigned int RDMmute : 1;
     
-    unsigned int RDMidentify : 1;
+    unsigned int RDM_Identify_Device : 1;   //1= True, 0=False;
+    
+    unsigned int RDM_Identify_Device_Switch : 1;   //1= On, 0=Off; Period = 1s
     
 } DMX_FLAGS;
 
@@ -126,10 +128,6 @@ volatile char DMXPeriodDimming = 0;
 char DMXStepConst=0;
 
 
-
-
-
-
 //??????14bit
 typedef union{
     uint16_t DC[RX_BUFFER_SIZE];
@@ -140,6 +138,7 @@ typedef union{
 }Inter_PWM_16;
 volatile Inter_PWM_16 CurrentPWM=0;  //InterPolation PWM
 
+
 typedef struct {
     // Update PWM per 500us
     /**  00 =unchange  01 = Increment   10=Decrement */
@@ -149,6 +148,7 @@ typedef struct {
     unsigned int InfiniteLoop: 1;
     signed int direct : 2;
 } DMX_SIGN;
+
 /** SMOOTH_Pwm Set in the ISR to indicate to helper functions etc */
 volatile DMX_SIGN DMXSign[RX_BUFFER_SIZE]; /**  00 =unchange  01 = Increment   10=Decrement */
 //char DCdifference;
@@ -161,10 +161,10 @@ volatile float DMX_TargetBright[RX_BUFFER_SIZE]=0;
 char DMX_sumRepeat[RX_BUFFER_SIZE]=2;
 char DMX_Repeat[RX_BUFFER_SIZE][2]=1;
 char preRxData[RX_BUFFER_SIZE]=0;
-
-
+char DMX_repeatcoeff[RX_BUFFER_SIZE] = 1;
+float DMX_repeat_hereditary[RX_BUFFER_SIZE]=2.0;
 //char send=0;
 
 
 /** SMOOTH_Pwm Set in the ISR to indicate to helper functions etc */
-volatile char PWM_Pin[RX_BUFFER_SIZE];
+//volatile char PWM_Pin[RX_BUFFER_SIZE];

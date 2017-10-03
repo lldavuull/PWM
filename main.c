@@ -13,11 +13,11 @@
 
 
 __CONFIG(FOSC_INTOSC & WDTE_OFF & PWRTE_OFF & MCLRE_ON & CP_OFF & BOREN_OFF & CLKOUTEN_OFF);
-__CONFIG(WRT_OFF & PPS1WAY_OFF & PLLEN_ON & STVREN_ON & LPBOREN_OFF & LVP_OFF);
+__CONFIG(WRT_HALF & PPS1WAY_OFF & PLLEN_ON & STVREN_ON & LPBOREN_OFF & LVP_OFF);
 
 #define PWMxCON_SET  0b10000000        // Enhanced features off
 #define PRx_SET      0xFF              // Max resolution
-#define TxCON_SET    0b00000101        // Post=1:1, ON, PRE=1:4
+//#define TxCON_SET    0b00000100        // Post=1:1, ON, PRE=1:1
 
 void timer_interrupt(void);
 
@@ -39,7 +39,7 @@ void main(void) {
     RC2PPS = 0b0110; //PWM4_out
     
     PR2 = PRx_SET;
-    T2CON = TxCON_SET;
+//    T2CON = TxCON_SET;
 
     OSCCON = 0b11110000; // 4xPLL,32MHz, Config bits determine source  //   PLL=Phase-locked
     OSCTUNE = 0b000000;
@@ -51,23 +51,18 @@ void main(void) {
     
     PWM1PHH = PWM2PHH = PWM3PHH = PWM4PHH = 0x00;
     PWM1PHL = PWM2PHL = PWM3PHL = PWM4PHL = 0x00;
-    PWM1PRH = PWM2PRH = PWM3PRH = PWM4PRH = 0x3F;
+    PWM1PRH = PWM2PRH = PWM3PRH = PWM4PRH = 0xFF;
     PWM1PRL = PWM2PRL = PWM3PRL = PWM4PRL = 0xFF;
     PWM1CLKCON = PWM2CLKCON = PWM3CLKCON = PWM4CLKCON = 0b00000000; //1:1
-    
     
     
     TRISC3 = 0;
     ANSC3 = 0; //RC3  is for interrupt test
     INTCON = 0b11000000; //GIE=1; TMR0 interrupt=0; PEIE interrupt=1;
     
-    
-//    Sweep_PWM_init();
     timer1_init();
     
-//    DMX_Address=PFM_Read(Flash_DMXAddress);
-//    PFM_Write(Flash_DMXAddress,0x0100);
-//    DMX_Address=PFM_Read(0x0F80);
+    
     
     
     ADC_init();
@@ -75,10 +70,16 @@ void main(void) {
     RDM_init();
     PWM1CON = PWM2CON = PWM3CON = PWM4CON = PWMxCON_SET;
     
+    DMX_Address=PFM_Read(Flash_DMXAddress);
+    if(DMX_Address==0x3fff){
+        PFM_Write(Flash_DMXAddress,0x0001);
+    }
+    DMX_Address=PFM_Read(Flash_DMXAddress);
+    
     while (1) {
         DMX_loop();
         ADC_loop();
-//        timer1_switch();
+        timer1_switch();
         RDM_rx_loop();
     }
 }

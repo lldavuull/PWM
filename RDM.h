@@ -68,7 +68,9 @@ extern void RDM_SET_CC(void);
 extern void TX_RDM_Response_Set(void);
 extern void RDM_rx_loop(void);
 extern void RDM_TXSTART(void);
+//extern void RDM_disc_tx_TimerBreak(void);
 
+#define DiscoveryLength 24
 /**
  *  Select the size of the transmit buffer
  *  This is the Maximum number of channels that will be sent.
@@ -94,19 +96,21 @@ volatile uint8_t *TxByte;
 /** TxState State for the Transmit state machine  */
 volatile uint8_t TxState=0;
 
-#define METEOR 0x4D52
-#define DriverID 0x17C31092
+#define METEOR 0x08BA
+#define DriverID 0x12345678
+const char UID[6]={0x08,0xBA,0x12,0x34,0x56,0x78};
 
- enum
- {
+
+enum
+{
 //    TX_MARK_BEFORE_BREAK,
 //    TX_MAB,
     TX_DISCOVERY,
     TX_START,
-//    TX_SART_DISCOVERY,
+    TX_SART_DISCOVERY,
     TX_DATA,
     TX_RDM_PD
- };
+};
 
 
 typedef union{
@@ -146,13 +150,12 @@ typedef union{
 extern uint16_t RDM_get_checkSum(RDM_Data, char);
 extern uint16_t RDM_set_checkSum(RDM_Data);
 
-const char UID[6]={0x4D,0x52,0x17,0xC3,0x10,0x92};
 
-volatile char *DataPtr;
 //char pd_c=0;
 volatile RDM_Data RX_RDM_Data;
 volatile RDM_Data TX_RDM_Data;
-volatile RDM_Data DISCOVERY_RDM_Data;
+//volatile RDM_Data DISCOVERY_RDM_Data;
+char DISCOVERY_RDM_Data[DiscoveryLength];
 
 #define TX_PD_LEN      40   // Parameter Data Length
 #define TX_PD_u16      20   // Parameter Data Length

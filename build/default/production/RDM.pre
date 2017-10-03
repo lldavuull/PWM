@@ -11,7 +11,7 @@ extern double __fpnormalize(double);
 #pragma intrinsic(__builtin_software_breakpoint)
 extern void __builtin_software_breakpoint(void);
 
-# 49 "C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16f1574.h"
+# 49 "C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16f1575.h"
 extern volatile unsigned char INDF0 @ 0x000;
 
 asm("INDF0 equ 00h");
@@ -6281,7 +6281,7 @@ extern void TX_RDM_Response_Set(void);
 extern void RDM_rx_loop(void);
 extern void RDM_TXSTART(void);
 
-# 89
+# 91
 uint16_t TxCount=0;
 
 
@@ -6292,6 +6292,8 @@ volatile uint8_t TxState=0;
 
 
 
+const char UID[6]={0x08,0xBA,0x12,0x34,0x56,0x78};
+
 
 enum
 {
@@ -6299,7 +6301,7 @@ enum
 
 TX_DISCOVERY,
 TX_START,
-
+TX_SART_DISCOVERY,
 TX_DATA,
 TX_RDM_PD
 };
@@ -6342,15 +6344,14 @@ unsigned ML:8;
 extern uint16_t RDM_get_checkSum(RDM_Data, char);
 extern uint16_t RDM_set_checkSum(RDM_Data);
 
-const char UID[6]={0x4D,0x52,0x17,0xC3,0x10,0x92};
 
-volatile char *DataPtr;
 
 volatile RDM_Data RX_RDM_Data;
 volatile RDM_Data TX_RDM_Data;
-volatile RDM_Data DISCOVERY_RDM_Data;
 
-# 169
+char DISCOVERY_RDM_Data[24];
+
+# 172
 typedef union{
 uint8_t u8[100];
 uint16_t u16[50];
@@ -6368,7 +6369,7 @@ volatile char PackCount;
 volatile unsigned PD_Flag;
 volatile unsigned TX_PD_Flag;
 
-# 253
+# 256
 uint16_t checkSum;
 
 # 13 "DMX.h"
@@ -6433,18 +6434,20 @@ unsigned int TxMAB : 1;
 
 unsigned int RDMNew : 1;
 
-unsigned int RDMcheck : 2;
+unsigned int RDMcheckUID_flag : 2;
 
 unsigned int RDMmute : 1;
 
-unsigned int RDMidentify : 1;
+unsigned int RDM_Identify_Device : 1;
+
+unsigned int RDM_Identify_Device_Switch : 1;
 
 } DMX_FLAGS;
 
 
 volatile DMX_FLAGS DMX_Flags;
 
-# 117
+# 119
 unsigned char DMXPeriod = 100;
 
 volatile char DMXPeriodConst =0;
@@ -6456,7 +6459,8 @@ volatile char DMXPeriodDimming = 0;
 
 char DMXStepConst=0;
 
-# 134
+
+
 typedef union{
 uint16_t DC[4];
 struct{
@@ -6465,6 +6469,7 @@ unsigned DCH :8;
 }PWM[4];
 }Inter_PWM_16;
 volatile Inter_PWM_16 CurrentPWM=0;
+
 
 typedef struct {
 
@@ -6475,6 +6480,7 @@ unsigned int SIGN: 2;
 unsigned int InfiniteLoop: 1;
 signed int direct : 2;
 } DMX_SIGN;
+
 
 volatile DMX_SIGN DMXSign[4];
 
@@ -6487,9 +6493,8 @@ volatile float DMX_TargetBright[4]=0;
 char DMX_sumRepeat[4]=2;
 char DMX_Repeat[4][2]=1;
 char preRxData[4]=0;
-
-# 170
-volatile char PWM_Pin[4];
+char DMX_repeatcoeff[4] = 1;
+float DMX_repeat_hereditary[4]=2.0;
 
 # 14 "Timer.h"
 extern void timer1_interrupt(void);
@@ -6502,7 +6507,8 @@ TIMER_BREAK,
 TX_TIMER_MAB,
 
 
-TIMER_StartUpDelay,
+
+
 };
 volatile char TimerState = 0;
 
@@ -6535,15 +6541,14 @@ extern uint16_t PFM_Read(uint16_t);
 
 extern void PFM_Write(uint16_t ,uint16_t);
 
-
-
-
+# 21
 enum{
-Flash_DMXAddress=0x0F80,
-Flash_UID1=0x0FA0,
-Flash_UID2=0x0FA1,
-Flash_UID3=0x0FA2,
-Flash_UID4=0x0FA3,
+Flash_DMXAddress=0x1F80,
+Flash_UID1=0x1FA0,
+Flash_UID2=0x1FA1,
+Flash_UID3=0x1FA2,
+Flash_UID4=0x1FA3,
+Personality_Number=0x1FC0
 };
 
 # 16 "RDM.c"
@@ -6575,7 +6580,7 @@ TX9 = TX9D = 1;
 
 
 DMX_Flags.RDMmute = 0;
-DMX_Flags.RDMidentify = 0;
+DMX_Flags.RDM_Identify_Device = 0;
 
 # 59
 DMX_Address=1;
@@ -6583,27 +6588,29 @@ DMX_Address=1;
 
 
 
-PDCount = 23;
+PDCount = 24;
+
+
 while (PDCount >= 17) {
-DISCOVERY_RDM_Data.value[PDCount] = 0xFE;
+DISCOVERY_RDM_Data[PDCount] = 0xFE;
 PDCount--;
 }
-DISCOVERY_RDM_Data.value[16] = 0xAA;
+DISCOVERY_RDM_Data[16] = 0xAA;
 PDCount = 0;
 checkSum = 0;
 while (PDCount < 6) {
-DISCOVERY_RDM_Data.value[15 - PDCount * 2] = UID[PDCount] | 0xAA;
-DISCOVERY_RDM_Data.value[14 - PDCount * 2] = UID[PDCount] | 0x55;
-checkSum += DISCOVERY_RDM_Data.value[15 - PDCount * 2];
-checkSum += DISCOVERY_RDM_Data.value[14 - PDCount * 2];
+DISCOVERY_RDM_Data[15 - PDCount * 2] = UID[PDCount] | 0xAA;
+DISCOVERY_RDM_Data[14 - PDCount * 2] = UID[PDCount] | 0x55;
+checkSum += DISCOVERY_RDM_Data[15 - PDCount * 2];
+checkSum += DISCOVERY_RDM_Data[14 - PDCount * 2];
 PDCount++;
 }
 TX_RDM_Data.CS = checkSum;
-PDCount = 0;
-DISCOVERY_RDM_Data.value[3] = TX_RDM_Data.CSH | 0xAA;
-DISCOVERY_RDM_Data.value[2] = TX_RDM_Data.CSH | 0x55;
-DISCOVERY_RDM_Data.value[1] = TX_RDM_Data.CSL | 0xAA;
-DISCOVERY_RDM_Data.value[0] = TX_RDM_Data.CSL | 0x55;
+
+DISCOVERY_RDM_Data[3] = TX_RDM_Data.CSH | 0xAA;
+DISCOVERY_RDM_Data[2] = TX_RDM_Data.CSH | 0x55;
+DISCOVERY_RDM_Data[1] = TX_RDM_Data.CSL | 0xAA;
+DISCOVERY_RDM_Data[0] = TX_RDM_Data.CSL | 0x55;
 
 PDCount = 16;
 while (PDCount >= 11) {
@@ -6618,17 +6625,17 @@ PDCount--;
 void RDM_rx_loop(void) {
 if (DMX_Flags.RDMNew == 1) {
 DMX_Flags.RDMNew = 0;
-DMX_Flags.RDMcheck = 0;
+DMX_Flags.RDMcheckUID_flag = 0;
 
-if ((RX_RDM_Data.DUID.M == 0x4D52 || RX_RDM_Data.DUID.M == 0xFFFF)&& (RX_RDM_Data.DUID.ID == 0x17C31092 || RX_RDM_Data.DUID.ID == 0xFFFFFFFF)) {
-DMX_Flags.RDMcheck = 1;
+if ((RX_RDM_Data.DUID.M == 0x08BA || RX_RDM_Data.DUID.M == 0xFFFF)&& (RX_RDM_Data.DUID.ID == 0x12345678 || RX_RDM_Data.DUID.ID == 0xFFFFFFFF)) {
+DMX_Flags.RDMcheckUID_flag = 1;
 }
 
-if (DMX_Flags.RDMcheck == 1 && RDM_get_checkSum(RX_RDM_Data,100) == RX_RDM_Data.CS) {
-DMX_Flags.RDMcheck = 2;
+if (DMX_Flags.RDMcheckUID_flag == 1 && RDM_get_checkSum(RX_RDM_Data,100) == RX_RDM_Data.CS) {
+DMX_Flags.RDMcheckUID_flag = 2;
 }
 
-if (DMX_Flags.RDMcheck == 2) {
+if (DMX_Flags.RDMcheckUID_flag == 2) {
 switch (RX_RDM_Data.CC) {
 case 0x10:
 RDM_discovery_CC();
@@ -6647,7 +6654,7 @@ break;
 void RDM_tx_interrupt(void) {
 if (TXIE && TXIF) {
 
-# 133
+# 134
 switch (TxState) {
 case TX_START:
 if(TX_PD_Flag==1){
@@ -6660,18 +6667,16 @@ TxCount = 0;
 TxState = TX_DATA;
 }
 break;
-
-
-
-
+case TX_SART_DISCOVERY:
+TxState = TX_DISCOVERY;
+break;
 case TX_DISCOVERY:
 if (TxCount <= 24) {
-
 TXREG = *TxByte;
 TxByte--;
 TxCount++;
 }else{
-RCIE = 1;
+
 LATC4 = 1;
 TXEN = 0;
 TXIE = 0;
@@ -6689,7 +6694,7 @@ TxState = TX_RDM_PD;
 TX_PDCount = 40-1;
 }
 }else{
-RCIE = 1;
+
 LATC4 = 1;
 TXEN = 0;
 TXIE = 0;
@@ -6710,11 +6715,11 @@ break;
 }
 
 void RDM_tx_TimerBreak() {
-TMR1 = 0xFFA5;
+TMR1 = 0xFF0B;
 TimerState = TIMER_BREAK;
 LATC4 = 0;
 LATC3 = 1;
 TX_PD_Flag=1;
-RCIE = 0;
+
 }
 

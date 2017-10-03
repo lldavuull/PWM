@@ -13,7 +13,7 @@
 #include "Timer.h"
 #include <stdint.h>
 #include "rdm_define.h"
-
+//16bit
 void DMX_init(void) {
     // DMX UART START
     RXPPS = 0b10101; //RX=RC5
@@ -31,7 +31,7 @@ void DMX_init(void) {
     //    RC4PPS=0b1001; //RC4=TX
     //    TXSTA=0b01000101;//disable TX,
 
-    DMX_Address = 1;
+//    DMX_Address = 1;
     PWMDCLptr[0] = &PWM1DCL;
     PWMDCLptr[1] = &PWM2DCL;
     PWMDCLptr[2] = &PWM3DCL;
@@ -44,13 +44,19 @@ void DMX_init(void) {
     PWMLDCONptr[1] = &PWM2LDCON;
     PWMLDCONptr[2] = &PWM3LDCON;
     PWMLDCONptr[3] = &PWM4LDCON;
+            
+    PWMDCptr[0]=&PWM1DC;
+    PWMDCptr[1]=&PWM1DC;
+    PWMDCptr[2]=&PWM1DC;
+    PWMDCptr[3]=&PWM1DC;
+            
     
-    PWM_Pin[0]=RA2;
-    PWM_Pin[1]=RC0;
-    PWM_Pin[2]=RC1;
-    PWM_Pin[3]=RC2;
+//    PWM_Pin[0]=RA2;
+//    PWM_Pin[1]=RC0;
+//    PWM_Pin[2]=RC1;
+//    PWM_Pin[3]=RC2;
     
-    char Addr=0;
+    Addr=0;
     while(Addr<4){
         DMX_sumRepeat[Addr]=2;
         DMX_Repeat[Addr][0]=DMX_Repeat[Addr][1]=1;
@@ -60,7 +66,7 @@ void DMX_init(void) {
     }
 }
 void DMX_loop(void) {
-    char Addr = 0;
+    Addr = 0;
     //DMX Renew
     if (DMX_Flags.RxNew == 1) {
         DMX_Flags.RxNew = 0;
@@ -78,7 +84,7 @@ void DMX_loop(void) {
                 }else{
                     DMXSign[Addr].SIGN = 0b01;//increase
                     DMX_CurrentBright[Addr]=DMX_TargetBright[Addr];
-                    DMX_TargetBright[Addr]=DMX_TargetBright[Addr]+(DMX_difference*2/DMX_sumRepeat[Addr]);
+                    DMX_TargetBright[Addr]=DMX_TargetBright[Addr]+(DMX_difference*DMX_repeatcoeff[Addr]/DMX_sumRepeat[Addr]);
                     DMX_SpaceBright[Addr]=(DMX_TargetBright[Addr]-DMX_CurrentBright[Addr])/(DMXPeriod>>DMX_Shift_bits);
                 }
             } else if (DMX_TargetBright[Addr] > rxdata) {
@@ -90,7 +96,7 @@ void DMX_loop(void) {
                 else{
                     DMXSign[Addr].SIGN = 0b10;//decrease
                     DMX_CurrentBright[Addr]=DMX_TargetBright[Addr];
-                    DMX_TargetBright[Addr]=DMX_TargetBright[Addr]-(DMX_difference*2/DMX_sumRepeat[Addr]);
+                    DMX_TargetBright[Addr]=DMX_TargetBright[Addr]-(DMX_difference*DMX_repeatcoeff[Addr]/DMX_sumRepeat[Addr]);
                     DMX_SpaceBright[Addr]=(DMX_CurrentBright[Addr]-DMX_TargetBright[Addr])/(DMXPeriod>>DMX_Shift_bits);
                 }
             } else {    //unchange
@@ -98,27 +104,33 @@ void DMX_loop(void) {
                 DMXSign[Addr].SIGN = 0b00;
             }
             
-            if(preRxData[Addr]==RxData[Addr]){
-                if( !DMXSign[Addr].InfiniteLoop){
-                    DMX_Repeat[Addr][0]++;
-                    if(DMX_Repeat[Addr][0]==0x10){
-                        DMX_Repeat[Addr][0]=DMX_Repeat[Addr][1]=1;
-                        DMX_sumRepeat[Addr]=2;
-                        DMXSign[Addr].InfiniteLoop=1;
-                    }
+            if(preRxData[Addr]==RxData[Addr] && !DMXSign[Addr].InfiniteLoop){
+                DMX_Repeat[Addr][0]++;
+                if(DMX_Repeat[Addr][0]==0x10){
+                    DMX_Repeat[Addr][0]=DMX_Repeat[Addr][1]=1;
+                    DMX_sumRepeat[Addr]=2;
+                    DMXSign[Addr].InfiniteLoop=1;
+                    DMX_repeatcoeff[Addr]=2;
                 }
+                DMX_repeat_hereditary[Addr]=DMX_repeat_hereditary[Addr]/2+DMX_Repeat[Addr][0];
             }else{
-                DMX_Repeat[Addr][1]=DMX_Repeat[Addr][0];
                 DMX_sumRepeat[Addr]=DMX_Repeat[Addr][0]+DMX_Repeat[Addr][1];
+                DMX_Repeat[Addr][1]=DMX_Repeat[Addr][0];
+                DMX_repeat_hereditary[Addr]=DMX_repeat_hereditary[Addr]/2+DMX_Repeat[Addr][0];
                 DMX_Repeat[Addr][0]=1;
                 DMXSign[Addr].InfiniteLoop=0;
+                if(DMX_repeat_hereditary[Addr]>2.1){
+                    DMX_repeatcoeff[Addr]=1;
+                }else{
+                    DMX_repeatcoeff[Addr]=2;
+                }
             }
             preRxData[Addr]=RxData[Addr];
             Addr++;
         }
     }
     //DMX didn't get Signal
-    if (Timer.MS) {
+    if (Timer.MS && !DMX_Flags.RDM_Identify_Device) {
         DMXPeriodConst++;
         Timer.MS = 0;
         Addr = 0;
@@ -147,8 +159,8 @@ void DMX_loop(void) {
                 CurrentPWM.DC[Addr]=PWM.DC[rxdata]+(PWM.DC[rxdata+1]-PWM.DC[rxdata])*(DMX_CurrentBright[Addr]-rxdata); //interpolation
                 *PWMDCHptr[Addr] = CurrentPWM.PWM[Addr].DCH;
                 *PWMDCLptr[Addr] = CurrentPWM.PWM[Addr].DCL;
-                *PWMLDCONptr[Addr] = 0b10000000;
                 
+                *PWMLDCONptr[Addr] = 0b10000000; 
                 Addr++;
             }
 //        TXREG=CurrentPWM.PWM[3].DCH;
