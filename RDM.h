@@ -8,6 +8,8 @@
 
 #include <xc.h> // include processor files - each processor file is guarded.  
 #include <stdint.h>
+#include "rdm_define.h"
+
 //Response Type
 enum{
     ACK=0x00,
@@ -32,14 +34,14 @@ enum{
 //};
 
 //Parameter ID (PID)
-enum{
-    SUPPORTED_PARAMETERS = 0x0050,
-    PARAMETER_DESCRIPTION = 0x0051,
-    DEVICE_INFO = 0x0060,
-    SOFTWARE_VERSION_LABEL = 0x00C0,
-    DMX_START_ADDRESS = 0x00F0,
-    IDENTIFY_DEVICE = 0x1000
-};
+//enum{
+//    SUPPORTED_PARAMETERS = 0x0050,
+//    PARAMETER_DESCRIPTION = 0x0051,
+//    DEVICE_INFO = 0x0060,
+//    SOFTWARE_VERSION_LABEL = 0x00C0,
+//    DMX_START_ADDRESS = 0x00F0,
+//    IDENTIFY_DEVICE = 0x1000
+//};
 
 
 
@@ -70,7 +72,7 @@ extern void RDM_rx_loop(void);
 extern void RDM_TXSTART(void);
 //extern void RDM_disc_tx_TimerBreak(void);
 
-#define DiscoveryLength 24
+#define DiscoveryLength 23
 /**
  *  Select the size of the transmit buffer
  *  This is the Maximum number of channels that will be sent.
@@ -92,7 +94,7 @@ uint16_t         TxCount=0;
 ///** TxStart Start code to transmit  */
 //const uint8_t          TxStart=0;
 /** *TxByte Pointer to data to send  */
-volatile uint8_t *TxByte;
+volatile uint8_t *BytePtr;
 /** TxState State for the Transmit state machine  */
 volatile uint8_t TxState=0;
 
@@ -100,6 +102,14 @@ volatile uint8_t TxState=0;
 #define DriverID 0x12345678
 const char UID[6]={0x08,0xBA,0x12,0x34,0x56,0x78};
 
+
+const char SOFTWARE_VERSION_LABEL[]="Meteor Lighting v171012";
+#define SOFTWARE_VERSION_LABEL_Size      sizeof(SOFTWARE_VERSION_LABEL)
+//{
+//0x4D,	0x65,	0x74,	0x65,	0x6F,	0x72,	0x20,	0x4C,	0x69,	0x67,	//Meteor Lighting v171012
+//0x68,	0x74,	0x69,	0x6E,	0x67,	0x20,	0x76,	0x31,	0x37,	0x31,	
+//0x30,	0x31,	0x32,								
+//};
 
 enum
 {
@@ -155,19 +165,19 @@ extern uint16_t RDM_set_checkSum(RDM_Data);
 volatile RDM_Data RX_RDM_Data;
 volatile RDM_Data TX_RDM_Data;
 //volatile RDM_Data DISCOVERY_RDM_Data;
-char DISCOVERY_RDM_Data[DiscoveryLength];
+char DISCOVERY_RDM_Data[DiscoveryLength+1];
 
-#define TX_PD_LEN      40   // Parameter Data Length
-#define TX_PD_u16      20   // Parameter Data Length
-#define TX_PD_u32      10   // Parameter Data Length
+#define TX_PD_LEN      (PD_LEN>>1)   // Parameter Data Length
+#define TX_PD_u16      (TX_PD_LEN>>1)   // Parameter Data Length
+#define TX_PD_u32      (TX_PD_LEN>>2)   // Parameter Data Length
 
 #define PD_LEN      100   // Parameter Data Length
-#define PD_u16      50   // Parameter Data Length
-#define PD_u32      25   // Parameter Data Length
-#define PD1  PD_LEN-2
-#define PD5  PD_LEN-6
-#define PD7  PD_LEN-8
-#define PD11  PD_LEN-12
+#define PD_u16      (PD_LEN>>1)   // Parameter Data Length
+#define PD_u32      (PD_LEN>>2)   // Parameter Data Length
+//#define PD1  PD_LEN-2
+//#define PD5  PD_LEN-6
+//#define PD7  PD_LEN-8
+//#define PD11  PD_LEN-12
 //RDM Parameter Data
 typedef union{
     uint8_t u8[PD_LEN];
@@ -176,8 +186,15 @@ typedef union{
 }PD_call;
 PD_call PD;
 
-uint16_t *PD_Manu;
-uint32_t *PD_ID;
+extern void PD_init(void);
+extern void PD_write_u8(uint8_t);
+extern void PD_write_u16(uint16_t);
+extern void PD_write_u32(uint32_t);
+extern uint8_t* PD_Read_u8ptr(void);
+extern uint16_t* PD_Read_u16ptr(void);
+extern uint32_t* PD_Read_u32ptr(void);
+uint16_t *PD_Manu_ptr;
+uint32_t *PD_ID_ptr;
 
 char PDCount;
 char TX_PDCount;
@@ -185,79 +202,59 @@ char TX_PDCount;
 volatile char PackCount;
 volatile unsigned PD_Flag;
 volatile unsigned TX_PD_Flag;
-//typedef struct {
-//    int PacketType; //
-//    union{
-//        char value[6];
-//        unsigned char Length;
-//        struct{
-//            uint16_t M;     //Manufacture
-//            uint32_t ID;
-//        }UID;       // this.device UID
-//        struct{
-//            uint16_t M;     //Manufacture
-//            uint32_t ID;    
-//        }CUID;      //Controller UID
-//        unsigned int TN;//Transaction Number
-//        unsigned int PORT;//Port ID / Response Type
-//        unsigned int MSG;//message count
-//        uint16_t subDevice;
-//        unsigned int CC;//Command Class
-//        uint16_t PID;//Parameter ID
-//        unsigned int PDL;//Parameter Data Length
-//        union{
-//            struct{
-//            unsigned int CSH;//ChechSum High
-//            unsigned int CSL;//ChechSum Low
-//            };
-//            uint16_t CS;
-//        };
-//    };
-//}RDM_pack;
-//
-///** AddrCount RDM counter used in the interrupt routine */
-//
-//typedef struct{
-//    unsigned char Type; //
-//    unsigned char Count;
-//    unsigned char PDL;//boolean 0 or 1
-//}RDM_PackNum;
-//
-//RDM_PackNum RDM_PackFlag;
-//
-//const unsigned char PackNum[12]={1,6,6,1,1,1,2,1,2,1,1,1};
-//
-//RDM_pack *PackPtr;
-//RDM_pack RDMpack[12];
-
-/** PARAMETER_ID is a part of Packet */
-//typedef struct{
-//    unsigned char PARAMETER_ID;
-//    unsigned char PARAMETER;//Parameter
-//    char* NextID;
-//}RDM_Parameter;
-
-
-//enum{
-//    ML,
-//    UID,
-//    CUID,
-//    TN,
-//    PORT,
-//    MSG,
-//    subDevice,
-//    CC,
-//    PID,
-//    PDL,
-//    CSH,
-//    CSL
-//};
+volatile unsigned TX_Discovery_Flag;
 
 uint16_t checkSum;
 
-//uint16_t uint16_tmp;
-//RDM end start
+char IDENTIFY_MODE=0xff;
+
+static const uint16_t PID_DEFINITIONS[] = {
+//    E120_QUEUED_MESSAGE,
+//    E120_PRODUCT_DETAIL_ID_LIST,
+//    E120_DEVICE_MODEL_DESCRIPTION,
+//    E120_MANUFACTURER_LABEL,
+//    E120_DEVICE_LABEL,
+//    E120_FACTORY_DEFAULTS,
+//    E120_LANGUAGE_CAPABILITIES,
+//    E120_LANGUAGE,
+//    E120_BOOT_SOFTWARE_VERSION_ID,
+//    E120_BOOT_SOFTWARE_VERSION_LABEL,
+    E120_DMX_PERSONALITY,
+    E120_DMX_PERSONALITY_DESCRIPTION,
+//    E120_SENSOR_DEFINITION,
+//    E120_SENSOR_VALUE,
+//    E120_RECORD_SENSORS,
+//    E120_DEVICE_HOURS,
+//    E120_REAL_TIME_CLOCK,
+//    E120_RESET_DEVICE,
+//    E137_1_IDENTIFY_MODE,  //done
+};
 
 
-//extern void PWM_Level_interrupt(void);
+const char PERSONALITY_1[]="1 LOG";
+const char PERSONALITY_2[]="2 LOG";
+const char PERSONALITY_3[]="3 LOG";
+const char PERSONALITY_4[]="4 LOG";
+const char PERSONALITY_5[]="1 LOG, 1 CCT";
+const char PERSONALITY_6[]="2 LOG, 2 CCT";
 
+typedef struct _personality_definition
+{
+	const uint8_t personality;
+//	void (*get_handler)(uint16_t sub_device);
+//	void (*set_handler)(bool was_broadcast, uint16_t sub_device);
+	const uint8_t footprint;
+    const char* description;
+    const char descriptionsize;
+//	const bool include_in_supported_params;
+};
+static const struct _personality_definition PERSONALITY_DEFINITIONS[]  = {
+    {1,1,&PERSONALITY_1[0],sizeof(PERSONALITY_1)},
+    {2,2,&PERSONALITY_2[0],sizeof(PERSONALITY_2)},
+    {3,3,&PERSONALITY_3[0],sizeof(PERSONALITY_3)},
+    {4,4,&PERSONALITY_4[0],sizeof(PERSONALITY_4)},
+    {5,2,&PERSONALITY_5[0],sizeof(PERSONALITY_5)},
+    {6,4,&PERSONALITY_6[0],sizeof(PERSONALITY_6)},
+};
+char PERSONALITY ;
+#define PERSONALITY_SIZE      sizeof(PERSONALITY_DEFINITIONS)

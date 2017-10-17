@@ -11,7 +11,7 @@ extern double __fpnormalize(double);
 #pragma intrinsic(__builtin_software_breakpoint)
 extern void __builtin_software_breakpoint(void);
 
-# 49 "C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16f1575.h"
+# 49 "C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16f1574.h"
 extern volatile unsigned char INDF0 @ 0x000;
 
 asm("INDF0 equ 00h");
@@ -6251,15 +6251,22 @@ typedef uint16_t uintptr_t;
 
 # 14 "Timer.h"
 extern void timer1_interrupt(void);
-extern void timer1_init(void);
+extern void timer_init(void);
 extern void timer1_switch(void);
+extern void RDM_Identify_Switch(void);
+extern void timer2_loop(void);
 
 enum {
 TIMER_500US,
-TIMER_BREAK,
-TX_TIMER_MAB,
+TIMER_RDM_BREAK,
+TIMER_RDM_MAB,
+TIMER_RDM_MBB,
 
 
+
+
+TIMER_MAS,
+TIMER_DISC_MAB,
 
 
 };
@@ -6289,6 +6296,9 @@ unsigned int Switch : 1;
 
 volatile TIMER_DATA Timer;
 
+# 86
+char Timer2_Count = 0;
+
 # 13 "DMX.h"
 extern void DMX_init(void);
 
@@ -6302,12 +6312,15 @@ extern void DMX_interrupt(void);
 
 extern void DMX_TargetNew(void);
 
-# 50
+extern void PWM_TurnOn(void);
+extern void PWM_TurnOff(void);
+
+# 53
 volatile unsigned char RxData[4];
 
 uint16_t DMX_Address;
 
-const char DMX_StartCode = 0;
+
 
 volatile int RxAddrCount = 0;
 
@@ -6357,19 +6370,21 @@ unsigned int RDMmute : 1;
 
 unsigned int RDM_Identify_Device : 1;
 
-unsigned int RDM_Identify_Device_Switch : 1;
+unsigned int RDM_Identify_Device_Flash : 1;
+
+unsigned int RDM_Identify_Device_Timer2New : 1;
 
 } DMX_FLAGS;
 
 
 volatile DMX_FLAGS DMX_Flags;
 
-# 119
+# 124
 unsigned char DMXPeriod = 100;
 
 volatile char DMXPeriodConst =0;
 
-volatile char DMXPeriodDimming = 0;
+volatile char DMXDimming = 0;
 
 
 
@@ -6457,10 +6472,10 @@ const PWM_16 PWM={
 
 volatile char *PWMDCLptr[4];
 volatile char *PWMDCHptr[4];
-volatile char *PWMDCptr[4];
+
 volatile char *PWMLDCONptr[4];
 
-# 12 "RDM.h"
+# 14 "RDM.h"
 enum{
 ACK=0x00,
 ACK_TIMER=0x01,
@@ -6468,20 +6483,10 @@ NACK_REASON=0x02,
 ACK_OVERFLOW=0x03,
 };
 
-# 35
-enum{
-SUPPORTED_PARAMETERS = 0x0050,
-PARAMETER_DESCRIPTION = 0x0051,
-DEVICE_INFO = 0x0060,
-SOFTWARE_VERSION_LABEL = 0x00C0,
-DMX_START_ADDRESS = 0x00F0,
-IDENTIFY_DEVICE = 0x1000
-};
-
-# 58
+# 60
 extern void RDM_init(void);
 
-# 62
+# 64
 extern void RDM_tx_interrupt(void);
 
 extern void RDM_tx_TimerBreak(void);
@@ -6492,12 +6497,12 @@ extern void TX_RDM_Response_Set(void);
 extern void RDM_rx_loop(void);
 extern void RDM_TXSTART(void);
 
-# 91
+# 93
 uint16_t TxCount=0;
 
 
 
-volatile uint8_t *TxByte;
+volatile uint8_t *BytePtr;
 
 volatile uint8_t TxState=0;
 
@@ -6506,6 +6511,9 @@ volatile uint8_t TxState=0;
 const char UID[6]={0x08,0xBA,0x12,0x34,0x56,0x78};
 
 
+const char SOFTWARE_VERSION_LABEL[]="Meteor Lighting v171012";
+
+# 114
 enum
 {
 
@@ -6560,18 +6568,25 @@ extern uint16_t RDM_set_checkSum(RDM_Data);
 volatile RDM_Data RX_RDM_Data;
 volatile RDM_Data TX_RDM_Data;
 
-char DISCOVERY_RDM_Data[24];
+char DISCOVERY_RDM_Data[23+1];
 
-# 172
+# 182
 typedef union{
 uint8_t u8[100];
-uint16_t u16[50];
-uint32_t u32[25];
+uint16_t u16[(100>>1)];
+uint32_t u32[(100>>2)];
 }PD_call;
 PD_call PD;
 
-uint16_t *PD_Manu;
-uint32_t *PD_ID;
+extern void PD_init(void);
+extern void PD_write_u8(uint8_t);
+extern void PD_write_u16(uint16_t);
+extern void PD_write_u32(uint32_t);
+extern uint8_t* PD_Read_u8ptr(void);
+extern uint16_t* PD_Read_u16ptr(void);
+extern uint32_t* PD_Read_u32ptr(void);
+uint16_t *PD_Manu_ptr;
+uint32_t *PD_ID_ptr;
 
 char PDCount;
 char TX_PDCount;
@@ -6579,17 +6594,72 @@ char TX_PDCount;
 volatile char PackCount;
 volatile unsigned PD_Flag;
 volatile unsigned TX_PD_Flag;
+volatile unsigned TX_Discovery_Flag;
 
-# 256
 uint16_t checkSum;
 
+char IDENTIFY_MODE=0xff;
+
+static const uint16_t PID_DEFINITIONS[] = {
+
+# 222
+0x00E0,
+0x00E1,
+
+# 231
+};
+
+
+const char PERSONALITY_1[]="1 LOG";
+const char PERSONALITY_2[]="2 LOG";
+const char PERSONALITY_3[]="3 LOG";
+const char PERSONALITY_4[]="4 LOG";
+const char PERSONALITY_5[]="1 LOG, 1 CCT";
+const char PERSONALITY_6[]="2 LOG, 2 CCT";
+
+typedef struct _personality_definition
+{
+const uint8_t personality;
+
+
+const uint8_t footprint;
+const char* description;
+const char descriptionsize;
+
+};
+static const struct _personality_definition PERSONALITY_DEFINITIONS[] = {
+{1,1,&PERSONALITY_1[0],sizeof(PERSONALITY_1)},
+{2,2,&PERSONALITY_2[0],sizeof(PERSONALITY_2)},
+{3,3,&PERSONALITY_3[0],sizeof(PERSONALITY_3)},
+{4,4,&PERSONALITY_4[0],sizeof(PERSONALITY_4)},
+{5,2,&PERSONALITY_5[0],sizeof(PERSONALITY_5)},
+{6,4,&PERSONALITY_6[0],sizeof(PERSONALITY_6)},
+};
+char PERSONALITY ;
+
 # 15 "Timer.c"
-void timer1_init(void) {
+void timer_init(void) {
+
 TMR1IE = 1;
 T1CON = 0b00110001;
 
+TimerState = TIMER_500US;
+
+Timer.HR_Count = 0;
+Timer.MIN_Count = 0;
+Timer.SEC_Count = 0;
+Timer.flags = 0;
 
 
+TMR1 = 0xFE0B;
+TMR1IF = 0;
+TMR1IE = 1;
+
+
+
+
+T2CON=0b01001111;
+PR2=0xf9;
 }
 
 
@@ -6600,13 +6670,11 @@ switch (TimerState) {
 default:
 TimerState = TIMER_500US;
 
-# 41
+# 56
+break;
 case TIMER_500US:
 
-# 50
-if(ADIE==RA5){
-Timer.Switch=1;
-}
+# 69
 TMR1 = 0xFE0B;
 RxTimer++;
 if (RxTimer == 2400) {
@@ -6619,7 +6687,7 @@ Timer.MS = 1;
 if (Timer.MS_Count == 1000)
 {
 
-# 80
+# 94
 Timer.MS_Count = 0;
 Timer.SEC_Count++;
 Timer.SEC = 1;
@@ -6640,37 +6708,77 @@ Timer.HR = 1;
 
 break;
 
-# 105
-case TIMER_BREAK:
+# 118
+case TIMER_RDM_MBB:
+LATC4 = 0;
+TXEN = 0;
+TMR1 = 0xff73;
+TimerState = TIMER_RDM_BREAK;
+break;
+case TIMER_RDM_BREAK:
+TXEN = 1;
 LATC4 = 1;
 TMR1 = 0xFFF5;
-TimerState = TX_TIMER_MAB;
+TimerState = TIMER_RDM_MAB;
+
 break;
 
-case TX_TIMER_MAB:
-TXEN = 1;
+case TIMER_RDM_MAB:
+TMR1 = 0xFCDF;
+TimerState = TIMER_500US;
+
+
+TXIE = 1;
+break;
+case TIMER_DISC_MAB:
+
 TXIE = 1;
 TMR1 = 0xFCDF;
 TimerState = TIMER_500US;
+
 break;
+
+# 156
+case TIMER_MAS:
+TMR1 = TIMER_500US;
+TimerState = TIMER_500US;
+
+
+LATC3=0;
+break;
+
+# 168
 }
 }
 }
 
-void timer1_switch(void){
-if(Timer.Switch==1){
-SPEN=RA5;
-RC3=RA5;
-RCIE=RA5;
-volatile char RxDat2;
-Timer.Switch=0;
-ADIE=~RA5;
-ADON=~RA5;
-GO_nDONE = ~RA5;
-if (FERR){}
-RxDat2 = RCREG;
-ADIF = 0;
-DMX_Flags.RxTimeout = 0;
-RxState = WAIT_FOR_START;
+void timer2_interrupt(void) {
+if (TMR2IE && TMR2IF) {
+TMR2IF = 0;
+Timer2_Count++;
+if(Timer2_Count==50){
+Timer2_Count=0;
+DMX_Flags.RDM_Identify_Device_Timer2New = 1;
 }
 }
+}
+void timer2_loop(void){
+if(DMX_Flags.RDM_Identify_Device_Timer2New){
+DMX_Flags.RDM_Identify_Device_Timer2New=0;
+DMX_Flags.RDM_Identify_Device_Flash=~DMX_Flags.RDM_Identify_Device_Flash;
+if(DMX_Flags.RDM_Identify_Device_Flash){
+PWM_TurnOn();
+}else{
+PWM_TurnOff();
+}
+}
+}
+
+void RDM_Identify_Switch(void){
+DMX_Flags.RDM_Identify_Device=~DMX_Flags.RDM_Identify_Device;
+TMR2IE=DMX_Flags.RDM_Identify_Device;
+if(!DMX_Flags.RDM_Identify_Device){
+PWM_TurnOff();
+}
+}
+

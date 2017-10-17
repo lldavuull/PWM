@@ -12,17 +12,24 @@
 
 //Timer1 set start
 extern void timer1_interrupt(void);
-extern void timer1_init(void);
+extern void timer_init(void);
 extern void timer1_switch(void);
+extern void RDM_Identify_Switch(void);
+extern void timer2_loop(void);
 
 enum {
     TIMER_500US,  //(500us)
-    TIMER_BREAK,  //(90us)
-    TX_TIMER_MAB,  //(20us)
+    TIMER_RDM_BREAK,  //(180us)
+    TIMER_RDM_MAB,  //(10us)
+    TIMER_RDM_MBB,
 //    TIMER_DISC_MARK,  //(10us)
 //    TIMER_WAIT_TO_BREAK, //(180us)
 //    TIMER_FILL  //(800us)
 //    TIMER_StartUpDelay, // (65.535*0x10=1048.56ms)
+    TIMER_MAS, //(4us)
+    TIMER_DISC_MAB, //(4us)
+    
+//    TX_TEST
 };
 volatile char TimerState = 0;
 
@@ -56,20 +63,27 @@ volatile TIMER_DATA Timer;
 
 //1MS     0xFc17
 
+//0xFFFF - 40 = 0xffd7
+
+#define TMR_LOAD_RDM_MBB     0xFFcd  // Load value for MBB      ( 40us)
+
+// 140us = 0xFFFF - 140 = 0xff73
+#define TMR_LOAD_RDM_BREAK   0xff73  // Load Value for BREAK    (140us)
+
 // 10us = 0xFFFF - 10 = 0xFFF5
-#define TMR_LOAD_MAB     0xFFF5  // Load value for MAB      ( 10us)
-
-// 180us = 0xFFFF - 180 = 0xFF4B
-//#define TMR_LOAD_WAIT_TO_BREAK   0xFF4B  // Load Value for BREAK    (180us)
-
-// 180us = 0xFFFF - 180 = 0xFF4B
-#define TMR_LOAD_BREAK   0xFF0B  // Load Value for BREAK    (180us)
+#define TMR_LOAD_RDM_MAB     0xFFF5  // Load value for MAB      ( 10us)
 
 // 800us = 0xFFFF - 800 = 0xFCDF  - Adjust to fine tune the 1ms total
 #define TMR_LOAD_FILL   0xFCDF   // Load value to total 1ms (800us)
 
+// 4us = 0xFFFF - 4 = 0xFFFA  
+#define TMR_LOAD_MAS   0xFFCA   // Load value for MAB      ( 4us)
+
+// 8us = 0xFFFF - 8 = 0xFFF7
+#define TMR_LOAD_DISC_MAB   0xFFE5   // Load value for MAB Discovery      ( 10us)
 //timer1 set end
 
+char Timer2_Count = 0; // 0x0~ 0x10 
 
 // 4us = 0xFFFF - 4 = 0xFFFB  - Adjust to fine tune the 1ms total
 
@@ -78,3 +92,4 @@ volatile TIMER_DATA Timer;
 // This will ensure that all other devices on the line recognize the start bit.
 
 //#define TMR_DISC_MARK   0xFFF5   // Load value to total 10us
+

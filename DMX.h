@@ -28,6 +28,9 @@ extern void DMX_interrupt(void);
 
 extern void DMX_TargetNew(void);
 
+extern void PWM_TurnOn(void);
+extern void PWM_TurnOff(void);
+
 
 /** Select the size of the receive buffer.
     This is the number of DMX512 Channels you will recieve
@@ -51,7 +54,7 @@ volatile unsigned char RxData[RX_BUFFER_SIZE];
 /** RxChannel Base Address / Channel to start reading from */
 uint16_t DMX_Address;
 /** RxStart The Start Code for a valid data stream */
-const char DMX_StartCode = 0;
+#define DMX_StartCode 0
 /** AddrCount Address counter used in the interrupt routine */
 volatile int RxAddrCount = 0;
 /** *RxDataPtr Pointer to the receive data buffer. Used in interrupt */
@@ -101,7 +104,9 @@ typedef struct {
     
     unsigned int RDM_Identify_Device : 1;   //1= True, 0=False;
     
-    unsigned int RDM_Identify_Device_Switch : 1;   //1= On, 0=Off; Period = 1s
+    unsigned int RDM_Identify_Device_Flash : 1;   //1= On, 0=Off; Period = 1s
+    
+    unsigned int RDM_Identify_Device_Timer2New : 1;   //1= True, 0=False; Timer2
     
 } DMX_FLAGS;
 
@@ -120,7 +125,7 @@ unsigned char DMXPeriod = 100;
 /** DMXperiodConst incerease per 500us, Return to zero when RX recieve DMX_StartCode */
 volatile char DMXPeriodConst =0;
 
-volatile char DMXPeriodDimming = 0;
+volatile char DMXDimming = 0;
 //?????
 /** DMXPeriodStep will change PWM at 500us Timer per DMXPeriodStep period */
 //char DMXStep[RX_BUFFER_SIZE] =1; //0 is unchange , 1 is always change per 0.5ms Timer up, 2 is 1ms, 3 is 1.5ms, ....

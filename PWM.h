@@ -48,7 +48,7 @@ const PWM_16 PWM={
 //char* PWM_ptr=&Inter_PWM_16;
 volatile char *PWMDCLptr[4];
 volatile char *PWMDCHptr[4];
-volatile char *PWMDCptr[4];
+//volatile char *PWMDCptr[4];
 volatile char *PWMLDCONptr[4];
 
 //#define PWMDCH[0] PWM1DCH

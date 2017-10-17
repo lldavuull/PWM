@@ -11,7 +11,7 @@ extern double __fpnormalize(double);
 #pragma intrinsic(__builtin_software_breakpoint)
 extern void __builtin_software_breakpoint(void);
 
-# 49 "C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16f1575.h"
+# 49 "C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16f1574.h"
 extern volatile unsigned char INDF0 @ 0x000;
 
 asm("INDF0 equ 00h");
@@ -6293,7 +6293,7 @@ const PWM_16 PWM={
 
 volatile char *PWMDCLptr[4];
 volatile char *PWMDCHptr[4];
-volatile char *PWMDCptr[4];
+
 volatile char *PWMLDCONptr[4];
 
 # 12 "ADC.h"
@@ -6330,12 +6330,15 @@ extern void DMX_interrupt(void);
 
 extern void DMX_TargetNew(void);
 
-# 50
+extern void PWM_TurnOn(void);
+extern void PWM_TurnOff(void);
+
+# 53
 volatile unsigned char RxData[4];
 
 uint16_t DMX_Address;
 
-const char DMX_StartCode = 0;
+
 
 volatile int RxAddrCount = 0;
 
@@ -6385,19 +6388,21 @@ unsigned int RDMmute : 1;
 
 unsigned int RDM_Identify_Device : 1;
 
-unsigned int RDM_Identify_Device_Switch : 1;
+unsigned int RDM_Identify_Device_Flash : 1;
+
+unsigned int RDM_Identify_Device_Timer2New : 1;
 
 } DMX_FLAGS;
 
 
 volatile DMX_FLAGS DMX_Flags;
 
-# 119
+# 124
 unsigned char DMXPeriod = 100;
 
 volatile char DMXPeriodConst =0;
 
-volatile char DMXPeriodDimming = 0;
+volatile char DMXDimming = 0;
 
 
 

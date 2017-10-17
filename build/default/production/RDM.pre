@@ -11,7 +11,7 @@ extern double __fpnormalize(double);
 #pragma intrinsic(__builtin_software_breakpoint)
 extern void __builtin_software_breakpoint(void);
 
-# 49 "C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16f1575.h"
+# 49 "C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16f1574.h"
 extern volatile unsigned char INDF0 @ 0x000;
 
 asm("INDF0 equ 00h");
@@ -6249,7 +6249,7 @@ typedef int16_t intptr_t;
 
 typedef uint16_t uintptr_t;
 
-# 12 "RDM.h"
+# 14 "RDM.h"
 enum{
 ACK=0x00,
 ACK_TIMER=0x01,
@@ -6257,20 +6257,10 @@ NACK_REASON=0x02,
 ACK_OVERFLOW=0x03,
 };
 
-# 35
-enum{
-SUPPORTED_PARAMETERS = 0x0050,
-PARAMETER_DESCRIPTION = 0x0051,
-DEVICE_INFO = 0x0060,
-SOFTWARE_VERSION_LABEL = 0x00C0,
-DMX_START_ADDRESS = 0x00F0,
-IDENTIFY_DEVICE = 0x1000
-};
-
-# 58
+# 60
 extern void RDM_init(void);
 
-# 62
+# 64
 extern void RDM_tx_interrupt(void);
 
 extern void RDM_tx_TimerBreak(void);
@@ -6281,12 +6271,12 @@ extern void TX_RDM_Response_Set(void);
 extern void RDM_rx_loop(void);
 extern void RDM_TXSTART(void);
 
-# 91
+# 93
 uint16_t TxCount=0;
 
 
 
-volatile uint8_t *TxByte;
+volatile uint8_t *BytePtr;
 
 volatile uint8_t TxState=0;
 
@@ -6295,6 +6285,9 @@ volatile uint8_t TxState=0;
 const char UID[6]={0x08,0xBA,0x12,0x34,0x56,0x78};
 
 
+const char SOFTWARE_VERSION_LABEL[]="Meteor Lighting v171012";
+
+# 114
 enum
 {
 
@@ -6349,18 +6342,25 @@ extern uint16_t RDM_set_checkSum(RDM_Data);
 volatile RDM_Data RX_RDM_Data;
 volatile RDM_Data TX_RDM_Data;
 
-char DISCOVERY_RDM_Data[24];
+char DISCOVERY_RDM_Data[23+1];
 
-# 172
+# 182
 typedef union{
 uint8_t u8[100];
-uint16_t u16[50];
-uint32_t u32[25];
+uint16_t u16[(100>>1)];
+uint32_t u32[(100>>2)];
 }PD_call;
 PD_call PD;
 
-uint16_t *PD_Manu;
-uint32_t *PD_ID;
+extern void PD_init(void);
+extern void PD_write_u8(uint8_t);
+extern void PD_write_u16(uint16_t);
+extern void PD_write_u32(uint32_t);
+extern uint8_t* PD_Read_u8ptr(void);
+extern uint16_t* PD_Read_u16ptr(void);
+extern uint32_t* PD_Read_u32ptr(void);
+uint16_t *PD_Manu_ptr;
+uint32_t *PD_ID_ptr;
 
 char PDCount;
 char TX_PDCount;
@@ -6368,9 +6368,48 @@ char TX_PDCount;
 volatile char PackCount;
 volatile unsigned PD_Flag;
 volatile unsigned TX_PD_Flag;
+volatile unsigned TX_Discovery_Flag;
 
-# 256
 uint16_t checkSum;
+
+char IDENTIFY_MODE=0xff;
+
+static const uint16_t PID_DEFINITIONS[] = {
+
+# 222
+0x00E0,
+0x00E1,
+
+# 231
+};
+
+
+const char PERSONALITY_1[]="1 LOG";
+const char PERSONALITY_2[]="2 LOG";
+const char PERSONALITY_3[]="3 LOG";
+const char PERSONALITY_4[]="4 LOG";
+const char PERSONALITY_5[]="1 LOG, 1 CCT";
+const char PERSONALITY_6[]="2 LOG, 2 CCT";
+
+typedef struct _personality_definition
+{
+const uint8_t personality;
+
+
+const uint8_t footprint;
+const char* description;
+const char descriptionsize;
+
+};
+static const struct _personality_definition PERSONALITY_DEFINITIONS[] = {
+{1,1,&PERSONALITY_1[0],sizeof(PERSONALITY_1)},
+{2,2,&PERSONALITY_2[0],sizeof(PERSONALITY_2)},
+{3,3,&PERSONALITY_3[0],sizeof(PERSONALITY_3)},
+{4,4,&PERSONALITY_4[0],sizeof(PERSONALITY_4)},
+{5,2,&PERSONALITY_5[0],sizeof(PERSONALITY_5)},
+{6,4,&PERSONALITY_6[0],sizeof(PERSONALITY_6)},
+};
+char PERSONALITY ;
 
 # 13 "DMX.h"
 extern void DMX_init(void);
@@ -6385,12 +6424,15 @@ extern void DMX_interrupt(void);
 
 extern void DMX_TargetNew(void);
 
-# 50
+extern void PWM_TurnOn(void);
+extern void PWM_TurnOff(void);
+
+# 53
 volatile unsigned char RxData[4];
 
 uint16_t DMX_Address;
 
-const char DMX_StartCode = 0;
+
 
 volatile int RxAddrCount = 0;
 
@@ -6440,19 +6482,21 @@ unsigned int RDMmute : 1;
 
 unsigned int RDM_Identify_Device : 1;
 
-unsigned int RDM_Identify_Device_Switch : 1;
+unsigned int RDM_Identify_Device_Flash : 1;
+
+unsigned int RDM_Identify_Device_Timer2New : 1;
 
 } DMX_FLAGS;
 
 
 volatile DMX_FLAGS DMX_Flags;
 
-# 119
+# 124
 unsigned char DMXPeriod = 100;
 
 volatile char DMXPeriodConst =0;
 
-volatile char DMXPeriodDimming = 0;
+volatile char DMXDimming = 0;
 
 
 
@@ -6498,15 +6542,22 @@ float DMX_repeat_hereditary[4]=2.0;
 
 # 14 "Timer.h"
 extern void timer1_interrupt(void);
-extern void timer1_init(void);
+extern void timer_init(void);
 extern void timer1_switch(void);
+extern void RDM_Identify_Switch(void);
+extern void timer2_loop(void);
 
 enum {
 TIMER_500US,
-TIMER_BREAK,
-TX_TIMER_MAB,
+TIMER_RDM_BREAK,
+TIMER_RDM_MAB,
+TIMER_RDM_MBB,
 
 
+
+
+TIMER_MAS,
+TIMER_DISC_MAB,
 
 
 };
@@ -6536,59 +6587,45 @@ unsigned int Switch : 1;
 
 volatile TIMER_DATA Timer;
 
+# 86
+char Timer2_Count = 0;
+
 # 13 "PFM.h"
 extern uint16_t PFM_Read(uint16_t);
 
 extern void PFM_Write(uint16_t ,uint16_t);
 
-# 21
+# 32
 enum{
-Flash_DMXAddress=0x1F80,
-Flash_UID1=0x1FA0,
-Flash_UID2=0x1FA1,
-Flash_UID3=0x1FA2,
-Flash_UID4=0x1FA3,
-Personality_Number=0x1FC0
+Flash_DMXAddress=0x0C80,
+Flash_UID1=0x0CA0,
+Flash_UID2=0x0CA1,
+Flash_UID3=0x0CA2,
+Flash_UID4=0x0CA3,
+Flash_Personality=0x0CC0
 };
 
 # 16 "RDM.c"
 void RDM_init(void) {
-TimerState = 0;
 
-Timer.HR_Count = 0;
-Timer.MIN_Count = 0;
-Timer.SEC_Count = 0;
-Timer.flags = 0;
-
-
-TMR1 = 0xFE0B;
-TMR1IF = 0;
-TMR1IE = 1;
 PEIE = 1;
 
-
-LATC4 = 1;
 TRISC4 = 0;
-TXEN = 1;
+LATC4 = 1;
+
 SPEN = 1;
 SYNC = 0;
 RC4PPS = 0b1001;
 
-TxByte = &TX_RDM_Data.value[0];
+BytePtr = &TX_RDM_Data.value[0];
 TX9 = TX9D = 1;
 
-
-
+LATC3=0;
 DMX_Flags.RDMmute = 0;
 DMX_Flags.RDM_Identify_Device = 0;
 
-# 59
-DMX_Address=1;
 
-
-
-
-PDCount = 24;
+PDCount = 23;
 
 
 while (PDCount >= 17) {
@@ -6617,8 +6654,17 @@ while (PDCount >= 11) {
 TX_RDM_Data.value[PDCount] = UID[16-PDCount];
 PDCount--;
 }
+DMX_Address=PFM_Read(Flash_DMXAddress);
+if(DMX_Address==0x3fff){
+PFM_Write(Flash_DMXAddress,0x0001);
+}
+DMX_Address=PFM_Read(Flash_DMXAddress);
 
-
+PERSONALITY=PFM_Read(PERSONALITY);
+if(PERSONALITY==0xff){
+PFM_Write(Flash_Personality,0x0004);
+}
+PERSONALITY=PFM_Read(Flash_Personality);
 
 }
 
@@ -6636,6 +6682,7 @@ DMX_Flags.RDMcheckUID_flag = 2;
 }
 
 if (DMX_Flags.RDMcheckUID_flag == 2) {
+PD_init();
 switch (RX_RDM_Data.CC) {
 case 0x10:
 RDM_discovery_CC();
@@ -6653,8 +6700,6 @@ break;
 
 void RDM_tx_interrupt(void) {
 if (TXIE && TXIF) {
-
-# 134
 switch (TxState) {
 case TX_START:
 if(TX_PD_Flag==1){
@@ -6662,7 +6707,7 @@ TX_PD_Flag=0;
 TXREG = 0xCC;
 }else{
 TXREG = 0x01;
-TxByte = &TX_RDM_Data.value[23];
+BytePtr = &TX_RDM_Data.value[23];
 TxCount = 0;
 TxState = TX_DATA;
 }
@@ -6671,39 +6716,44 @@ case TX_SART_DISCOVERY:
 TxState = TX_DISCOVERY;
 break;
 case TX_DISCOVERY:
-if (TxCount <= 24) {
-TXREG = *TxByte;
-TxByte--;
+if (TxCount <= 23) {
 TxCount++;
+TXREG = *BytePtr;
+BytePtr--;
 }else{
 
-LATC4 = 1;
-TXEN = 0;
 TXIE = 0;
-LATC3=0;
+RCIE = 1;
+TMR1 = 0xFFCA;
+TimerState = TIMER_MAS;
+
+
 }
 break;
 case TX_DATA:
 if (TxCount <= 24) {
 
-TXREG = *TxByte;
-TxByte--;
+TXREG = *BytePtr;
+BytePtr--;
 TxCount++;
 if(TxCount == 22 & TX_RDM_Data.PDL > 0 & TX_PD_Flag == 0){
 TxState = TX_RDM_PD;
-TX_PDCount = 40-1;
+TX_PDCount = (100>>1)-1;
 }
 }else{
+RCIE = 1;
 
-LATC4 = 1;
-TXEN = 0;
 TXIE = 0;
-LATC3=0;
+
+
+
+TMR1 = 0xFFCA;
+TimerState = TIMER_MAS;
 }
 break;
 case TX_RDM_PD:
 TXREG = PD.u8[TX_PDCount];
-if (TX_PDCount == 40-TX_RDM_Data.PDL) {
+if (TX_PDCount == (100>>1)-TX_RDM_Data.PDL) {
 TxState = TX_DATA;
 TX_PD_Flag = 1;
 }else{
@@ -6715,11 +6765,9 @@ break;
 }
 
 void RDM_tx_TimerBreak() {
-TMR1 = 0xFF0B;
-TimerState = TIMER_BREAK;
-LATC4 = 0;
+TMR1 = 0xFFcd;
+TimerState = TIMER_RDM_MBB;
 LATC3 = 1;
 TX_PD_Flag=1;
 
 }
-
