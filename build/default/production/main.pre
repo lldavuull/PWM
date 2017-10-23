@@ -11,7 +11,7 @@ extern double __fpnormalize(double);
 #pragma intrinsic(__builtin_software_breakpoint)
 extern void __builtin_software_breakpoint(void);
 
-# 49 "C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16f1574.h"
+# 49 "C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16f1575.h"
 extern volatile unsigned char INDF0 @ 0x000;
 
 asm("INDF0 equ 00h");
@@ -6329,7 +6329,12 @@ unsigned int RDM_Identify_Device_Timer2New : 1;
 
 volatile DMX_FLAGS DMX_Flags;
 
-# 124
+
+char FOOTPRINT = 4;
+
+
+
+
 unsigned char DMXPeriod = 100;
 
 volatile char DMXPeriodConst =0;
@@ -6382,14 +6387,14 @@ float DMX_repeat_hereditary[4]=2.0;
 volatile int i = 0;
 
 typedef union {
-unsigned int DC[256];
+unsigned int DC;
 struct{
 unsigned DCL :8;
 unsigned DCH :8;
-}PWM[256];
+};
 }PWM_16;
 
-const PWM_16 PWM={
+const PWM_16 PWM[]={
 0x0000, 0x00C8, 0x00CC, 0x00D1, 0x00D6, 0x00DB, 0x00E1, 0x00E6, 0x00EC, 0x00F1,
 0x00F7, 0x00FD, 0x0103, 0x0109, 0x0110, 0x0116, 0x011D, 0x0124, 0x012B, 0x0132,
 0x0139, 0x0141, 0x0149, 0x0151, 0x0159, 0x0161, 0x016A, 0x0172, 0x017B, 0x0184,
@@ -6425,30 +6430,22 @@ volatile char *PWMDCHptr[4];
 
 volatile char *PWMLDCONptr[4];
 
-# 13 "PFM.h"
+# 12 "PFM.h"
+extern void PFM_Unlock();
 extern uint16_t PFM_Read(uint16_t);
-
+extern void PFM_Erase(uint16_t);
 extern void PFM_Write(uint16_t ,uint16_t);
+extern void PFM_write_String(uint16_t,uint8_t*,uint8_t);
+extern uint8_t PFM_Read_String(uint16_t,uint8_t*);
 
-# 32
+# 24
 enum{
-Flash_DMXAddress=0x0C80,
-Flash_UID1=0x0CA0,
-Flash_UID2=0x0CA1,
-Flash_UID3=0x0CA2,
-Flash_UID4=0x0CA3,
-Flash_Personality=0x0CC0
+Flash_DMX_ADDRESS=0x1F80,
+Flash_PERSONALITY=0x1FA0,
+Flash_DEVICE_LABEL=0x1FC0,
 };
 
-# 14 "RDM.h"
-enum{
-ACK=0x00,
-ACK_TIMER=0x01,
-NACK_REASON=0x02,
-ACK_OVERFLOW=0x03,
-};
-
-# 60
+# 60 "RDM.h"
 extern void RDM_init(void);
 
 # 64
@@ -6473,20 +6470,23 @@ volatile uint8_t TxState=0;
 
 
 
-const char UID[6]={0x08,0xBA,0x12,0x34,0x56,0x78};
 
+typedef union{
+uint8_t data[6];
+struct{
+uint32_t ID;
+uint16_t MANC;
+};
+}_UID;
+_UID UID;
 
-const char SOFTWARE_VERSION_LABEL[]="Meteor Lighting v171012";
-
-# 114
 enum
 {
-
-
 TX_DISCOVERY,
 TX_START,
 TX_SART_DISCOVERY,
 TX_DATA,
+TX_MAS,
 TX_RDM_PD
 };
 
@@ -6535,11 +6535,11 @@ volatile RDM_Data TX_RDM_Data;
 
 char DISCOVERY_RDM_Data[23+1];
 
-# 182
+# 180
 typedef union{
-uint8_t u8[100];
-uint16_t u16[(100>>1)];
-uint32_t u32[(100>>2)];
+uint8_t u8[200];
+uint16_t u16[(200>>1)];
+uint32_t u32[(200>>2)];
 }PD_call;
 PD_call PD;
 
@@ -6547,16 +6547,19 @@ extern void PD_init(void);
 extern void PD_write_u8(uint8_t);
 extern void PD_write_u16(uint16_t);
 extern void PD_write_u32(uint32_t);
+extern void PD_write_String(uint8_t*,uint8_t);
 extern uint8_t* PD_Read_u8ptr(void);
 extern uint16_t* PD_Read_u16ptr(void);
 extern uint32_t* PD_Read_u32ptr(void);
+extern void PD_Read_String(uint8_t*, uint8_t);
 uint16_t *PD_Manu_ptr;
 uint32_t *PD_ID_ptr;
 
-char PDCount;
+uint8_t tmp8;
+uint16_t tmp16;
 char TX_PDCount;
 
-volatile char PackCount;
+volatile char ReadCount;
 volatile unsigned PD_Flag;
 volatile unsigned TX_PD_Flag;
 volatile unsigned TX_Discovery_Flag;
@@ -6565,22 +6568,52 @@ uint16_t checkSum;
 
 char IDENTIFY_MODE=0xff;
 
-static const uint16_t PID_DEFINITIONS[] = {
-
 # 222
+static const uint16_t SUPPORTED_PARAMETERS[] = {
+
+0x0070,
+0x0080,
+0x0081,
+0x0082,
+
+
+
+0x00C1,
+0x00C2,
 0x00E0,
 0x00E1,
+0x0120,
+0x0121,
+0x0122,
 
-# 231
+# 244
+0x1040,
 };
 
+# 251
+const char SOFTWARE_VERSION_LABEL[]="METEOR LIGHTING SOFTWARE";
 
-const char PERSONALITY_1[]="1 LOG";
-const char PERSONALITY_2[]="2 LOG";
-const char PERSONALITY_3[]="3 LOG";
-const char PERSONALITY_4[]="4 LOG";
-const char PERSONALITY_5[]="1 LOG, 1 CCT";
-const char PERSONALITY_6[]="2 LOG, 2 CCT";
+
+const uint32_t BOOT_SOFTWARE_VERSION_ID=0x20171019;
+const char BOOT_SOFTWARE_VERSION_LABEL[]="DMX, TUNABLE WHITE, 16bit fine";
+
+
+const char DEVICE_MODEL_DESCRIPTION[]="METEOR DRIVER";
+
+const char MANUFACTURER_LABEL[]="METEOR LIGHTING";
+
+char DEVICE_LABEL[32]="METEOR DRIVER";
+char DEVICE_LABEL_SIZE=13;
+
+
+
+
+const char PERSONALITY_1[]="LOG 1";
+const char PERSONALITY_2[]="LOG 2";
+const char PERSONALITY_3[]="LOG 3";
+const char PERSONALITY_4[]="LOG 4";
+const char PERSONALITY_5[]="LOG 1, CCT 1";
+const char PERSONALITY_6[]="LOG 2, CCT 2";
 
 typedef struct _personality_definition
 {
@@ -6592,15 +6625,67 @@ const char* description;
 const char descriptionsize;
 
 };
-static const struct _personality_definition PERSONALITY_DEFINITIONS[] = {
-{1,1,&PERSONALITY_1[0],sizeof(PERSONALITY_1)},
-{2,2,&PERSONALITY_2[0],sizeof(PERSONALITY_2)},
-{3,3,&PERSONALITY_3[0],sizeof(PERSONALITY_3)},
-{4,4,&PERSONALITY_4[0],sizeof(PERSONALITY_4)},
-{5,2,&PERSONALITY_5[0],sizeof(PERSONALITY_5)},
-{6,4,&PERSONALITY_6[0],sizeof(PERSONALITY_6)},
+
+const struct _personality_definition PERSONALITY_DEFINITIONS[] = {
+{1,1,&PERSONALITY_1[0],sizeof(PERSONALITY_1)-1},
+{2,2,&PERSONALITY_2[0],sizeof(PERSONALITY_2)-1},
+{3,3,&PERSONALITY_3[0],sizeof(PERSONALITY_3)-1},
+{4,4,&PERSONALITY_4[0],sizeof(PERSONALITY_4)-1},
+{5,2,&PERSONALITY_5[0],sizeof(PERSONALITY_5)-1},
+{6,4,&PERSONALITY_6[0],sizeof(PERSONALITY_6)-1},
 };
 char PERSONALITY ;
+char FOOTPRINT ;
+
+
+
+extern uint8_t Get_FootPrint(uint8_t);
+
+
+
+
+const uint8_t SLOT_TYPE[8]={
+
+0x00,
+0x00,
+0x00,
+0x00,
+
+0x00,
+0x04,
+0x00,
+0x04
+};
+
+const uint16_t SLOT_LABEL_ID[8]={
+
+0x0001,
+0x0001,
+0x0001,
+0x0001,
+
+0x0001,
+0x0208,
+0x0001,
+0x0208
+};
+
+const char SLOT_DESCRIPTION_0[]="PWM SLOT ";
+const char SLOT_DESCRIPTION_1[]="LED ITENSITY";
+const char SLOT_DESCRIPTION_2[]="LED CCT";
+
+typedef struct _slot_description
+{
+const char* description;
+const char descriptionsize;
+};
+
+const struct _slot_description SLOT_DEFINITIONS[] = {
+{&SLOT_DESCRIPTION_0[0],sizeof(SLOT_DESCRIPTION_0)-1},
+{&SLOT_DESCRIPTION_1[0],sizeof(SLOT_DESCRIPTION_1)-1},
+{&SLOT_DESCRIPTION_2[0],sizeof(SLOT_DESCRIPTION_2)-1},
+};
+const char SLOT[]="0123";
 
 # 14 "Timer.h"
 extern void timer1_interrupt(void);
@@ -6649,7 +6734,7 @@ unsigned int Switch : 1;
 
 volatile TIMER_DATA Timer;
 
-# 86
+# 87
 char Timer2_Count = 0;
 
 # 15 "main.c"
@@ -6698,14 +6783,15 @@ TRISC3 = 0;
 ANSC3 = 0;
 INTCON = 0b11000000;
 
+
 timer_init();
 
 DMX_init();
 RDM_init();
+
 PWM1CON = PWM2CON = PWM3CON = PWM4CON = 0b10000000;
 
-# 70
-DMX_Address = 1;
+# 73
 while (1) {
 DMX_loop();
 

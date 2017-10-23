@@ -11,7 +11,7 @@ extern double __fpnormalize(double);
 #pragma intrinsic(__builtin_software_breakpoint)
 extern void __builtin_software_breakpoint(void);
 
-# 49 "C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16f1574.h"
+# 49 "C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16f1575.h"
 extern volatile unsigned char INDF0 @ 0x000;
 
 asm("INDF0 equ 00h");
@@ -6249,15 +6249,7 @@ typedef int16_t intptr_t;
 
 typedef uint16_t uintptr_t;
 
-# 14 "RDM.h"
-enum{
-ACK=0x00,
-ACK_TIMER=0x01,
-NACK_REASON=0x02,
-ACK_OVERFLOW=0x03,
-};
-
-# 60
+# 60 "RDM.h"
 extern void RDM_init(void);
 
 # 64
@@ -6282,20 +6274,23 @@ volatile uint8_t TxState=0;
 
 
 
-const char UID[6]={0x08,0xBA,0x12,0x34,0x56,0x78};
 
+typedef union{
+uint8_t data[6];
+struct{
+uint32_t ID;
+uint16_t MANC;
+};
+}_UID;
+_UID UID;
 
-const char SOFTWARE_VERSION_LABEL[]="Meteor Lighting v171012";
-
-# 114
 enum
 {
-
-
 TX_DISCOVERY,
 TX_START,
 TX_SART_DISCOVERY,
 TX_DATA,
+TX_MAS,
 TX_RDM_PD
 };
 
@@ -6344,11 +6339,11 @@ volatile RDM_Data TX_RDM_Data;
 
 char DISCOVERY_RDM_Data[23+1];
 
-# 182
+# 180
 typedef union{
-uint8_t u8[100];
-uint16_t u16[(100>>1)];
-uint32_t u32[(100>>2)];
+uint8_t u8[200];
+uint16_t u16[(200>>1)];
+uint32_t u32[(200>>2)];
 }PD_call;
 PD_call PD;
 
@@ -6356,16 +6351,19 @@ extern void PD_init(void);
 extern void PD_write_u8(uint8_t);
 extern void PD_write_u16(uint16_t);
 extern void PD_write_u32(uint32_t);
+extern void PD_write_String(uint8_t*,uint8_t);
 extern uint8_t* PD_Read_u8ptr(void);
 extern uint16_t* PD_Read_u16ptr(void);
 extern uint32_t* PD_Read_u32ptr(void);
+extern void PD_Read_String(uint8_t*, uint8_t);
 uint16_t *PD_Manu_ptr;
 uint32_t *PD_ID_ptr;
 
-char PDCount;
+uint8_t tmp8;
+uint16_t tmp16;
 char TX_PDCount;
 
-volatile char PackCount;
+volatile char ReadCount;
 volatile unsigned PD_Flag;
 volatile unsigned TX_PD_Flag;
 volatile unsigned TX_Discovery_Flag;
@@ -6374,22 +6372,52 @@ uint16_t checkSum;
 
 char IDENTIFY_MODE=0xff;
 
-static const uint16_t PID_DEFINITIONS[] = {
-
 # 222
+static const uint16_t SUPPORTED_PARAMETERS[] = {
+
+0x0070,
+0x0080,
+0x0081,
+0x0082,
+
+
+
+0x00C1,
+0x00C2,
 0x00E0,
 0x00E1,
+0x0120,
+0x0121,
+0x0122,
 
-# 231
+# 244
+0x1040,
 };
 
+# 251
+const char SOFTWARE_VERSION_LABEL[]="METEOR LIGHTING SOFTWARE";
 
-const char PERSONALITY_1[]="1 LOG";
-const char PERSONALITY_2[]="2 LOG";
-const char PERSONALITY_3[]="3 LOG";
-const char PERSONALITY_4[]="4 LOG";
-const char PERSONALITY_5[]="1 LOG, 1 CCT";
-const char PERSONALITY_6[]="2 LOG, 2 CCT";
+
+const uint32_t BOOT_SOFTWARE_VERSION_ID=0x20171019;
+const char BOOT_SOFTWARE_VERSION_LABEL[]="DMX, TUNABLE WHITE, 16bit fine";
+
+
+const char DEVICE_MODEL_DESCRIPTION[]="METEOR DRIVER";
+
+const char MANUFACTURER_LABEL[]="METEOR LIGHTING";
+
+char DEVICE_LABEL[32]="METEOR DRIVER";
+char DEVICE_LABEL_SIZE=13;
+
+
+
+
+const char PERSONALITY_1[]="LOG 1";
+const char PERSONALITY_2[]="LOG 2";
+const char PERSONALITY_3[]="LOG 3";
+const char PERSONALITY_4[]="LOG 4";
+const char PERSONALITY_5[]="LOG 1, CCT 1";
+const char PERSONALITY_6[]="LOG 2, CCT 2";
 
 typedef struct _personality_definition
 {
@@ -6401,15 +6429,67 @@ const char* description;
 const char descriptionsize;
 
 };
-static const struct _personality_definition PERSONALITY_DEFINITIONS[] = {
-{1,1,&PERSONALITY_1[0],sizeof(PERSONALITY_1)},
-{2,2,&PERSONALITY_2[0],sizeof(PERSONALITY_2)},
-{3,3,&PERSONALITY_3[0],sizeof(PERSONALITY_3)},
-{4,4,&PERSONALITY_4[0],sizeof(PERSONALITY_4)},
-{5,2,&PERSONALITY_5[0],sizeof(PERSONALITY_5)},
-{6,4,&PERSONALITY_6[0],sizeof(PERSONALITY_6)},
+
+const struct _personality_definition PERSONALITY_DEFINITIONS[] = {
+{1,1,&PERSONALITY_1[0],sizeof(PERSONALITY_1)-1},
+{2,2,&PERSONALITY_2[0],sizeof(PERSONALITY_2)-1},
+{3,3,&PERSONALITY_3[0],sizeof(PERSONALITY_3)-1},
+{4,4,&PERSONALITY_4[0],sizeof(PERSONALITY_4)-1},
+{5,2,&PERSONALITY_5[0],sizeof(PERSONALITY_5)-1},
+{6,4,&PERSONALITY_6[0],sizeof(PERSONALITY_6)-1},
 };
 char PERSONALITY ;
+char FOOTPRINT ;
+
+
+
+extern uint8_t Get_FootPrint(uint8_t);
+
+
+
+
+const uint8_t SLOT_TYPE[8]={
+
+0x00,
+0x00,
+0x00,
+0x00,
+
+0x00,
+0x04,
+0x00,
+0x04
+};
+
+const uint16_t SLOT_LABEL_ID[8]={
+
+0x0001,
+0x0001,
+0x0001,
+0x0001,
+
+0x0001,
+0x0208,
+0x0001,
+0x0208
+};
+
+const char SLOT_DESCRIPTION_0[]="PWM SLOT ";
+const char SLOT_DESCRIPTION_1[]="LED ITENSITY";
+const char SLOT_DESCRIPTION_2[]="LED CCT";
+
+typedef struct _slot_description
+{
+const char* description;
+const char descriptionsize;
+};
+
+const struct _slot_description SLOT_DEFINITIONS[] = {
+{&SLOT_DESCRIPTION_0[0],sizeof(SLOT_DESCRIPTION_0)-1},
+{&SLOT_DESCRIPTION_1[0],sizeof(SLOT_DESCRIPTION_1)-1},
+{&SLOT_DESCRIPTION_2[0],sizeof(SLOT_DESCRIPTION_2)-1},
+};
+const char SLOT[]="0123";
 
 # 13 "DMX.h"
 extern void DMX_init(void);
@@ -6491,7 +6571,12 @@ unsigned int RDM_Identify_Device_Timer2New : 1;
 
 volatile DMX_FLAGS DMX_Flags;
 
-# 124
+
+char FOOTPRINT = 4;
+
+
+
+
 unsigned char DMXPeriod = 100;
 
 volatile char DMXPeriodConst =0;
@@ -6540,19 +6625,19 @@ char preRxData[4]=0;
 char DMX_repeatcoeff[4] = 1;
 float DMX_repeat_hereditary[4]=2.0;
 
-# 13 "PFM.h"
+# 12 "PFM.h"
+extern void PFM_Unlock();
 extern uint16_t PFM_Read(uint16_t);
-
+extern void PFM_Erase(uint16_t);
 extern void PFM_Write(uint16_t ,uint16_t);
+extern void PFM_write_String(uint16_t,uint8_t*,uint8_t);
+extern uint8_t PFM_Read_String(uint16_t,uint8_t*);
 
-# 32
+# 24
 enum{
-Flash_DMXAddress=0x0C80,
-Flash_UID1=0x0CA0,
-Flash_UID2=0x0CA1,
-Flash_UID3=0x0CA2,
-Flash_UID4=0x0CA3,
-Flash_Personality=0x0CC0
+Flash_DMX_ADDRESS=0x1F80,
+Flash_PERSONALITY=0x1FA0,
+Flash_DEVICE_LABEL=0x1FC0,
 };
 
 # 14 "Timer.h"
@@ -6602,65 +6687,139 @@ unsigned int Switch : 1;
 
 volatile TIMER_DATA Timer;
 
-# 86
+# 87
 char Timer2_Count = 0;
 
-# 16 "RDM_Read.c"
+# 15 "RDM_Read.c"
 void RDM_GET_CC(void){
 switch (RX_RDM_Data.PID){
 case 0x1000:
-
-
 PD_write_u8(DMX_Flags.RDM_Identify_Device);
 break;
 case 0x0060:
-
-# 36
 PD_write_u16(0x0100);
 PD_write_u16(0x0080);
 PD_write_u16(0x0004);
-PD_write_u32(0x20171012);
-PD_write_u16(0x0004);
+PD_write_u32(BOOT_SOFTWARE_VERSION_ID);
+PD_write_u16(FOOTPRINT);
 PD_write_u8(PERSONALITY);
-PD_write_u8(sizeof(PERSONALITY_DEFINITIONS));
+PD_write_u8(sizeof(PERSONALITY_DEFINITIONS)/5);
 PD_write_u16(DMX_Address);
 PD_write_u16(0);
 PD_write_u8(0);
 break;
 case 0x00F0:
-
-
 PD_write_u16(DMX_Address);
 break;
 case 0x00C0:
-
-
-while(PackCount<sizeof(SOFTWARE_VERSION_LABEL)){
-PackCount++;
-PD_write_u8(SOFTWARE_VERSION_LABEL[PackCount]);
-}
+PD_write_String(&SOFTWARE_VERSION_LABEL[0],sizeof(SOFTWARE_VERSION_LABEL));
+break;
+case 0x00C1:
+PD_write_u32(BOOT_SOFTWARE_VERSION_ID);
+break;
+case 0x00C2:
+PD_write_String(&BOOT_SOFTWARE_VERSION_LABEL[0],sizeof(BOOT_SOFTWARE_VERSION_LABEL));
 break;
 case 0x0050:
-PDCount=sizeof(PID_DEFINITIONS);
-while(PackCount<PDCount){
-PD_write_u16(PID_DEFINITIONS[PackCount]);
-PackCount++;
+while(ReadCount<(sizeof(SUPPORTED_PARAMETERS)>>1)){
+PD_write_u16(SUPPORTED_PARAMETERS[ReadCount]);
+ReadCount++;
 }
 break;
-
-
-
+case 0x0051:
+tmp16=*PD_Read_u8ptr();
+PD_write_u16(tmp16);
+PD_write_u8(0x0001);
+PD_write_u8(0x02);
+PD_write_u8(0x01);
+PD_write_u8(0x00);
+PD_write_u8(0x00);
+PD_write_u8(0x00);
+PD_write_u32(0x00000000);
+PD_write_u32(0xffffffff);
+PD_write_u32(0x00000000);
+break;
+case 0x1040:
+PD_write_u8(IDENTIFY_MODE);
+break;
 case 0x00E0:
 PD_write_u8(PERSONALITY);
-PD_write_u8(sizeof(PERSONALITY_DEFINITIONS));
+PD_write_u8(sizeof(PERSONALITY_DEFINITIONS)/5);
 break;
 case 0x00E1:
-BytePtr=PERSONALITY_DEFINITIONS[PERSONALITY-1].description;
-PDCount=PERSONALITY_DEFINITIONS[PERSONALITY-1].descriptionsize;
-while(PackCount<PDCount){
-PD_write_u8(*BytePtr);
-PackCount++;
-BytePtr++;
+Addr=*PD_Read_u8ptr();
+PD_write_u8(Addr);
+PD_write_u16(PERSONALITY_DEFINITIONS[Addr-1].footprint);
+PD_write_String( PERSONALITY_DEFINITIONS[Addr-1].description , PERSONALITY_DEFINITIONS[Addr-1].descriptionsize );
+break;
+case 0x0070:
+PD_write_u16(0x0004);
+break;
+case 0x0080:
+PD_write_String(&DEVICE_MODEL_DESCRIPTION[0] , sizeof(DEVICE_MODEL_DESCRIPTION));
+break;
+case 0x0081:
+PD_write_String(&MANUFACTURER_LABEL[0] , sizeof(MANUFACTURER_LABEL));
+break;
+case 0x0082:
+PD_write_String(&DEVICE_LABEL[0] , DEVICE_LABEL_SIZE);
+break;
+case 0x0120:
+if(PERSONALITY<5){
+while(ReadCount<PERSONALITY){
+PD_write_u16(ReadCount);
+PD_write_u8(SLOT_TYPE[ReadCount]);
+PD_write_u16(SLOT_LABEL_ID[ReadCount]);
+ReadCount++;
+}
+}else{
+ReadCount=4;
+while(ReadCount<PERSONALITY){
+PD_write_u16(ReadCount);
+PD_write_u8(SLOT_TYPE[ReadCount]);
+PD_write_u16(SLOT_LABEL_ID[ReadCount]);
+tmp8=ReadCount+1;
+PD_write_u16(tmp8);
+PD_write_u8(SLOT_TYPE[tmp8]);
+PD_write_u16(SLOT_LABEL_ID[tmp8]);
+ReadCount++;
+}
+}
+break;
+case 0x0121:
+tmp16=*PD_Read_u16ptr();
+PD_write_u16(tmp16);
+if(PERSONALITY<5){
+PD_write_String(SLOT_DEFINITIONS[0].description , SLOT_DEFINITIONS[0].descriptionsize);
+PD_write_u8(SLOT[tmp16]);
+PD_write_String(SLOT_DEFINITIONS[1].description , SLOT_DEFINITIONS[1].descriptionsize);
+}else{
+PD_write_String(SLOT_DEFINITIONS[0].description , SLOT_DEFINITIONS[0].descriptionsize);
+PD_write_u8(SLOT[tmp16]);
+if(tmp16%2==0){
+PD_write_String(SLOT_DEFINITIONS[1].description , SLOT_DEFINITIONS[1].descriptionsize);
+}else{
+PD_write_String(SLOT_DEFINITIONS[2].description , SLOT_DEFINITIONS[2].descriptionsize);
+}
+}
+break;
+case 0x0122:
+if(PERSONALITY<5){
+while(ReadCount<PERSONALITY){
+PD_write_u16(ReadCount);
+PD_write_u8(0);
+ReadCount++;
+}
+}else{
+ReadCount=4;
+while(ReadCount<PERSONALITY){
+PD_write_u16(ReadCount);
+PD_write_u8(0);
+tmp8=ReadCount+1;
+PD_write_u16(tmp8);
+PD_write_u8(0);
+ReadCount++;
+}
 }
 break;
 }
@@ -6673,7 +6832,8 @@ case 0x00F0:
 
 DMX_Address=*PD_Read_u16ptr();
 
-PFM_Write(Flash_DMXAddress,DMX_Address);
+PFM_Erase(Flash_DMX_ADDRESS);
+PFM_Write(Flash_DMX_ADDRESS,DMX_Address);
 
 
 break;
@@ -6685,7 +6845,14 @@ IDENTIFY_MODE=*PD_Read_u8ptr();
 break;
 case 0x00E0:
 PERSONALITY=*PD_Read_u8ptr();
-PFM_Write(Flash_Personality,PERSONALITY);
+PFM_Erase(Flash_PERSONALITY);
+PFM_Write(Flash_PERSONALITY,PERSONALITY);
+FOOTPRINT=Get_FootPrint(PERSONALITY);
+break;
+case 0x0082:
+DEVICE_LABEL_SIZE=RX_RDM_Data.PDL;
+PD_Read_String(&DEVICE_LABEL[0] , DEVICE_LABEL_SIZE);
+PFM_write_String(Flash_DEVICE_LABEL,&DEVICE_LABEL[0],DEVICE_LABEL_SIZE);
 break;
 }
 RDM_TXSTART();
@@ -6700,17 +6867,17 @@ DMX_Flags.RDMcheckUID_flag = 1;
 PD_Manu_ptr =PD_Read_u16ptr();
 PD_ID_ptr = PD_Read_u32ptr();
 
-if (*PD_Manu_ptr < 0x08BA) {
+if (*PD_Manu_ptr <= UID.MANC) {
 DMX_Flags.RDMcheckUID_flag++;
-if (*PD_Manu_ptr == 0x08BA && *PD_ID_ptr > 0x12345678) {
+if (*PD_Manu_ptr == UID.MANC && *PD_ID_ptr > UID.ID) {
 DMX_Flags.RDMcheckUID_flag = 0;
 }
 }
 PD_Manu_ptr = PD_Read_u16ptr();
 PD_ID_ptr = PD_Read_u32ptr();
-if (*PD_Manu_ptr > 0x08BA) {
+if (*PD_Manu_ptr >= UID.MANC) {
 DMX_Flags.RDMcheckUID_flag++;
-if (*PD_Manu_ptr == 0x08BA && *PD_ID_ptr < 0x12345678) {
+if (*PD_Manu_ptr == UID.MANC && *PD_ID_ptr < UID.ID) {
 DMX_Flags.RDMcheckUID_flag = 0;
 }
 }
@@ -6725,7 +6892,7 @@ RCIE = 0;
 
 TXEN = 1;
 
-TMR1 = 0xFFE5;
+TMR1 = 0xFFF5;
 TimerState = TIMER_DISC_MAB;
 }
 }
@@ -6733,7 +6900,7 @@ break;
 case 0x0002:
 DMX_Flags.RDMmute = 1;
 TX_RDM_Data.PDL=2;
-PD.u16[((100>>1)>>1)-1] = 0;
+PD.u16[((200>>1)>>1)-1] = 0;
 RDM_TXSTART();
 break;
 case 0x0003:
@@ -6750,7 +6917,7 @@ break;
 void RDM_TXSTART(void){
 
 TX_RDM_Response_Set();
-TX_RDM_Data.CS=RDM_get_checkSum(TX_RDM_Data,(100>>1));
+TX_RDM_Data.CS=RDM_get_checkSum(TX_RDM_Data,(200>>1));
 TxState = TX_START;
 RDM_tx_TimerBreak();
 }
@@ -6761,57 +6928,85 @@ TX_RDM_Data.DUID.M=RX_RDM_Data.SUID.M;
 TX_RDM_Data.TN=RX_RDM_Data.TN;
 TX_RDM_Data.CC=RX_RDM_Data.CC+1;
 TX_RDM_Data.PID=RX_RDM_Data.PID;
-TX_RDM_Data.ML=24+TX_RDM_Data.PDL;
+TX_RDM_Data.ML=0x18+TX_RDM_Data.PDL;
 TX_RDM_Data.PORT=0x00;
 }
 
 
 uint16_t RDM_get_checkSum(RDM_Data Data, char len) {
 checkSum = 0x00CD;
-PackCount = 23;
-while (PackCount > 1) {
-checkSum += Data.value[PackCount];
-PackCount--;
+ReadCount = 23;
+while (ReadCount > 1) {
+checkSum += Data.value[ReadCount];
+ReadCount--;
 }
-PackCount = len-1;
-PDCount = len - Data.PDL;
-while (PackCount >= PDCount) {
-checkSum += PD.u8[PDCount];
-PDCount++;
+ReadCount = len-1;
+tmp8 = len - Data.PDL;
+while (ReadCount >= tmp8) {
+checkSum += PD.u8[tmp8];
+tmp8++;
 }
 return checkSum;
 }
 
 void PD_init(void){
 TX_RDM_Data.PDL=0x0;
-PackCount=0;
-PDCount=0;
+ReadCount=0;
+tmp8=0;
 }
 
 void PD_write_u8(uint8_t u8){
 TX_RDM_Data.PDL++;
-PD.u8[(100>>1)-TX_RDM_Data.PDL]=u8;
+PD.u8[(200>>1)-TX_RDM_Data.PDL]=u8;
 }
 
 void PD_write_u16(uint16_t u16){
 TX_RDM_Data.PDL+=2;
-PD.u16[((100>>1)>>1)-(TX_RDM_Data.PDL>>1)]=u16;
+if(TX_RDM_Data.PDL%2==0){
+PD.u16[((200>>1)>>1)-(TX_RDM_Data.PDL>>1)]=u16;
+}else{
+PD.u8[(200>>1)-TX_RDM_Data.PDL]=u16;
+PD.u8[(200>>1)-TX_RDM_Data.PDL+1]=(u16>>8);
+}
 }
 
 void PD_write_u32(uint32_t u32){
 TX_RDM_Data.PDL+=4;
-PD.u32[((100>>1)>>1)-(TX_RDM_Data.PDL>>2)]=u32;
+if(TX_RDM_Data.PDL%4==0){
+PD.u32[((200>>1)>>2)-(TX_RDM_Data.PDL>>2)]=u32;
+}else{
+PD.u8[(200>>1)-TX_RDM_Data.PDL]=u32;
+PD.u8[(200>>1)-TX_RDM_Data.PDL+1]=(u32>>8);
+PD.u8[(200>>1)-TX_RDM_Data.PDL+2]=(u32>>16);
+PD.u8[(200>>1)-TX_RDM_Data.PDL+3]=(u32>>24);
+}
+}
+
+void PD_write_String(uint8_t* u8ptr, uint8_t u8len){
+tmp8=0;
+while(tmp8<u8len){
+PD_write_u8(*u8ptr);
+tmp8++;
+u8ptr++;
+}
 }
 
 uint8_t* PD_Read_u8ptr(void){
-PackCount+=1;
-return &PD.u8[100-PackCount];
+ReadCount+=1;
+return &PD.u8[200-ReadCount];
 }
 uint16_t* PD_Read_u16ptr(void){
-PackCount+=2;
-return &PD.u16[(100>>1)-(PackCount>>1)];
+ReadCount+=2;
+return &PD.u16[(200>>1)-(ReadCount>>1)];
 }
 uint32_t* PD_Read_u32ptr(void){
-PackCount+=4;
-return &PD.u32[(100>>2)-(PackCount>>2)];
+ReadCount+=4;
+return &PD.u32[(200>>2)-(ReadCount>>2)];
+}
+
+void PD_Read_String(uint8_t* u8ptr, uint8_t u8len){
+while(ReadCount<u8len){
+*u8ptr=*PD_Read_u8ptr();
+u8ptr++;
+}
 }

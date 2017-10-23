@@ -11,7 +11,7 @@ extern double __fpnormalize(double);
 #pragma intrinsic(__builtin_software_breakpoint)
 extern void __builtin_software_breakpoint(void);
 
-# 49 "C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16f1574.h"
+# 49 "C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16f1575.h"
 extern volatile unsigned char INDF0 @ 0x000;
 
 asm("INDF0 equ 00h");
@@ -6249,19 +6249,19 @@ typedef int16_t intptr_t;
 
 typedef uint16_t uintptr_t;
 
-# 13 "PFM.h"
+# 12 "PFM.h"
+extern void PFM_Unlock();
 extern uint16_t PFM_Read(uint16_t);
-
+extern void PFM_Erase(uint16_t);
 extern void PFM_Write(uint16_t ,uint16_t);
+extern void PFM_write_String(uint16_t,uint8_t*,uint8_t);
+extern uint8_t PFM_Read_String(uint16_t,uint8_t*);
 
-# 32
+# 24
 enum{
-Flash_DMXAddress=0x0C80,
-Flash_UID1=0x0CA0,
-Flash_UID2=0x0CA1,
-Flash_UID3=0x0CA2,
-Flash_UID4=0x0CA3,
-Flash_Personality=0x0CC0
+Flash_DMX_ADDRESS=0x1F80,
+Flash_PERSONALITY=0x1FA0,
+Flash_DEVICE_LABEL=0x1FC0,
 };
 
 # 13 "DMX.h"
@@ -6344,7 +6344,12 @@ unsigned int RDM_Identify_Device_Timer2New : 1;
 
 volatile DMX_FLAGS DMX_Flags;
 
-# 124
+
+char FOOTPRINT = 4;
+
+
+
+
 unsigned char DMXPeriod = 100;
 
 volatile char DMXPeriodConst =0;
@@ -6393,22 +6398,276 @@ char preRxData[4]=0;
 char DMX_repeatcoeff[4] = 1;
 float DMX_repeat_hereditary[4]=2.0;
 
-# 13 "PFM.c"
-uint16_t PFM_Read(uint16_t AddrPFM){
+# 60 "RDM.h"
+extern void RDM_init(void);
+
+# 64
+extern void RDM_tx_interrupt(void);
+
+extern void RDM_tx_TimerBreak(void);
+extern void RDM_discovery_CC(void);
+extern void RDM_GET_CC(void);
+extern void RDM_SET_CC(void);
+extern void TX_RDM_Response_Set(void);
+extern void RDM_rx_loop(void);
+extern void RDM_TXSTART(void);
+
+# 93
+uint16_t TxCount=0;
 
 
-PMADR=AddrPFM;
+
+volatile uint8_t *BytePtr;
+
+volatile uint8_t TxState=0;
+
+
+
+
+typedef union{
+uint8_t data[6];
+struct{
+uint32_t ID;
+uint16_t MANC;
+};
+}_UID;
+_UID UID;
+
+enum
+{
+TX_DISCOVERY,
+TX_START,
+TX_SART_DISCOVERY,
+TX_DATA,
+TX_MAS,
+TX_RDM_PD
+};
+
+
+typedef union{
+unsigned char value[24];
+struct{
+union{
+uint16_t CS;
+struct{
+unsigned CSL:8;
+unsigned CSH:8;
+};
+};
+
+unsigned PDL:8;
+uint16_t PID;
+
+unsigned CC:8;
+uint16_t subDevice;
+unsigned message:8;
+unsigned PORT:8;
+unsigned TN:8;
+
+struct{
+uint32_t ID;
+uint16_t M;
+}SUID;
+
+struct{
+uint32_t ID;
+uint16_t M;
+}DUID;
+
+unsigned ML:8;
+};
+}RDM_Data;
+
+extern uint16_t RDM_get_checkSum(RDM_Data, char);
+extern uint16_t RDM_set_checkSum(RDM_Data);
+
+
+
+volatile RDM_Data RX_RDM_Data;
+volatile RDM_Data TX_RDM_Data;
+
+char DISCOVERY_RDM_Data[23+1];
+
+# 180
+typedef union{
+uint8_t u8[200];
+uint16_t u16[(200>>1)];
+uint32_t u32[(200>>2)];
+}PD_call;
+PD_call PD;
+
+extern void PD_init(void);
+extern void PD_write_u8(uint8_t);
+extern void PD_write_u16(uint16_t);
+extern void PD_write_u32(uint32_t);
+extern void PD_write_String(uint8_t*,uint8_t);
+extern uint8_t* PD_Read_u8ptr(void);
+extern uint16_t* PD_Read_u16ptr(void);
+extern uint32_t* PD_Read_u32ptr(void);
+extern void PD_Read_String(uint8_t*, uint8_t);
+uint16_t *PD_Manu_ptr;
+uint32_t *PD_ID_ptr;
+
+uint8_t tmp8;
+uint16_t tmp16;
+char TX_PDCount;
+
+volatile char ReadCount;
+volatile unsigned PD_Flag;
+volatile unsigned TX_PD_Flag;
+volatile unsigned TX_Discovery_Flag;
+
+uint16_t checkSum;
+
+char IDENTIFY_MODE=0xff;
+
+# 222
+static const uint16_t SUPPORTED_PARAMETERS[] = {
+
+0x0070,
+0x0080,
+0x0081,
+0x0082,
+
+
+
+0x00C1,
+0x00C2,
+0x00E0,
+0x00E1,
+0x0120,
+0x0121,
+0x0122,
+
+# 244
+0x1040,
+};
+
+# 251
+const char SOFTWARE_VERSION_LABEL[]="METEOR LIGHTING SOFTWARE";
+
+
+const uint32_t BOOT_SOFTWARE_VERSION_ID=0x20171019;
+const char BOOT_SOFTWARE_VERSION_LABEL[]="DMX, TUNABLE WHITE, 16bit fine";
+
+
+const char DEVICE_MODEL_DESCRIPTION[]="METEOR DRIVER";
+
+const char MANUFACTURER_LABEL[]="METEOR LIGHTING";
+
+char DEVICE_LABEL[32]="METEOR DRIVER";
+char DEVICE_LABEL_SIZE=13;
+
+
+
+
+const char PERSONALITY_1[]="LOG 1";
+const char PERSONALITY_2[]="LOG 2";
+const char PERSONALITY_3[]="LOG 3";
+const char PERSONALITY_4[]="LOG 4";
+const char PERSONALITY_5[]="LOG 1, CCT 1";
+const char PERSONALITY_6[]="LOG 2, CCT 2";
+
+typedef struct _personality_definition
+{
+const uint8_t personality;
+
+
+const uint8_t footprint;
+const char* description;
+const char descriptionsize;
+
+};
+
+const struct _personality_definition PERSONALITY_DEFINITIONS[] = {
+{1,1,&PERSONALITY_1[0],sizeof(PERSONALITY_1)-1},
+{2,2,&PERSONALITY_2[0],sizeof(PERSONALITY_2)-1},
+{3,3,&PERSONALITY_3[0],sizeof(PERSONALITY_3)-1},
+{4,4,&PERSONALITY_4[0],sizeof(PERSONALITY_4)-1},
+{5,2,&PERSONALITY_5[0],sizeof(PERSONALITY_5)-1},
+{6,4,&PERSONALITY_6[0],sizeof(PERSONALITY_6)-1},
+};
+char PERSONALITY ;
+char FOOTPRINT ;
+
+
+
+extern uint8_t Get_FootPrint(uint8_t);
+
+
+
+
+const uint8_t SLOT_TYPE[8]={
+
+0x00,
+0x00,
+0x00,
+0x00,
+
+0x00,
+0x04,
+0x00,
+0x04
+};
+
+const uint16_t SLOT_LABEL_ID[8]={
+
+0x0001,
+0x0001,
+0x0001,
+0x0001,
+
+0x0001,
+0x0208,
+0x0001,
+0x0208
+};
+
+const char SLOT_DESCRIPTION_0[]="PWM SLOT ";
+const char SLOT_DESCRIPTION_1[]="LED ITENSITY";
+const char SLOT_DESCRIPTION_2[]="LED CCT";
+
+typedef struct _slot_description
+{
+const char* description;
+const char descriptionsize;
+};
+
+const struct _slot_description SLOT_DEFINITIONS[] = {
+{&SLOT_DESCRIPTION_0[0],sizeof(SLOT_DESCRIPTION_0)-1},
+{&SLOT_DESCRIPTION_1[0],sizeof(SLOT_DESCRIPTION_1)-1},
+{&SLOT_DESCRIPTION_2[0],sizeof(SLOT_DESCRIPTION_2)-1},
+};
+const char SLOT[]="0123";
+
+# 14 "PFM.c"
+uint16_t PFM_Read(uint16_t AddrRd){
+
+PMADR=AddrRd;
 RD=1;
 asm("nop");
 asm("nop");
 return PMDAT;
 }
 
-void PFM_Write(uint16_t AddrPFM,uint16_t Data){
+void PFM_Erase(uint16_t AddrErs){
+GIE=0;
+CFGS=0;
+PMADR=AddrErs;
+
+FREE = 1;
+WREN = 1;
+PFM_Unlock();
+
+WREN=0;
+GIE=1;
+}
+
+void PFM_Write(uint16_t AddrWrt, uint16_t Data){
 do{
 GIE=0;
 CFGS=0;
-PMADR=AddrPFM;
+PMADR=AddrWrt;
 
 
 FREE = 1;
@@ -6430,7 +6689,73 @@ WR=1;
 asm("nop");
 asm("nop");
 
-}while(PFM_Read(AddrPFM)!=Data);
+}while(PFM_Read(AddrWrt)!=Data);
+
 WREN=0;
 GIE=1;
+
+# 86
+}
+
+
+void PFM_write_String(uint16_t AddrWrtStr, uint8_t* u8ptr, uint8_t u8len){
+
+GIE=0;
+CFGS=0;
+PMADR=AddrWrtStr;
+
+FREE = 1;
+WREN = 1;
+PMCON2=0x55;
+PMCON2=0xAA;
+WR=1;
+asm("nop");
+asm("nop");
+
+FREE = 0;
+LWLO = 1;
+
+ReadCount=0;
+while(1){
+PMDAT=*u8ptr;
+ReadCount++;
+if(ReadCount<u8len){
+PFM_Unlock();
+u8ptr++;
+PMADR++;
+}else{
+break;
+}
+
+}
+
+LWLO=0;
+PFM_Unlock();
+WREN=0;
+GIE=1;
+}
+
+uint8_t PFM_Read_String(uint16_t AddrRdStr, uint8_t* dataptr){
+ReadCount=0;
+while(ReadCount<32){
+tmp16=PFM_Read(AddrRdStr);
+if(tmp16==0x3fff){
+break;
+}else{
+*dataptr=tmp16;
+ReadCount++;
+dataptr++;
+AddrRdStr++;
+}
+
+}
+return ReadCount;
+}
+
+void PFM_Unlock(){
+PMCON2=0x55;
+PMCON2=0xAA;
+WR=1;
+asm("nop");
+asm("nop");
 }

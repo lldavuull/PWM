@@ -11,7 +11,7 @@ extern double __fpnormalize(double);
 #pragma intrinsic(__builtin_software_breakpoint)
 extern void __builtin_software_breakpoint(void);
 
-# 49 "C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16f1574.h"
+# 49 "C:\Program Files (x86)\Microchip\xc8\v1.41\include\pic16f1575.h"
 extern volatile unsigned char INDF0 @ 0x000;
 
 asm("INDF0 equ 00h");
@@ -6253,14 +6253,14 @@ typedef uint16_t uintptr_t;
 volatile int i = 0;
 
 typedef union {
-unsigned int DC[256];
+unsigned int DC;
 struct{
 unsigned DCL :8;
 unsigned DCH :8;
-}PWM[256];
+};
 }PWM_16;
 
-const PWM_16 PWM={
+const PWM_16 PWM[]={
 0x0000, 0x00C8, 0x00CC, 0x00D1, 0x00D6, 0x00DB, 0x00E1, 0x00E6, 0x00EC, 0x00F1,
 0x00F7, 0x00FD, 0x0103, 0x0109, 0x0110, 0x0116, 0x011D, 0x0124, 0x012B, 0x0132,
 0x0139, 0x0141, 0x0149, 0x0151, 0x0159, 0x0161, 0x016A, 0x0172, 0x017B, 0x0184,
@@ -6397,7 +6397,12 @@ unsigned int RDM_Identify_Device_Timer2New : 1;
 
 volatile DMX_FLAGS DMX_Flags;
 
-# 124
+
+char FOOTPRINT = 4;
+
+
+
+
 unsigned char DMXPeriod = 100;
 
 volatile char DMXPeriodConst =0;
@@ -6469,8 +6474,8 @@ void ADC_loop(){
 if(ADC_Flags.New==1){
 RxTimer = 0;
 ADC_Flags.New = 0;
-PWM1DCH=PWM2DCH=PWM3DCH=PWM4DCH = PWM.PWM[ADC_Data].DCH;
-PWM1DCL=PWM2DCL=PWM3DCL=PWM4DCL = PWM.PWM[ADC_Data].DCL;
+PWM1DCH=PWM2DCH=PWM3DCH=PWM4DCH = PWM[ADC_Data].DCH;
+PWM1DCL=PWM2DCL=PWM3DCL=PWM4DCL = PWM[ADC_Data].DCL;
 PWM1LDCON=PWM2LDCON=PWM3LDCON=PWM4LDCON = 0b10000000;
 GO_nDONE = 1;
 }

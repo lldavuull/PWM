@@ -3,15 +3,15 @@
   <executable name="dist/default/production\PWM_DAVID_14bit.production.hex">
     <memory name="program">
       <units>words</units>
-      <length>4096</length>
-      <used>2884</used>
-      <free>1212</free>
+      <length>8192</length>
+      <used>5607</used>
+      <free>2585</free>
     </memory>
     <memory name="data">
       <units>bytes</units>
-      <length>512</length>
-      <used>350</used>
-      <free>162</free>
+      <length>1008</length>
+      <used>568</used>
+      <free>440</free>
     </memory>
   </executable>
 </project>

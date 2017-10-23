@@ -114,10 +114,8 @@ typedef struct {
 volatile DMX_FLAGS DMX_Flags;
 //DMX set end
 
+char FOOTPRINT = 4;
 
-
-//???= ??????????? 200?212????6????????2
-//???= ??DC???????? 200?201????6???????? (PWM[201].DC-PWM[200].DC/6)
 //??????0.5ms
 //PWM SMOOTH//
 /** DMXperiod Counts 500us since DMX period, period records when RX recieve DMX_StartCode*/
@@ -161,7 +159,7 @@ char rxdata;//avoid violatile to acculate.
 //char rgbw;//avoid violatile to acculate.
 volatile float DMX_difference=0.0;
 volatile float DMX_CurrentBright[RX_BUFFER_SIZE]=0;
-volatile float DMX_SpaceBright[RX_BUFFER_SIZE]=0; 
+volatile float DMX_SpaceBright[RX_BUFFER_SIZE]=0;
 volatile float DMX_TargetBright[RX_BUFFER_SIZE]=0; 
 char DMX_sumRepeat[RX_BUFFER_SIZE]=2;
 char DMX_Repeat[RX_BUFFER_SIZE][2]=1;

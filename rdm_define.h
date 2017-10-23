@@ -672,3 +672,37 @@
 #define E137_2_DHCP_MODE_ACTIVE                          0x01 /* IP Address was obtained via DHCP                               */
 #define E137_2_DHCP_MODE_UNKNOWN                         0x02 /* The system cannot determine if address was obtained via DHCP.  */
 
+
+
+
+
+
+/********************************************************/
+/* Appendix C: Slot Info (Normative)        */
+/********************************************************/
+
+/********************************************************/
+/* Table C-1: Slot Type        */
+/********************************************************/
+
+#define E120_SD_INTENSITY                                0x00 /* Slot directly controls parameter (represents Coarsefor 16-bit 
+                                                                 parameters)                                                    */
+#define E120_ST_SEC_FINE                                 0x01 /* Fine, for 16-bit parameters                                    */
+#define E120_ST_SEC_TIMING                               0x02 /* Slot sets timing value for associated parameter                */
+#define E120_ST_SEC_SPEED                                0x03 /* Slot sets speed/velocity for associated parameter              */
+#define E120_ST_SEC_CONTROL                              0x04 /* Slot provides control/mode info for parameter                  */
+#define E120_ST_SEC_INDEX                                0x05 /* Slot sets index position for associated parameter              */
+#define E120_ST_SEC_ROTATION                             0x06 /* Slot sets rotation speed for associated parameter              */
+#define E120_ST_SEC_INDEX_ROTATE                         0x07 /* Combined index/rotation control                                */
+
+#define E120_ST_SEC_UNDEFINED                            0xFF /* Undefined secondary type                                       */
+
+
+/********************************************************/
+/* Table C-2: Slot ID Definitions        */
+/********************************************************/
+//Intensity Functions                                  0x00xx
+#define E120_ST_PRIMARY                                0x0001 /* Intensity                                                      */
+#define E120_SD_INTENSITY_MASTER                       0x0002 /* Intensity Master                                               */
+//Color Functions                                      0x02xx
+#define E120_SD_COLOR_CORRECTION                       0x0208 /* Color Temperature Correction                                   */

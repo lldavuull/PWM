@@ -116,17 +116,14 @@ void timer1_interrupt(void) {
 //                TimerState = TX_TIMER_MAB; // Next state is MAB end
 //                break;
             case TIMER_RDM_MBB:
-                TX_PIN = 0; //set low ?SPACE? for BREAK
-                TXEN = 0; // Disable the EUSART's control of the TX pin
-                TMR1 = TMR_LOAD_RDM_BREAK; // Load the MAB time = 0xFFF5  // Load value for MAB      ( 10us)
+                TXEN = 0;
+                TMR1 = TMR_LOAD_RDM_BREAK; // Load Value for BREAK    (180us)
                 TimerState = TIMER_RDM_BREAK; // Next state is MAB end
                 break;
             case TIMER_RDM_BREAK:
                 TXEN = 1;
-                TX_PIN = 1; // Set pin high for MAB
                 TMR1 = TMR_LOAD_RDM_MAB; // Load the MAB time = 0xFFF5  // Load value for MAB      ( 10us)
                 TimerState = TIMER_RDM_MAB; // Next state is MAB end
-//                RXTX_SWITCH_PIN = 0; //Set switch pin to RX mode
                 break;
 
             case TIMER_RDM_MAB:

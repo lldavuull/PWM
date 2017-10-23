@@ -33,8 +33,8 @@ void ADC_loop(){
     if(ADC_Flags.New==1){
         RxTimer = 0;
         ADC_Flags.New = 0;
-        PWM1DCH=PWM2DCH=PWM3DCH=PWM4DCH = PWM.PWM[ADC_Data].DCH;
-        PWM1DCL=PWM2DCL=PWM3DCL=PWM4DCL = PWM.PWM[ADC_Data].DCL;
+        PWM1DCH=PWM2DCH=PWM3DCH=PWM4DCH = PWM[ADC_Data].DCH;
+        PWM1DCL=PWM2DCL=PWM3DCL=PWM4DCL = PWM[ADC_Data].DCL;
         PWM1LDCON=PWM2LDCON=PWM3LDCON=PWM4LDCON = 0b10000000;
         GO_nDONE = 1;   //Start to convert ADC
     }

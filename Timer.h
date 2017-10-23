@@ -65,22 +65,23 @@ volatile TIMER_DATA Timer;
 
 //0xFFFF - 40 = 0xffd7
 
-#define TMR_LOAD_RDM_MBB     0xFFcd  // Load value for MBB      ( 40us)
+#define TMR_LOAD_RDM_MBB     0xFFFF  // Load value for MBB      (10us)
 
-// 140us = 0xFFFF - 140 = 0xff73
-#define TMR_LOAD_RDM_BREAK   0xff73  // Load Value for BREAK    (140us)
+// 140us = 0xFFFF - 176 = 0xFF4f
+#define TMR_LOAD_RDM_BREAK   0xFF4f  // Load Value for BREAK    (176us)
+//#define TMR_LOAD_RDM_BREAK   0xFFA5  // Load Value for BREAK    (90us)
 
 // 10us = 0xFFFF - 10 = 0xFFF5
-#define TMR_LOAD_RDM_MAB     0xFFF5  // Load value for MAB      ( 10us)
+#define TMR_LOAD_RDM_MAB     0xFFF5  // Load value for MAB      (10us)
 
 // 800us = 0xFFFF - 800 = 0xFCDF  - Adjust to fine tune the 1ms total
 #define TMR_LOAD_FILL   0xFCDF   // Load value to total 1ms (800us)
 
-// 4us = 0xFFFF - 4 = 0xFFFA  
-#define TMR_LOAD_MAS   0xFFCA   // Load value for MAB      ( 4us)
+// 4us = 0xFFFF - 50 = 0xFFCD  
+#define TMR_LOAD_MAS   0xFFDD   // Load value for MAB      ( 50us)
 
 // 8us = 0xFFFF - 8 = 0xFFF7
-#define TMR_LOAD_DISC_MAB   0xFFE5   // Load value for MAB Discovery      ( 10us)
+#define TMR_LOAD_DISC_MAB   0xFFF5   // Load value for MAB Discovery      ( 10us)
 //timer1 set end
 
 char Timer2_Count = 0; // 0x0~ 0x10 

@@ -57,17 +57,19 @@ void main(void) {
     ANSC3 = 0; //RC3  is for interrupt test
     INTCON = 0b11000000; //GIE=1; TMR0 interrupt=0; PEIE interrupt=1;
     
+//    DMX_Address = 1;
     timer_init();
 //    ADC_init();
     DMX_init();
     RDM_init();
+   
     PWM1CON = PWM2CON = PWM3CON = PWM4CON = PWMxCON_SET;
     
     
     
     
 //    TX_PD_Flag=0;
-    DMX_Address = 1;
+    
     while (1) {
         DMX_loop();
 //        ADC_loop();

@@ -30,24 +30,26 @@ void RDM_init(void) {
     RXTX_SWITCH_PIN=0;
     DMX_Flags.RDMmute = 0;
     DMX_Flags.RDM_Identify_Device = 0;
-    
+    //UID Setting
+    UID.MANC=0x08BA;
+    UID.ID=0x12345678;
     //DISCOVERY Response Init
-    PDCount = DiscoveryLength;
+    tmp8 = DiscoveryLength;
 //    DISCOVERY_RDM_Data.value[PDCount]=0xCC;
 //    PDCount--;
-    while (PDCount >= 17) { //value[23~17]]=0xFE
-        DISCOVERY_RDM_Data[PDCount] = 0xFE;
-        PDCount--;
+    while (tmp8 >= 17) { //value[23~17]]=0xFE
+        DISCOVERY_RDM_Data[tmp8] = 0xFE;
+        tmp8--;
     }
     DISCOVERY_RDM_Data[16] = 0xAA;
-    PDCount = 0;
+    tmp8 = 0;
     checkSum = 0;
-    while (PDCount < 6) { //value[15~5]]=Encode UID
-        DISCOVERY_RDM_Data[15 - PDCount * 2] = UID[PDCount] | 0xAA;
-        DISCOVERY_RDM_Data[14 - PDCount * 2] = UID[PDCount] | 0x55;
-        checkSum += DISCOVERY_RDM_Data[15 - PDCount * 2];
-        checkSum += DISCOVERY_RDM_Data[14 - PDCount * 2];
-        PDCount++;
+    while (tmp8 < 6) { //value[15~5]]=Encode UID
+        DISCOVERY_RDM_Data[15 - tmp8 * 2] = UID.data[5-tmp8] | 0xAA;
+        DISCOVERY_RDM_Data[14 - tmp8 * 2] = UID.data[5-tmp8] | 0x55;
+        checkSum += DISCOVERY_RDM_Data[15 - tmp8 * 2];
+        checkSum += DISCOVERY_RDM_Data[14 - tmp8 * 2];
+        tmp8++;
     }
     TX_RDM_Data.CS = checkSum;
 //    PDCount = 0; //value[3~0]=CheckSum of EUID
@@ -55,24 +57,38 @@ void RDM_init(void) {
     DISCOVERY_RDM_Data[2] = TX_RDM_Data.CSH | 0x55;
     DISCOVERY_RDM_Data[1] = TX_RDM_Data.CSL | 0xAA;
     DISCOVERY_RDM_Data[0] = TX_RDM_Data.CSL | 0x55;
-    
-    PDCount = 16;
-    while (PDCount >= 11) { //value[16~11]]=Source UID(Meteor UID)
-        TX_RDM_Data.value[PDCount] = UID[16-PDCount];
-        PDCount--;
+    tmp8 = 16;
+    while (tmp8 >= 11) { //value[16~11]]=Source UID(Meteor UID)
+        TX_RDM_Data.value[tmp8] = UID.data[tmp8-11];
+        tmp8--;
     }
-    DMX_Address=PFM_Read(Flash_DMXAddress);
+    
+    //get Flash_DMX_ADDRESS
+    DMX_Address=PFM_Read(Flash_DMX_ADDRESS);
     if(DMX_Address==0x3fff){
-        PFM_Write(Flash_DMXAddress,0x0001);
+//        PFM_Erase(Flash_DMX_ADDRESS);
+        PFM_Write(Flash_DMX_ADDRESS,0x0001);
+        DMX_Address=PFM_Read(Flash_DMX_ADDRESS);
     }
-    DMX_Address=PFM_Read(Flash_DMXAddress);
     
-    PERSONALITY=PFM_Read(Flash_Personality);
-    if(PERSONALITY==0xff){
-        PFM_Write(Flash_Personality,0x0004);
+    //get PERSONALITY
+    tmp16=PFM_Read(Flash_PERSONALITY);
+    if(tmp16==0x3fff){
+        PFM_Erase(Flash_PERSONALITY);
+        PFM_Write(Flash_PERSONALITY,0x0004);
     }
-    PERSONALITY=PFM_Read(Flash_Personality);
+    PERSONALITY=PFM_Read(Flash_PERSONALITY);
+    FOOTPRINT=Get_FootPrint(PERSONALITY);
     
+    //get DEVICE_LABEL
+    tmp16=PFM_Read(Flash_DEVICE_LABEL);
+//    PFM_write_String(Flash_DEVICE_LABEL,&DEVICE_LABEL[0],DEVICE_LABEL_Size);
+//    DEVICE_LABEL_Size=PFM_Read_String(Flash_DEVICE_LABEL,&DEVICE_LABEL[0]);
+    if(tmp16==0x3fff){
+//        PFM_write_String(Flash_DEVICE_LABEL,&DEVICE_LABEL[0],DEVICE_LABEL_Size);
+    }else{
+        DEVICE_LABEL_SIZE=PFM_Read_String(Flash_DEVICE_LABEL,&DEVICE_LABEL[0]);
+    }
 }
 
 void RDM_rx_loop(void) {
@@ -80,7 +96,7 @@ void RDM_rx_loop(void) {
         DMX_Flags.RDMNew = 0;
         DMX_Flags.RDMcheckUID_flag = 0;
         //1. check UID
-        if ((RX_RDM_Data.DUID.M == METEOR || RX_RDM_Data.DUID.M == 0xFFFF)&& (RX_RDM_Data.DUID.ID == DriverID || RX_RDM_Data.DUID.ID == 0xFFFFFFFF)) {
+        if ((RX_RDM_Data.DUID.M == UID.MANC || RX_RDM_Data.DUID.M == 0xFFFF)&& (RX_RDM_Data.DUID.ID == UID.ID || RX_RDM_Data.DUID.ID == 0xFFFFFFFF)) {
             DMX_Flags.RDMcheckUID_flag = 1;
         }
         //        2. checksum
@@ -138,7 +154,7 @@ void RDM_tx_interrupt(void) {
                 }
                 break;
             case TX_DATA:                 // Send the data
-                if (TxCount <= TX_SIZE) {
+                if (TxCount < TX_SIZE) {
 //                    TX_RDM_Data.value[1]=0x11;
                     TXREG = *BytePtr;
                     BytePtr--; // Point to next byte
@@ -148,16 +164,18 @@ void RDM_tx_interrupt(void) {
                         TX_PDCount = TX_PD_LEN-1;
                     }
                 }else{
+//                    TxState = TX_MAS;
                     RCIE = 1; //Enable RC interrupt
 //                    TXEN = 0; // Disable the EUSART's control of the TX pin
                     TXIE = 0; // Disable the EUSART Interrupt 
-//                    TMR1 == TX_TIMER_MBB; // Next state is MAB end
-//                    RXTX_SWITCH_PIN=0;  //Set switch pin to RX mode
-//                    TX_PIN = 1; // Ensure PIN = RC4 will be high
                     TMR1 = TMR_LOAD_MAS; // Load the MAB time = 0xFFFA  // Load value for MBB      ( 4us)
                     TimerState = TIMER_MAS; // Next state is MAB end
                 }
                 break;
+//            case TX_MAS:                 // Send the data
+//                TXIE = 0; // Disable the EUSART Interrupt 
+//                RXTX_SWITCH_PIN=0;
+//                break;
             case TX_RDM_PD:
                 TXREG = PD.u8[TX_PDCount];
                 if (TX_PDCount == TX_PD_LEN-TX_RDM_Data.PDL) {
@@ -172,9 +190,19 @@ void RDM_tx_interrupt(void) {
 }
 
 void RDM_tx_TimerBreak() {
-    TMR1 = TMR_LOAD_RDM_MBB; //=0xFF4B  Load Value for BREAK    (180us)
-    TimerState = TIMER_RDM_MBB;
-    RXTX_SWITCH_PIN = 1; //Set switch pin to TX mode
+//    TMR1 = TMR_LOAD_RDM_MBB; // Load value for MBB      ( 4us)
+//    TimerState = TIMER_RDM_MBB;
+//    RXTX_SWITCH_PIN = 1; //Set switch pin to TX mode
+//    TX_PD_Flag=1;//check you have sent Parameter Data or not.
+    
+    
+    TXEN = 0;
     TX_PD_Flag=1;//check you have sent Parameter Data or not.
-//    RCIE = 0; //Enable RC interrupt
+    TMR1 = TMR_LOAD_RDM_BREAK; // Load Value for BREAK    (180us)
+    TimerState = TIMER_RDM_BREAK; // Next state is MAB end
+    RXTX_SWITCH_PIN = 1; //Set switch pin to TX mode
+}
+
+uint8_t Get_FootPrint(uint8_t Input_Personality){
+    return PERSONALITY_DEFINITIONS[Input_Personality-1].footprint;
 }
